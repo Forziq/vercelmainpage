@@ -1,644 +1,877 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Egor Grigorciuc — Projects</title>
-<meta name="description" content="A running record of projects and experiments by Egor Grigorciuc.">
-<style>
-  /* ============================================================
-     TOKENS — Eindhoven Design District
-     ============================================================ */
-  :root {
-    /* Colors */
-    --color-charcoal-ink: #000000;
-    --color-paper-white: #ffffff;
-    --color-newsprint-gray: #e8e8e8;
-    --color-pewter: #bfbfbf;
-    --color-signal-red: #ff0000;
-
-    /* Type */
-    --font-helveticanow: 'HelveticaNow', 'Helvetica Neue', Inter, ui-sans-serif,
-                         system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-
-    --text-caption: 14px;
-    --text-body-sm: 16px;
-    --text-body: 18px;
-    --text-subheading: 23px;
-    --text-heading-sm: 35px;
-    --text-heading: 46px;
-    --text-heading-lg: 50px;
-    --text-display: 150px;
-
-    /* Spacing */
-    --spacing-8: 8px;
-    --spacing-10: 10px;
-    --spacing-12: 12px;
-    --spacing-15: 15px;
-    --spacing-16: 16px;
-    --spacing-20: 20px;
-    --spacing-25: 25px;
-    --spacing-30: 30px;
-    --spacing-40: 40px;
-    --spacing-50: 50px;
-    --spacing-100: 100px;
-
-    /* Layout */
-    --page-max-width: 1200px;
-    --section-gap: 80px;
-    --card-padding: 20px;
-    --element-gap: 20px;
-
-    /* Radius — only two values exist in this system */
-    --radius-none: 0px;
-    --radius-pill: 500px;
-
-    /* Surfaces */
-    --surface-paper-white: #ffffff;
-    --surface-newsprint-gray: #e8e8e8;
-  }
-
-  /* ============================================================
-     BASE
-     ============================================================ */
-  *, *::before, *::after { box-sizing: border-box; }
-
-  html {
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    margin: 0;
-    background: var(--color-paper-white);
-    color: var(--color-charcoal-ink);
-    font-family: var(--font-helveticanow);
-    font-weight: 400;
-    font-size: var(--text-body);
-    line-height: 1.31;
-    letter-spacing: -0.004em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  a { color: inherit; }
-
-  :focus-visible {
-    outline: 1px solid var(--color-charcoal-ink);
-    outline-offset: 3px;
-  }
-
-  /* ============================================================
-     LAYOUT PRIMITIVES
-     ============================================================ */
-  .container {
-    max-width: var(--page-max-width);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .band { padding: var(--section-gap) 0; }
-  .band--white { background: var(--surface-paper-white); }
-  .band--gray  { background: var(--surface-newsprint-gray); }
-
-  /* ============================================================
-     BUTTONS — pill ghost / pill filled
-     ============================================================ */
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: inherit;
-    font-size: var(--text-body-sm);
-    font-weight: 400;
-    line-height: 1.2;
-    letter-spacing: 0.005em;
-    border-radius: var(--radius-pill);
-    padding: 10px 15px;
-    text-decoration: none;
-    cursor: pointer;
-    background: none;
-    white-space: nowrap;
-  }
-
-  .pill--ghost {
-    border: 1px solid var(--color-charcoal-ink);
-    background: var(--surface-paper-white);
-    color: var(--color-charcoal-ink);
-  }
-
-  .pill--filled {
-    border: 1px solid var(--color-charcoal-ink);
-    background: var(--color-charcoal-ink);
-    color: var(--color-paper-white);
-    padding: 10px 18px;
-  }
-
-  .pill--lg { padding: 16px 20px; }
-  .pill--sm { font-size: var(--text-caption); padding: 8px 14px; letter-spacing: 0.015em; }
-
-  /* ============================================================
-     HEADER
-     ============================================================ */
-  .site-header {
-    max-width: var(--page-max-width);
-    margin: 0 auto;
-    padding: 30px 24px 40px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--element-gap);
-  }
-
-  .logo {
-    font-size: var(--text-caption);
-    line-height: 1.2;
-    letter-spacing: 0.015em;
-    text-decoration: none;
-    display: block;
-  }
-  .logo span { display: block; }
-
-  .nav-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-10);
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  /* ============================================================
-     HERO — typographic installation
-     ============================================================ */
-  .hero { padding-bottom: var(--section-gap); }
-
-  .hero-type {
-    display: flex;
-    align-items: flex-start;
-    gap: clamp(16px, 4vw, 50px);
-  }
-
-  .display {
-    margin: 0;
-    font-size: clamp(48px, 13vw, 150px);
-    font-weight: 400;
-    line-height: 0.93;
-    letter-spacing: -0.05em;
-  }
-
-  .display-rotated {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-size: clamp(48px, 13vw, 150px);
-    font-weight: 400;
-    line-height: 0.93;
-    letter-spacing: -0.05em;
-    user-select: none;
-  }
-
-  .hero-foot {
-    margin-top: var(--spacing-40);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--spacing-30);
-  }
-
-  .hero-sub {
-    margin: 0;
-    max-width: 600px;
-    font-size: 19px;
-    line-height: 1.31;
-    letter-spacing: -0.004em;
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-10);
-  }
-
-  /* ============================================================
-     SECTION HEADINGS
-     ============================================================ */
-  .section-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--spacing-20);
-    margin-bottom: var(--spacing-40);
-  }
-
-  .heading {
-    margin: 0;
-    font-size: clamp(32px, 5vw, 46px);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-
-  .heading-sm {
-    margin: 0;
-    font-size: clamp(23px, 3vw, 35px);
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-
-  .eyebrow {
-    margin: 0;
-    font-size: var(--text-caption);
-    line-height: 1.4;
-    letter-spacing: 0.015em;
-    color: var(--color-pewter);
-  }
-
-  /* ============================================================
-     INTRO PARAGRAPH BLOCK
-     ============================================================ */
-  .intro {
-    margin: 0;
-    max-width: 600px;
-    font-size: var(--text-body);
-    line-height: 1.31;
-    letter-spacing: -0.004em;
-  }
-  .intro + .intro { margin-top: var(--spacing-20); }
-
-  /* ============================================================
-     PROJECT CARDS
-     ============================================================ */
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--element-gap);
-  }
-
-  .card {
-    background: var(--surface-paper-white);
-    border-radius: var(--radius-none);
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Placeholder media block — swap for an <img> when you have a photo */
-  .card-media {
-    aspect-ratio: 4 / 3;
-    background: var(--surface-newsprint-gray);
-    display: flex;
-    align-items: flex-end;
-    padding: var(--card-padding);
-    font-size: var(--text-heading);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--color-pewter);
-  }
-
-  .card-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .card-body {
-    padding-top: var(--card-padding);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-10);
-  }
-
-  .card-label {
-    margin: 0;
-    font-size: var(--text-caption);
-    line-height: 1.4;
-    letter-spacing: 0.015em;
-    color: var(--color-signal-red);
-  }
-
-  .card-title {
-    margin: 0;
-    font-size: 19px;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-  }
-
-  .card-excerpt {
-    margin: 0;
-    font-size: var(--text-body-sm);
-    line-height: 1.4;
-    letter-spacing: 0.005em;
-  }
-
-  .card-body .pill { margin-top: var(--spacing-8); }
-
-  /* ============================================================
-     ARCHIVE LIST — hairline rows
-     ============================================================ */
-  .archive {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--color-pewter);
-  }
-
-  .archive-row {
-    display: grid;
-    grid-template-columns: 80px 1fr 160px auto;
-    align-items: baseline;
-    gap: var(--spacing-20);
-    padding: var(--spacing-20) 0;
-    border-bottom: 1px solid var(--color-pewter);
-  }
-
-  .archive-year {
-    font-size: var(--text-caption);
-    letter-spacing: 0.015em;
-    color: var(--color-pewter);
-  }
-
-  .archive-title {
-    font-size: var(--text-body-sm);
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0.005em;
-  }
-
-  .archive-tag {
-    font-size: var(--text-caption);
-    letter-spacing: 0.015em;
-    color: var(--color-signal-red);
-  }
-
-  .archive-link {
-    font-size: var(--text-caption);
-    letter-spacing: 0.015em;
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-charcoal-ink);
-    padding-bottom: 2px;
-    justify-self: end;
-  }
-
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-  .site-footer {
-    background: var(--surface-newsprint-gray);
-    padding: var(--section-gap) 0 var(--spacing-50);
-  }
-
-  .footer-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--spacing-30);
-  }
-
-  .footer-note {
-    margin: var(--spacing-20) 0 0;
-    font-size: var(--text-caption);
-    line-height: 1.4;
-    letter-spacing: 0.015em;
-    color: var(--color-pewter);
-  }
-
-  .footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-10);
-  }
-
-  /* ============================================================
-     RESPONSIVE
-     ============================================================ */
-  @media (max-width: 900px) {
-    .project-grid { grid-template-columns: repeat(2, 1fr); }
-    .archive-row { grid-template-columns: 60px 1fr auto; }
-    .archive-tag { display: none; }
-  }
-
-  @media (max-width: 620px) {
-    :root { --section-gap: 56px; }
-    .container { padding: 0 18px; }
-    .site-header { padding: 22px 18px 30px; }
-    .project-grid { grid-template-columns: 1fr; }
-    .hero-foot { flex-direction: column; align-items: flex-start; }
-    .archive-row {
-      grid-template-columns: 1fr auto;
-      gap: var(--spacing-8);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff8f5">
+  <title>Egor Grigorciuc — Digital Business &amp; E-commerce</title>
+  <meta name="description" content="The portfolio of Egor Grigorciuc, a BSc Digital Business &amp; E-commerce student working across customer experience, content and business development.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fff8f5;
+      --paper-light: #ffffff;
+      --parchment: #f4ece8;
+      --ink: #1e1b19;
+      --ink-soft: #55423d;
+      --amber: #7c2d12;
+      --amber-deep: #5e1700;
+      --terracotta: #c2410c;
+      --rule: #dcc1b9;
+      --font-display: "EB Garamond", Georgia, serif;
+      --font-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+      --page-width: 1280px;
+      --gutter: clamp(1.25rem, 4vw, 3rem);
+      --section-space: clamp(5rem, 10vw, 9rem);
     }
-    .archive-year { grid-column: 1 / -1; }
-    .archive-link { justify-self: start; grid-column: 1 / -1; margin-top: var(--spacing-8); }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-  }
-</style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    :focus-visible {
+      outline: 2px solid var(--terracotta);
+      outline-offset: 4px;
+    }
+
+    ::selection {
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.75rem 1rem;
+      transform: translateY(-180%);
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .page-shell {
+      width: min(100%, var(--page-width));
+      margin: 0 auto;
+      padding-inline: var(--gutter);
+    }
+
+    .site-header { border-bottom: 1px solid var(--rule); }
+
+    .site-header__inner {
+      display: grid;
+      grid-template-columns: 3fr 6fr 3fr;
+      align-items: center;
+      min-height: 6.5rem;
+      gap: 1.5rem;
+    }
+
+    .wordmark {
+      display: inline-flex;
+      flex-direction: column;
+      width: fit-content;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 0.95;
+      text-decoration: none;
+    }
+
+    .wordmark small {
+      margin-top: 0.55rem;
+      color: var(--ink-soft);
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .primary-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 2.5vw, 2.25rem);
+    }
+
+    .primary-nav a {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .primary-nav a {
+      padding-block: 0.4rem;
+      border-bottom: 1px solid transparent;
+    }
+
+    .primary-nav a:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .header-action { justify-self: end; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.9rem;
+      padding: 0.75rem 1.4rem;
+      border: 1px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .button:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .button--primary {
+      border-color: var(--amber);
+      background: var(--amber);
+      color: #fff;
+    }
+
+    .button--primary:hover {
+      border-color: var(--terracotta);
+      background: var(--terracotta);
+    }
+
+    .hero {
+      overflow: hidden;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .hero__inner {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      min-height: min(47rem, calc(100svh - 6.5rem));
+      padding-block: clamp(4.5rem, 9vw, 8rem) 3rem;
+    }
+
+    .hero__edition {
+      grid-column: 1 / span 2;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-right: 2rem;
+      border-right: 1px solid var(--rule);
+    }
+
+    .kicker,
+    .section-label,
+    .meta,
+    .case-study__index,
+    .case-study__status,
+    .timeline__date,
+    .capability__number {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .hero__edition .kicker {
+      color: var(--amber);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    .hero__folio {
+      color: var(--ink-soft);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    .hero__content {
+      grid-column: 3 / -1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-left: clamp(2rem, 5vw, 5rem);
+    }
+
+    .hero h1 {
+      max-width: 10ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 9vw, 8.6rem);
+      font-weight: 400;
+      letter-spacing: -0.045em;
+      line-height: 0.86;
+    }
+
+    .hero h1 em {
+      color: var(--amber);
+      font-weight: 400;
+    }
+
+    .hero__bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(15rem, 3fr);
+      align-items: end;
+      gap: 3rem;
+      margin-top: 5rem;
+    }
+
+    .hero__intro {
+      max-width: 48ch;
+      margin: 0;
+      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+      line-height: 1.65;
+    }
+
+    .hero__aside {
+      padding-top: 1rem;
+      border-top: 1px solid var(--ink);
+    }
+
+    .hero__aside .meta { color: var(--amber); }
+
+    .hero__aside p:last-child {
+      margin: 0.6rem 0 0;
+      color: var(--ink-soft);
+      font-size: 0.875rem;
+    }
+
+    .section { padding-block: var(--section-space); }
+    .section--parchment { background: var(--parchment); }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: 3fr 9fr;
+      align-items: baseline;
+      margin-bottom: clamp(3.5rem, 7vw, 6rem);
+    }
+
+    .section-label { color: var(--amber); }
+
+    .section-title {
+      max-width: 18ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5.5vw, 5.2rem);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 3fr 5fr 4fr;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .profile-lead {
+      grid-column: 2;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 3vw, 2.5rem);
+      letter-spacing: -0.012em;
+      line-height: 1.25;
+    }
+
+    .profile-copy {
+      grid-column: 3;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
+    }
+
+    .study-note {
+      grid-column: 2 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 2rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .study-note__item { padding: 1.25rem 1.5rem 1.25rem 0; }
+
+    .study-note__item + .study-note__item {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--rule);
+    }
+
+    .study-note__item span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .study-note__item strong {
+      display: block;
+      margin-top: 0.45rem;
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    .work-intro {
+      display: grid;
+      grid-template-columns: 3fr 9fr;
+      margin-bottom: 2rem;
+    }
+
+    .work-intro p {
+      grid-column: 2;
+      max-width: 62ch;
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .case-studies { border-top: 1px solid var(--ink); }
+
+    .case-study {
+      display: grid;
+      grid-template-columns: 3fr 5fr 4fr;
+      gap: clamp(1.5rem, 4vw, 4rem);
+      padding-block: clamp(2rem, 4vw, 3.25rem);
+      border-bottom: 1px solid var(--rule);
+      transition: background-color 180ms ease;
+    }
+
+    .case-study:hover { background: rgba(255, 255, 255, 0.45); }
+    .case-study__index { color: var(--terracotta); }
+
+    .case-study h3 {
+      max-width: 18ch;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.04;
+    }
+
+    .case-study__details {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      min-height: 10rem;
+    }
+
+    .case-study__details p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.925rem;
+    }
+
+    .case-study__status {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--amber);
+      color: var(--amber);
+    }
+
+    .experience-layout,
+    .capabilities-layout {
+      display: grid;
+      grid-template-columns: 3fr 9fr;
+    }
+
+    .timeline {
+      grid-column: 2;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--ink);
+      list-style: none;
+    }
+
+    .timeline__item {
+      display: grid;
+      grid-template-columns: 2fr 4fr 3fr;
+      gap: 2rem;
+      padding-block: 2rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .timeline__date {
+      color: var(--amber);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timeline__role h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .timeline__role p,
+    .timeline__summary {
+      margin: 0.4rem 0 0;
+      color: var(--ink-soft);
+      font-size: 0.875rem;
+    }
+
+    .timeline__summary { margin-top: 0; }
+
+    .capabilities {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--ink);
+      list-style: none;
+    }
+
+    .capability {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 1.4rem 1.5rem 1.4rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .capability:nth-child(even) {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--rule);
+    }
+
+    .capability__number {
+      color: var(--terracotta);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .capability span:last-child {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .site-footer {
+      padding-block: clamp(4rem, 8vw, 7rem) 2rem;
+      background: var(--amber-deep);
+      color: #fff8f5;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: end;
+    }
+
+    .footer-copy { grid-column: 1 / span 8; }
+    .footer-copy .section-label { color: #ffb59e; }
+
+    .footer-copy h2 {
+      max-width: 12ch;
+      margin: 1.5rem 0 2.5rem;
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6.7rem);
+      font-weight: 400;
+      letter-spacing: -0.035em;
+      line-height: 0.9;
+    }
+
+    .email-link {
+      display: inline-block;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid currentColor;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      text-decoration: none;
+    }
+
+    .email-link:hover { color: #ffb59e; }
+
+    .footer-action {
+      grid-column: 10 / -1;
+      justify-self: stretch;
+    }
+
+    .footer-action .button {
+      width: 100%;
+      border-color: #fff8f5;
+      color: #fff8f5;
+    }
+
+    .footer-action .button:hover {
+      background: #fff8f5;
+      color: var(--amber-deep);
+    }
+
+    .footer-fineprint {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 6rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 248, 245, 0.32);
+      color: #ffb59e;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .site-header__inner { grid-template-columns: 1fr auto; }
+
+      .primary-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: flex-start;
+        padding-bottom: 1.25rem;
+        overflow-x: auto;
+      }
+
+      .hero__edition {
+        grid-column: 1 / span 1;
+        padding-right: 1rem;
+      }
+
+      .hero__content {
+        grid-column: 2 / -1;
+        padding-left: 2rem;
+      }
+
+      .hero__bottom { grid-template-columns: 1fr; }
+
+      .section-heading,
+      .profile-grid,
+      .work-intro,
+      .case-study,
+      .experience-layout,
+      .capabilities-layout {
+        grid-template-columns: 2fr 6fr;
+      }
+
+      .profile-lead,
+      .profile-copy,
+      .work-intro p,
+      .timeline,
+      .capabilities { grid-column: 2; }
+
+      .profile-copy { margin-top: 1rem; }
+      .study-note { grid-column: 2; }
+      .case-study__index { grid-column: 1; }
+
+      .case-study h3,
+      .case-study__details { grid-column: 2; }
+
+      .case-study__details { min-height: auto; }
+      .timeline__item { grid-template-columns: 1fr 2fr; }
+      .timeline__summary { grid-column: 2; }
+      .footer-copy { grid-column: 1 / span 8; }
+      .footer-action { grid-column: 9 / -1; }
+    }
+
+    @media (max-width: 700px) {
+      .site-header__inner { min-height: 5rem; }
+      .primary-nav { gap: 1.25rem; }
+
+      .primary-nav a {
+        font-size: 0.7rem;
+        white-space: nowrap;
+      }
+
+      .hero__inner {
+        min-height: auto;
+        padding-block: 3.5rem 2.5rem;
+      }
+
+      .hero__edition { display: none; }
+
+      .hero__content {
+        grid-column: 1 / -1;
+        padding-left: 0;
+      }
+
+      .hero h1 { font-size: clamp(3.6rem, 18vw, 6rem); }
+
+      .hero__bottom {
+        gap: 2.5rem;
+        margin-top: 4rem;
+      }
+
+      .section-heading,
+      .profile-grid,
+      .work-intro,
+      .case-study,
+      .experience-layout,
+      .capabilities-layout { display: block; }
+
+      .section-label { margin-bottom: 1rem; }
+      .profile-copy { margin-top: 1.5rem; }
+
+      .study-note {
+        display: block;
+        margin-top: 2.5rem;
+      }
+
+      .study-note__item,
+      .study-note__item + .study-note__item {
+        padding: 1rem 0;
+        border-left: 0;
+      }
+
+      .study-note__item + .study-note__item { border-top: 1px solid var(--rule); }
+      .work-intro { margin-top: -1.5rem; }
+      .case-study { padding-block: 2rem; }
+      .case-study h3 { margin-top: 1rem; }
+
+      .case-study__details {
+        margin-top: 1.25rem;
+        min-height: auto;
+      }
+
+      .timeline__item { display: block; }
+      .timeline__role { margin-top: 1rem; }
+      .timeline__summary { margin-top: 1.25rem; }
+      .capabilities { grid-template-columns: 1fr; }
+
+      .capability,
+      .capability:nth-child(even) {
+        padding: 1.25rem 0;
+        border-left: 0;
+      }
+
+      .footer-grid { display: block; }
+      .footer-action { margin-top: 3rem; }
+
+      .footer-fineprint {
+        flex-direction: column;
+        margin-top: 4rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ============================================================
-       HEADER
-       ============================================================ -->
   <header class="site-header">
-    <a class="logo" href="index.html">
-      <span>Egor</span>
-      <span>Grigorciuc</span>
-    </a>
+    <div class="site-header__inner page-shell">
+      <a class="wordmark" href="index.html" aria-label="Egor Grigorciuc, home">
+        Egor Grigorciuc
+        <small>Portfolio / 2026</small>
+      </a>
 
-    <nav class="nav-controls" aria-label="Primary">
-      <a class="pill pill--ghost" href="#projects">Projects</a>
-      <a class="pill pill--ghost" href="#archive">Archive</a>
-      <a class="pill pill--filled" href="game.html">Play the game</a>
-    </nav>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <a href="#profile">Profile</a>
+        <a href="#work">Selected work</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <a class="button button--primary header-action" href="game.html">Play Game</a>
+    </div>
   </header>
 
-  <main>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__inner page-shell">
+        <aside class="hero__edition" aria-label="Portfolio edition">
+          <p class="kicker">Digital Business &amp; E-commerce</p>
+          <span class="hero__folio">Vol. 01</span>
+        </aside>
 
-    <!-- ============================================================
-         HERO
-         ============================================================ -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero-type">
-          <h1 class="display">Projects</h1>
-          <span class="display-rotated" aria-hidden="true">Log</span>
-        </div>
+        <div class="hero__content">
+          <h1 id="hero-title">Business, built around <em>people.</em></h1>
 
-        <div class="hero-foot">
-          <p class="hero-sub">
-            A running record of the things I build — kept short, kept current,
-            and kept here so the CV never has to guess.
-          </p>
-          <div class="hero-actions">
-            <a class="pill pill--filled pill--lg" href="game.html">Play Neon Dodge →</a>
-            <a class="pill pill--ghost pill--lg" href="#projects">See all projects</a>
+          <div class="hero__bottom">
+            <p class="hero__intro">I’m Egor Grigorciuc, a digital business student with practical experience in customer communication, content, operations and business development.</p>
+            <div class="hero__aside">
+              <p class="meta">Currently</p>
+              <p>BSc student at TU Dublin, learning how strong digital experiences connect people and businesses.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         ABOUT — short intro block
-         ============================================================ -->
-    <section class="band band--white" id="about">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="heading-sm">About this log</h2>
-          <p class="eyebrow">Updated September 2026</p>
-        </div>
-        <p class="intro">
-          I make small, finished things — browser games, interfaces, tools that
-          solve one problem well. Each entry below is something I can talk
-          through end to end: what it does, why it exists, and what I learned
-          building it.
-        </p>
-        <p class="intro">
-          The list is deliberately plain. One card per project, newest first.
-          If something ships, it goes here the same week.
-        </p>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         PROJECTS — featured cards
-         ============================================================ -->
-    <section class="band band--gray" id="projects">
-      <div class="container">
-
-        <div class="section-head">
-          <h2 class="heading">Selected work</h2>
-          <p class="eyebrow">03 entries</p>
+    <section class="section" id="profile" aria-labelledby="profile-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <p class="section-label">01 / Profile</p>
+          <h2 class="section-title" id="profile-title">Curious about the whole customer journey.</h2>
         </div>
 
-        <div class="project-grid">
+        <div class="profile-grid">
+          <p class="profile-lead">I combine academic study with experience from the day-to-day reality of small business and customer-facing work.</p>
+          <p class="profile-copy">From answering enquiries and coordinating custom orders to speaking with business owners and organising follow-ups, I’ve learned that good work starts with listening clearly, staying organised and following through. I’m now building on that foundation through my degree at TU Dublin.</p>
 
-          <!-- ── CARD ─────────────────────────────────────────────
-               To add a project: copy this whole <article> block and
-               edit the label, title, excerpt and link. To use a real
-               image, replace the placeholder div contents with:
-                 <img src="images/your-photo.jpg" alt="Describe it">
-               ──────────────────────────────────────────────────── -->
-          <article class="card">
-            <div class="card-media">01</div>
-            <div class="card-body">
-              <p class="card-label">Game · 2026</p>
-              <h3 class="card-title">Neon Dodge</h3>
-              <p class="card-excerpt">
-                A fast arcade dodger built in a single HTML file. Canvas
-                rendering, keyboard and touch controls, no dependencies.
-              </p>
-              <a class="pill pill--ghost pill--sm" href="game.html">Play →</a>
+          <div class="study-note" aria-label="Education details">
+            <div class="study-note__item">
+              <span>Course</span>
+              <strong>BSc Digital Business &amp; E-commerce</strong>
             </div>
-          </article>
-
-          <!-- ── CARD ─────────────────────────────────────────── -->
-          <article class="card">
-            <div class="card-media">02</div>
-            <div class="card-body">
-              <p class="card-label">Tool · 2026</p>
-              <h3 class="card-title">Project Name</h3>
-              <p class="card-excerpt">
-                One sentence on what it does and one on the part you're
-                proud of. Keep it under three lines.
-              </p>
-              <a class="pill pill--ghost pill--sm" href="#">View →</a>
+            <div class="study-note__item">
+              <span>Institution</span>
+              <strong>TU Dublin</strong>
             </div>
-          </article>
-
-          <!-- ── CARD ─────────────────────────────────────────── -->
-          <article class="card">
-            <div class="card-media">03</div>
-            <div class="card-body">
-              <p class="card-label">Experiment · 2025</p>
-              <h3 class="card-title">Project Name</h3>
-              <p class="card-excerpt">
-                A short, honest description. Mention the stack only if it
-                matters to the reader.
-              </p>
-              <a class="pill pill--ghost pill--sm" href="#">View →</a>
+            <div class="study-note__item">
+              <span>Study period</span>
+              <strong>2026-2030</strong>
             </div>
-          </article>
-
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================
-         ARCHIVE — compact list for everything else
-         ============================================================ -->
-    <section class="band band--white" id="archive">
-      <div class="container">
-
-        <div class="section-head">
-          <h2 class="heading-sm">Archive</h2>
-          <p class="eyebrow">Older and smaller</p>
+    <section class="section section--parchment" id="work" aria-labelledby="work-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <p class="section-label">02 / Selected work</p>
+          <h2 class="section-title" id="work-title">Experience worth examining in detail.</h2>
         </div>
 
-        <ul class="archive">
+        <div class="work-intro">
+          <p>These entries are an introduction to the work I’ve done so far. Each will later expand into a dedicated case study covering the context, my responsibilities and what I learned.</p>
+        </div>
 
-          <!-- ── ROW ────────────────────────────────────────────
-               Copy this <li> to add an entry.
-               ─────────────────────────────────────────────────── -->
-          <li class="archive-row">
-            <span class="archive-year">2026</span>
-            <span class="archive-title">Neon Dodge — browser arcade game</span>
-            <span class="archive-tag">Game</span>
-            <a class="archive-link" href="game.html">Open →</a>
-          </li>
+        <div class="case-studies">
+          <article class="case-study">
+            <p class="case-study__index">01 / Jana Bake</p>
+            <h3>Customer experience, content &amp; operations</h3>
+            <div class="case-study__details">
+              <p>Customer enquiries, custom orders, product photography, promotional content, and day-to-day support for a busy family bakery.</p>
+              <span class="case-study__status">Case study coming soon</span>
+            </div>
+          </article>
 
-          <li class="archive-row">
-            <span class="archive-year">2025</span>
-            <span class="archive-title">Project title goes here</span>
-            <span class="archive-tag">Tool</span>
-            <a class="archive-link" href="#">Open →</a>
-          </li>
-
-          <li class="archive-row">
-            <span class="archive-year">2025</span>
-            <span class="archive-title">Project title goes here</span>
-            <span class="archive-tag">Experiment</span>
-            <a class="archive-link" href="#">Open →</a>
-          </li>
-
-          <li class="archive-row">
-            <span class="archive-year">2024</span>
-            <span class="archive-title">Project title goes here</span>
-            <span class="archive-tag">Study</span>
-            <a class="archive-link" href="#">Open →</a>
-          </li>
-
-        </ul>
+          <article class="case-study">
+            <p class="case-study__index">02 / NexusCloud.ie</p>
+            <h3>Business development &amp; customer communication</h3>
+            <div class="case-study__details">
+              <p>Prospect conversations, tailored explanations, organised follow-ups, and independently maintained customer records.</p>
+              <span class="case-study__status">Case study coming soon</span>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
+    <section class="section" id="experience" aria-labelledby="experience-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <p class="section-label">03 / Experience</p>
+          <h2 class="section-title" id="experience-title">Learning through responsibility.</h2>
+        </div>
+
+        <div class="experience-layout">
+          <ol class="timeline">
+            <li class="timeline__item">
+              <p class="timeline__date">2021-Present</p>
+              <div class="timeline__role">
+                <h3>Customer Service &amp; Business Support</h3>
+                <p>Jana Bake, Dublin</p>
+              </div>
+              <p class="timeline__summary">Supporting customer communication, custom-order requirements, product content and the smooth running of a family-owned bakery.</p>
+            </li>
+            <li class="timeline__item">
+              <p class="timeline__date">2025-2026</p>
+              <div class="timeline__role">
+                <h3>Business Development Representative</h3>
+                <p>NexusCloud.ie</p>
+              </div>
+              <p class="timeline__summary">Communicating with prospective customers, adapting explanations, managing follow-ups and organising customer records independently.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--parchment" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <p class="section-label">04 / Capabilities</p>
+          <h2 class="section-title" id="capabilities-title">The habits behind the work.</h2>
+        </div>
+
+        <div class="capabilities-layout">
+          <ul class="capabilities">
+            <li class="capability"><span class="capability__number">01</span><span>Customer service</span></li>
+            <li class="capability"><span class="capability__number">02</span><span>Clear communication</span></li>
+            <li class="capability"><span class="capability__number">03</span><span>Organisation</span></li>
+            <li class="capability"><span class="capability__number">04</span><span>Problem-solving</span></li>
+            <li class="capability"><span class="capability__number">05</span><span>Teamwork</span></li>
+            <li class="capability"><span class="capability__number">06</span><span>Independent work</span></li>
+            <li class="capability"><span class="capability__number">07</span><span>Product photography</span></li>
+            <li class="capability"><span class="capability__number">08</span><span>Promotional content</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
-  <footer class="site-footer">
-    <div class="container">
+  <footer class="site-footer" id="contact">
+    <div class="page-shell">
       <div class="footer-grid">
-        <div>
-          <h2 class="heading-sm">Egor Grigorciuc</h2>
-          <p class="footer-note">Projects log · built as a single static page</p>
+        <div class="footer-copy">
+          <p class="section-label">05 / Contact</p>
+          <h2>Let’s start a conversation.</h2>
+          <a class="email-link" href="mailto:forzammil@gmail.com">forzammil@gmail.com</a>
         </div>
-        <div class="footer-links">
-          <a class="pill pill--ghost" href="mailto:hello@example.com">Email</a>
-          <a class="pill pill--ghost" href="#">GitHub</a>
-          <a class="pill pill--ghost" href="#">CV</a>
+
+        <div class="footer-action">
+          <a class="button" href="game.html">Play Game</a>
         </div>
+      </div>
+
+      <div class="footer-fineprint">
+        <span>Egor Grigorciuc / Adamstown, Ireland</span>
+        <span>Portfolio edition 2026</span>
       </div>
     </div>
   </footer>
-
 </body>
 </html>
