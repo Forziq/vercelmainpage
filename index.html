@@ -1,591 +1,644 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title>Neon Dodge · web game</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: none;
-        }
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-        body {
-            background: #0b0e1a;
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            padding: 8px;
-            touch-action: none;
-        }
-        .game-wrapper {
-            background: #111624;
-            border-radius: 24px;
-            padding: 14px 14px 18px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 2px #1f2a3f inset, 0 0 20px #00b8ff33;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 100%;
-            width: fit-content;
-        }
-        canvas {
-            display: block;
-            width: 100%;
-            max-width: 700px;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 0 0 3px #1e2b3c, 0 0 30px #0055ff33;
-            cursor: pointer;
-            background: #0a0d14;
-            touch-action: none;
-        }
-        .hud {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            gap: 10px;
-            color: #c0e0ff;
-            font-weight: 600;
-            text-shadow: 0 0 8px #0088ff, 0 0 16px #0055aa;
-            letter-spacing: 1px;
-            padding: 0 4px;
-        }
-        .score-box {
-            background: #0a111e;
-            padding: 8px 18px;
-            border-radius: 60px;
-            font-size: 1.2rem;
-            box-shadow: 0 0 0 2px #2e4b70, 0 0 18px #0066ff66;
-            font-variant-numeric: tabular-nums;
-            color: #bbddff;
-            flex-shrink: 0;
-        }
-        .restart-btn {
-            background: #16263f;
-            border: none;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 1rem;
-            padding: 8px 20px;
-            border-radius: 60px;
-            color: #b8e2ff;
-            letter-spacing: 1px;
-            box-shadow: 0 0 0 2px #2e5177, 0 0 16px #0077ff66;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-shadow: 0 0 5px #0088ff;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .restart-btn:hover {
-            background: #1e3657;
-            box-shadow: 0 0 0 2px #4b7eb0, 0 0 28px #0088ffcc;
-            color: #e0f0ff;
-        }
-        .restart-btn:active {
-            transform: scale(0.96);
-        }
-        .hint {
-            font-size: 0.72rem;
-            margin-top: 8px;
-            color: #5e7a9c;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 500;
-            text-align: center;
-        }
-        .hint span {
-            color: #88bbff;
-            background: #101b2b;
-            padding: 3px 10px;
-            border-radius: 30px;
-            margin: 0 3px;
-            box-shadow: 0 0 0 1px #2a4b6e;
-            display: inline-block;
-        }
-        /* Mobile touch control zones - visual indicator */
-        .mobile-controls {
-            display: none;
-            width: 100%;
-            margin-top: 10px;
-            gap: 10px;
-            justify-content: center;
-        }
-        .mobile-btn {
-            flex: 1;
-            max-width: 120px;
-            height: 56px;
-            background: #16263f;
-            border: none;
-            border-radius: 16px;
-            color: #b8e2ff;
-            font-size: 1.8rem;
-            font-weight: 700;
-            box-shadow: 0 0 0 2px #2e5177, 0 0 16px #0077ff44;
-            cursor: pointer;
-            touch-action: none;
-            transition: all 0.08s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .mobile-btn:active {
-            background: #1e3657;
-            box-shadow: 0 0 0 2px #4b7eb0, 0 0 24px #0088ffaa;
-            transform: scale(0.97);
-        }
-        @media (max-width: 600px) {
-            body { padding: 4px; }
-            .game-wrapper { padding: 10px 10px 14px; border-radius: 20px; }
-            .score-box { font-size: 1rem; padding: 6px 14px; }
-            .restart-btn { font-size: 0.85rem; padding: 6px 14px; }
-            .hint { font-size: 0.6rem; margin-top: 6px; }
-            .mobile-controls { display: flex; }
-        }
-        @media (hover: none) and (pointer: coarse) {
-            .mobile-controls { display: flex; }
-        }
-        /* Prevent callout menu on long press */
-        * {
-            -webkit-touch-callout: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Egor Grigorciuc — Projects</title>
+<meta name="description" content="A running record of projects and experiments by Egor Grigorciuc.">
+<style>
+  /* ============================================================
+     TOKENS — Eindhoven Design District
+     ============================================================ */
+  :root {
+    /* Colors */
+    --color-charcoal-ink: #000000;
+    --color-paper-white: #ffffff;
+    --color-newsprint-gray: #e8e8e8;
+    --color-pewter: #bfbfbf;
+    --color-signal-red: #ff0000;
+
+    /* Type */
+    --font-helveticanow: 'HelveticaNow', 'Helvetica Neue', Inter, ui-sans-serif,
+                         system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --text-caption: 14px;
+    --text-body-sm: 16px;
+    --text-body: 18px;
+    --text-subheading: 23px;
+    --text-heading-sm: 35px;
+    --text-heading: 46px;
+    --text-heading-lg: 50px;
+    --text-display: 150px;
+
+    /* Spacing */
+    --spacing-8: 8px;
+    --spacing-10: 10px;
+    --spacing-12: 12px;
+    --spacing-15: 15px;
+    --spacing-16: 16px;
+    --spacing-20: 20px;
+    --spacing-25: 25px;
+    --spacing-30: 30px;
+    --spacing-40: 40px;
+    --spacing-50: 50px;
+    --spacing-100: 100px;
+
+    /* Layout */
+    --page-max-width: 1200px;
+    --section-gap: 80px;
+    --card-padding: 20px;
+    --element-gap: 20px;
+
+    /* Radius — only two values exist in this system */
+    --radius-none: 0px;
+    --radius-pill: 500px;
+
+    /* Surfaces */
+    --surface-paper-white: #ffffff;
+    --surface-newsprint-gray: #e8e8e8;
+  }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-paper-white);
+    color: var(--color-charcoal-ink);
+    font-family: var(--font-helveticanow);
+    font-weight: 400;
+    font-size: var(--text-body);
+    line-height: 1.31;
+    letter-spacing: -0.004em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 1px solid var(--color-charcoal-ink);
+    outline-offset: 3px;
+  }
+
+  /* ============================================================
+     LAYOUT PRIMITIVES
+     ============================================================ */
+  .container {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .band { padding: var(--section-gap) 0; }
+  .band--white { background: var(--surface-paper-white); }
+  .band--gray  { background: var(--surface-newsprint-gray); }
+
+  /* ============================================================
+     BUTTONS — pill ghost / pill filled
+     ============================================================ */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    font-size: var(--text-body-sm);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0.005em;
+    border-radius: var(--radius-pill);
+    padding: 10px 15px;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    white-space: nowrap;
+  }
+
+  .pill--ghost {
+    border: 1px solid var(--color-charcoal-ink);
+    background: var(--surface-paper-white);
+    color: var(--color-charcoal-ink);
+  }
+
+  .pill--filled {
+    border: 1px solid var(--color-charcoal-ink);
+    background: var(--color-charcoal-ink);
+    color: var(--color-paper-white);
+    padding: 10px 18px;
+  }
+
+  .pill--lg { padding: 16px 20px; }
+  .pill--sm { font-size: var(--text-caption); padding: 8px 14px; letter-spacing: 0.015em; }
+
+  /* ============================================================
+     HEADER
+     ============================================================ */
+  .site-header {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 30px 24px 40px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--element-gap);
+  }
+
+  .logo {
+    font-size: var(--text-caption);
+    line-height: 1.2;
+    letter-spacing: 0.015em;
+    text-decoration: none;
+    display: block;
+  }
+  .logo span { display: block; }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-10);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* ============================================================
+     HERO — typographic installation
+     ============================================================ */
+  .hero { padding-bottom: var(--section-gap); }
+
+  .hero-type {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(16px, 4vw, 50px);
+  }
+
+  .display {
+    margin: 0;
+    font-size: clamp(48px, 13vw, 150px);
+    font-weight: 400;
+    line-height: 0.93;
+    letter-spacing: -0.05em;
+  }
+
+  .display-rotated {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: clamp(48px, 13vw, 150px);
+    font-weight: 400;
+    line-height: 0.93;
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  .hero-foot {
+    margin-top: var(--spacing-40);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--spacing-30);
+  }
+
+  .hero-sub {
+    margin: 0;
+    max-width: 600px;
+    font-size: 19px;
+    line-height: 1.31;
+    letter-spacing: -0.004em;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-10);
+  }
+
+  /* ============================================================
+     SECTION HEADINGS
+     ============================================================ */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spacing-20);
+    margin-bottom: var(--spacing-40);
+  }
+
+  .heading {
+    margin: 0;
+    font-size: clamp(32px, 5vw, 46px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .heading-sm {
+    margin: 0;
+    font-size: clamp(23px, 3vw, 35px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    letter-spacing: 0.015em;
+    color: var(--color-pewter);
+  }
+
+  /* ============================================================
+     INTRO PARAGRAPH BLOCK
+     ============================================================ */
+  .intro {
+    margin: 0;
+    max-width: 600px;
+    font-size: var(--text-body);
+    line-height: 1.31;
+    letter-spacing: -0.004em;
+  }
+  .intro + .intro { margin-top: var(--spacing-20); }
+
+  /* ============================================================
+     PROJECT CARDS
+     ============================================================ */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--element-gap);
+  }
+
+  .card {
+    background: var(--surface-paper-white);
+    border-radius: var(--radius-none);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Placeholder media block — swap for an <img> when you have a photo */
+  .card-media {
+    aspect-ratio: 4 / 3;
+    background: var(--surface-newsprint-gray);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--card-padding);
+    font-size: var(--text-heading);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--color-pewter);
+  }
+
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    padding-top: var(--card-padding);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-10);
+  }
+
+  .card-label {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    letter-spacing: 0.015em;
+    color: var(--color-signal-red);
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .card-excerpt {
+    margin: 0;
+    font-size: var(--text-body-sm);
+    line-height: 1.4;
+    letter-spacing: 0.005em;
+  }
+
+  .card-body .pill { margin-top: var(--spacing-8); }
+
+  /* ============================================================
+     ARCHIVE LIST — hairline rows
+     ============================================================ */
+  .archive {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-pewter);
+  }
+
+  .archive-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 160px auto;
+    align-items: baseline;
+    gap: var(--spacing-20);
+    padding: var(--spacing-20) 0;
+    border-bottom: 1px solid var(--color-pewter);
+  }
+
+  .archive-year {
+    font-size: var(--text-caption);
+    letter-spacing: 0.015em;
+    color: var(--color-pewter);
+  }
+
+  .archive-title {
+    font-size: var(--text-body-sm);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.005em;
+  }
+
+  .archive-tag {
+    font-size: var(--text-caption);
+    letter-spacing: 0.015em;
+    color: var(--color-signal-red);
+  }
+
+  .archive-link {
+    font-size: var(--text-caption);
+    letter-spacing: 0.015em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-charcoal-ink);
+    padding-bottom: 2px;
+    justify-self: end;
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .site-footer {
+    background: var(--surface-newsprint-gray);
+    padding: var(--section-gap) 0 var(--spacing-50);
+  }
+
+  .footer-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-30);
+  }
+
+  .footer-note {
+    margin: var(--spacing-20) 0 0;
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    letter-spacing: 0.015em;
+    color: var(--color-pewter);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-10);
+  }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .project-grid { grid-template-columns: repeat(2, 1fr); }
+    .archive-row { grid-template-columns: 60px 1fr auto; }
+    .archive-tag { display: none; }
+  }
+
+  @media (max-width: 620px) {
+    :root { --section-gap: 56px; }
+    .container { padding: 0 18px; }
+    .site-header { padding: 22px 18px 30px; }
+    .project-grid { grid-template-columns: 1fr; }
+    .hero-foot { flex-direction: column; align-items: flex-start; }
+    .archive-row {
+      grid-template-columns: 1fr auto;
+      gap: var(--spacing-8);
+    }
+    .archive-year { grid-column: 1 / -1; }
+    .archive-link { justify-self: start; grid-column: 1 / -1; margin-top: var(--spacing-8); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
 </head>
 <body>
-<div class="game-wrapper">
-    <canvas id="gameCanvas" width="700" height="500"></canvas>
-    <div class="hud">
-        <div class="score-box" id="scoreDisplay">000</div>
-        <button class="restart-btn" id="restartButton">⟳ RESTART</button>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="site-header">
+    <a class="logo" href="index.html">
+      <span>Egor</span>
+      <span>Grigorciuc</span>
+    </a>
+
+    <nav class="nav-controls" aria-label="Primary">
+      <a class="pill pill--ghost" href="#projects">Projects</a>
+      <a class="pill pill--ghost" href="#archive">Archive</a>
+      <a class="pill pill--filled" href="game.html">Play the game</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-type">
+          <h1 class="display">Projects</h1>
+          <span class="display-rotated" aria-hidden="true">Log</span>
+        </div>
+
+        <div class="hero-foot">
+          <p class="hero-sub">
+            A running record of the things I build — kept short, kept current,
+            and kept here so the CV never has to guess.
+          </p>
+          <div class="hero-actions">
+            <a class="pill pill--filled pill--lg" href="game.html">Play Neon Dodge →</a>
+            <a class="pill pill--ghost pill--lg" href="#projects">See all projects</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ABOUT — short intro block
+         ============================================================ -->
+    <section class="band band--white" id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="heading-sm">About this log</h2>
+          <p class="eyebrow">Updated September 2026</p>
+        </div>
+        <p class="intro">
+          I make small, finished things — browser games, interfaces, tools that
+          solve one problem well. Each entry below is something I can talk
+          through end to end: what it does, why it exists, and what I learned
+          building it.
+        </p>
+        <p class="intro">
+          The list is deliberately plain. One card per project, newest first.
+          If something ships, it goes here the same week.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PROJECTS — featured cards
+         ============================================================ -->
+    <section class="band band--gray" id="projects">
+      <div class="container">
+
+        <div class="section-head">
+          <h2 class="heading">Selected work</h2>
+          <p class="eyebrow">03 entries</p>
+        </div>
+
+        <div class="project-grid">
+
+          <!-- ── CARD ─────────────────────────────────────────────
+               To add a project: copy this whole <article> block and
+               edit the label, title, excerpt and link. To use a real
+               image, replace the placeholder div contents with:
+                 <img src="images/your-photo.jpg" alt="Describe it">
+               ──────────────────────────────────────────────────── -->
+          <article class="card">
+            <div class="card-media">01</div>
+            <div class="card-body">
+              <p class="card-label">Game · 2026</p>
+              <h3 class="card-title">Neon Dodge</h3>
+              <p class="card-excerpt">
+                A fast arcade dodger built in a single HTML file. Canvas
+                rendering, keyboard and touch controls, no dependencies.
+              </p>
+              <a class="pill pill--ghost pill--sm" href="game.html">Play →</a>
+            </div>
+          </article>
+
+          <!-- ── CARD ─────────────────────────────────────────── -->
+          <article class="card">
+            <div class="card-media">02</div>
+            <div class="card-body">
+              <p class="card-label">Tool · 2026</p>
+              <h3 class="card-title">Project Name</h3>
+              <p class="card-excerpt">
+                One sentence on what it does and one on the part you're
+                proud of. Keep it under three lines.
+              </p>
+              <a class="pill pill--ghost pill--sm" href="#">View →</a>
+            </div>
+          </article>
+
+          <!-- ── CARD ─────────────────────────────────────────── -->
+          <article class="card">
+            <div class="card-media">03</div>
+            <div class="card-body">
+              <p class="card-label">Experiment · 2025</p>
+              <h3 class="card-title">Project Name</h3>
+              <p class="card-excerpt">
+                A short, honest description. Mention the stack only if it
+                matters to the reader.
+              </p>
+              <a class="pill pill--ghost pill--sm" href="#">View →</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ARCHIVE — compact list for everything else
+         ============================================================ -->
+    <section class="band band--white" id="archive">
+      <div class="container">
+
+        <div class="section-head">
+          <h2 class="heading-sm">Archive</h2>
+          <p class="eyebrow">Older and smaller</p>
+        </div>
+
+        <ul class="archive">
+
+          <!-- ── ROW ────────────────────────────────────────────
+               Copy this <li> to add an entry.
+               ─────────────────────────────────────────────────── -->
+          <li class="archive-row">
+            <span class="archive-year">2026</span>
+            <span class="archive-title">Neon Dodge — browser arcade game</span>
+            <span class="archive-tag">Game</span>
+            <a class="archive-link" href="game.html">Open →</a>
+          </li>
+
+          <li class="archive-row">
+            <span class="archive-year">2025</span>
+            <span class="archive-title">Project title goes here</span>
+            <span class="archive-tag">Tool</span>
+            <a class="archive-link" href="#">Open →</a>
+          </li>
+
+          <li class="archive-row">
+            <span class="archive-year">2025</span>
+            <span class="archive-title">Project title goes here</span>
+            <span class="archive-tag">Experiment</span>
+            <a class="archive-link" href="#">Open →</a>
+          </li>
+
+          <li class="archive-row">
+            <span class="archive-year">2024</span>
+            <span class="archive-title">Project title goes here</span>
+            <span class="archive-tag">Study</span>
+            <a class="archive-link" href="#">Open →</a>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h2 class="heading-sm">Egor Grigorciuc</h2>
+          <p class="footer-note">Projects log · built as a single static page</p>
+        </div>
+        <div class="footer-links">
+          <a class="pill pill--ghost" href="mailto:hello@example.com">Email</a>
+          <a class="pill pill--ghost" href="#">GitHub</a>
+          <a class="pill pill--ghost" href="#">CV</a>
+        </div>
+      </div>
     </div>
-    <!-- On-screen mobile touch controls -->
-    <div class="mobile-controls" id="mobileControls">
-        <button class="mobile-btn" id="btnLeft" aria-label="Move left">◀</button>
-        <button class="mobile-btn" id="btnRight" aria-label="Move right">▶</button>
-    </div>
-    <div class="hint">
-        <span>← →</span> or <span>A / D</span> · tap screen after loss to restart
-    </div>
-</div>
+  </footer>
 
-<script>
-    (function() {
-        // ---- CANVAS & CONTEXT ----
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplay = document.getElementById('scoreDisplay');
-
-        // ---- GAME DIMENSIONS (fixed internal resolution) ----
-        const W = 700;
-        const H = 500;
-        canvas.width = W;
-        canvas.height = H;
-
-        // ---- GAME STATE ----
-        let gameActive = true;
-        let score = 0;
-        let frame = 0;
-        let animationId = null;
-
-        // ---- PLAYER ----
-        const PLAYER_WIDTH = 70;
-        const PLAYER_HEIGHT = 18;
-        const PLAYER_FIXED_Y = H - 70;
-        const PLAYER_SPEED = 7.5;
-
-        const player = {
-            x: W / 2 - PLAYER_WIDTH / 2,
-            y: PLAYER_FIXED_Y,
-            w: PLAYER_WIDTH,
-            h: PLAYER_HEIGHT
-        };
-
-        // ---- BLOCKS ----
-        let blocks = [];
-        const BLOCK_SIZE = 34;
-        const BASE_FALL_SPEED = 2.7;
-        const SPAWN_RATE = 0.022;
-
-        // ---- INPUT STATE ----
-        const keys = {
-            ArrowLeft: false,
-            ArrowRight: false,
-            a: false,
-            A: false,
-            d: false,
-            D: false
-        };
-        // Mobile button states (separate from keyboard)
-        let mobileLeft = false;
-        let mobileRight = false;
-
-        // ---- HELPERS ----
-        function formatScore(scr) {
-            return Math.min(999, Math.floor(scr)).toString().padStart(3, '0');
-        }
-
-        function resetGame() {
-            gameActive = true;
-            score = 0;
-            blocks = [];
-            frame = 0;
-            player.x = W / 2 - PLAYER_WIDTH / 2;
-            // reset input states
-            keys.ArrowLeft = false;
-            keys.ArrowRight = false;
-            keys.a = false;
-            keys.A = false;
-            keys.d = false;
-            keys.D = false;
-            mobileLeft = false;
-            mobileRight = false;
-            updateScoreDisplay();
-        }
-
-        function updateScoreDisplay() {
-            scoreDisplay.textContent = formatScore(score);
-        }
-
-        function rectCollide(ax, ay, aw, ah, bx, by, bw, bh) {
-            return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
-        }
-
-        function spawnBlock() {
-            const x = Math.random() * (W - BLOCK_SIZE);
-            const speedFactor = 0.85 + Math.random() * 0.75;
-            blocks.push({
-                x: x,
-                y: -BLOCK_SIZE,
-                w: BLOCK_SIZE,
-                h: BLOCK_SIZE,
-                speed: BASE_FALL_SPEED * speedFactor,
-                hue: 350 + Math.random() * 20 - 10
-            });
-        }
-
-        // ---- UPDATE ----
-        function updateGame() {
-            if (!gameActive) return;
-
-            // --- player movement (keyboard OR mobile) ---
-            const leftPressed = keys.ArrowLeft || keys.a || keys.A || mobileLeft;
-            const rightPressed = keys.ArrowRight || keys.d || keys.D || mobileRight;
-
-            if (leftPressed) player.x -= PLAYER_SPEED;
-            if (rightPressed) player.x += PLAYER_SPEED;
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.w > W) player.x = W - player.w;
-
-            // --- block movement ---
-            const difficultyMultiplier = 1 + Math.min(2.2, score / 300);
-
-            for (let i = blocks.length - 1; i >= 0; i--) {
-                const b = blocks[i];
-                b.y += b.speed * difficultyMultiplier;
-
-                // collision with player
-                if (rectCollide(player.x, player.y, player.w, player.h, b.x, b.y, b.w, b.h)) {
-                    gameActive = false;
-                }
-
-                // remove off-screen and score
-                if (b.y > H + BLOCK_SIZE) {
-                    blocks.splice(i, 1);
-                    if (gameActive) {
-                        score += 10;
-                        updateScoreDisplay();
-                    }
-                }
-            }
-
-            // if game became inactive due to collision, don't continue updates
-            if (!gameActive) return;
-
-            // spawn new blocks
-            const spawnChance = SPAWN_RATE * (1 + Math.min(1.8, score / 220));
-            if (Math.random() < spawnChance) {
-                spawnBlock();
-            }
-
-            frame++;
-        }
-
-        // ---- DRAW ----
-        function draw() {
-            ctx.clearRect(0, 0, W, H);
-
-            // grid
-            ctx.strokeStyle = '#1b314d';
-            ctx.lineWidth = 1.2;
-            ctx.globalAlpha = 0.5;
-            for (let i = 0; i < W; i += 40) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, H);
-                ctx.strokeStyle = '#1e3d62';
-                ctx.stroke();
-            }
-            for (let i = 0; i < H; i += 40) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(W, i);
-                ctx.strokeStyle = '#1e3d62';
-                ctx.stroke();
-            }
-            ctx.globalAlpha = 1.0;
-
-            // blocks
-            for (let b of blocks) {
-                ctx.shadowColor = '#ff3b3b';
-                ctx.shadowBlur = 22;
-                ctx.fillStyle = `hsl(${b.hue}, 90%, 60%)`;
-                ctx.beginPath();
-                ctx.roundRect(b.x, b.y, b.w, b.h, 8);
-                ctx.fill();
-
-                ctx.shadowBlur = 12;
-                ctx.fillStyle = `hsl(${b.hue}, 100%, 75%)`;
-                ctx.beginPath();
-                ctx.roundRect(b.x + 4, b.y + 4, b.w - 8, b.h - 8, 6);
-                ctx.fill();
-
-                ctx.shadowBlur = 6;
-                ctx.fillStyle = '#ffdddd';
-                ctx.beginPath();
-                ctx.roundRect(b.x + 8, b.y + 6, 6, 6, 3);
-                ctx.fill();
-            }
-
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
-
-            // player
-            ctx.shadowColor = '#00e0ff';
-            ctx.shadowBlur = 28;
-            ctx.fillStyle = '#00ccff';
-            ctx.beginPath();
-            ctx.roundRect(player.x, player.y, player.w, player.h, 12);
-            ctx.fill();
-
-            ctx.shadowBlur = 18;
-            ctx.fillStyle = '#aaeaff';
-            ctx.beginPath();
-            ctx.roundRect(player.x + 6, player.y + 3, player.w - 12, player.h - 6, 8);
-            ctx.fill();
-
-            ctx.shadowBlur = 12;
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.roundRect(player.x + 16, player.y + 5, 12, 8, 4);
-            ctx.fill();
-
-            ctx.shadowBlur = 0;
-            ctx.shadowColor = 'transparent';
-
-            // game over overlay
-            if (!gameActive) {
-                ctx.fillStyle = 'rgba(5, 8, 15, 0.78)';
-                ctx.fillRect(0, 0, W, H);
-
-                ctx.font = 'bold 52px "Segoe UI", system-ui, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.shadowColor = '#ff2266';
-                ctx.shadowBlur = 32;
-                ctx.fillStyle = '#ff4466';
-                ctx.fillText('GAME OVER', W / 2, H / 2 - 30);
-
-                ctx.font = 'bold 24px "Segoe UI", system-ui, sans-serif';
-                ctx.shadowColor = '#00aaff';
-                ctx.shadowBlur = 24;
-                ctx.fillStyle = '#88ddff';
-                ctx.fillText('TAP ANYWHERE TO RESTART', W / 2, H / 2 + 45);
-                ctx.shadowBlur = 0;
-            }
-        }
-
-        // ---- GAME LOOP ----
-        function gameLoop() {
-            updateGame();
-            draw();
-            animationId = requestAnimationFrame(gameLoop);
-        }
-
-        // ---- KEYBOARD EVENTS ----
-        function handleKeyDown(e) {
-            const key = e.key;
-            if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
-                e.preventDefault();
-            }
-            if (key in keys) keys[key] = true;
-        }
-
-        function handleKeyUp(e) {
-            const key = e.key;
-            if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
-                e.preventDefault();
-            }
-            if (key in keys) keys[key] = false;
-        }
-
-        // ---- MOBILE TOUCH CONTROLS ----
-        const btnLeft = document.getElementById('btnLeft');
-        const btnRight = document.getElementById('btnRight');
-
-        function setMobileLeft(state) {
-            mobileLeft = state;
-        }
-        function setMobileRight(state) {
-            mobileRight = state;
-        }
-
-        // touch events for buttons
-        btnLeft.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            setMobileLeft(true);
-        }, { passive: false });
-        btnLeft.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            setMobileLeft(false);
-        }, { passive: false });
-        btnLeft.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            setMobileLeft(false);
-        }, { passive: false });
-
-        btnRight.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            setMobileRight(true);
-        }, { passive: false });
-        btnRight.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            setMobileRight(false);
-        }, { passive: false });
-        btnRight.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            setMobileRight(false);
-        }, { passive: false });
-
-        // mouse events for buttons (for testing on desktop)
-        btnLeft.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            setMobileLeft(true);
-        });
-        btnLeft.addEventListener('mouseup', (e) => {
-            e.preventDefault();
-            setMobileLeft(false);
-        });
-        btnLeft.addEventListener('mouseleave', (e) => {
-            setMobileLeft(false);
-        });
-
-        btnRight.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            setMobileRight(true);
-        });
-        btnRight.addEventListener('mouseup', (e) => {
-            e.preventDefault();
-            setMobileRight(false);
-        });
-        btnRight.addEventListener('mouseleave', (e) => {
-            setMobileRight(false);
-        });
-
-        // ---- TAP-TO-RESTART (canvas click/tap after game over) ----
-        function handleCanvasTap(e) {
-            if (!gameActive) {
-                e.preventDefault();
-                resetGame();
-            }
-        }
-
-        canvas.addEventListener('click', handleCanvasTap);
-        canvas.addEventListener('touchstart', (e) => {
-            if (!gameActive) {
-                e.preventDefault();
-                resetGame();
-            }
-        }, { passive: false });
-
-        // ---- RESTART BUTTON ----
-        document.getElementById('restartButton').addEventListener('click', (e) => {
-            e.stopPropagation();
-            resetGame();
-        });
-
-        // ---- PREVENT SCROLLING / ZOOMING ON MOBILE ----
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                if (e.target === document.body || e.target === canvas) {
-                    e.preventDefault();
-                }
-            }
-        }, { passive: false });
-
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('keyup', handleKeyUp);
-
-        // prevent context menu
-        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.getElementById('mobileControls').addEventListener('contextmenu', (e) => e.preventDefault());
-
-        // prevent double-tap zoom
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', (e) => {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                e.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, { passive: false });
-
-        // ---- START ----
-        resetGame();
-        gameLoop();
-
-        // ---- POLYFILL roundRect ----
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                if (w < 2 * r) r = w / 2;
-                if (h < 2 * r) r = h / 2;
-                this.moveTo(x + r, y);
-                this.lineTo(x + w - r, y);
-                this.quadraticCurveTo(x + w, y, x + w, y + r);
-                this.lineTo(x + w, y + h - r);
-                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-                this.lineTo(x + r, y + h);
-                this.quadraticCurveTo(x, y + h, x, y + h - r);
-                this.lineTo(x, y + r);
-                this.quadraticCurveTo(x, y, x + r, y);
-                return this;
-            };
-        }
-
-        // ---- CLEANUP ----
-        window.addEventListener('beforeunload', () => {
-            if (animationId) cancelAnimationFrame(animationId);
-            document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('keyup', handleKeyUp);
-        });
-    })();
-</script>
 </body>
 </html>
