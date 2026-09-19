@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Neon Dodge · web game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: #0b0e1a;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 8px;
+            touch-action: none;
+        }
+        .game-wrapper {
+            background: #111624;
+            border-radius: 24px;
+            padding: 14px 14px 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 2px #1f2a3f inset, 0 0 20px #00b8ff33;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 100%;
+            width: fit-content;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 0 0 3px #1e2b3c, 0 0 30px #0055ff33;
+            cursor: pointer;
+            background: #0a0d14;
+            touch-action: none;
+        }
+        .hud {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            gap: 10px;
+            color: #c0e0ff;
+            font-weight: 600;
+            text-shadow: 0 0 8px #0088ff, 0 0 16px #0055aa;
+            letter-spacing: 1px;
+            padding: 0 4px;
+        }
+        .score-box {
+            background: #0a111e;
+            padding: 8px 18px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            box-shadow: 0 0 0 2px #2e4b70, 0 0 18px #0066ff66;
+            font-variant-numeric: tabular-nums;
+            color: #bbddff;
+            flex-shrink: 0;
+        }
+        .restart-btn {
+            background: #16263f;
+            border: none;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 8px 20px;
+            border-radius: 60px;
+            color: #b8e2ff;
+            letter-spacing: 1px;
+            box-shadow: 0 0 0 2px #2e5177, 0 0 16px #0077ff66;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-shadow: 0 0 5px #0088ff;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .restart-btn:hover {
+            background: #1e3657;
+            box-shadow: 0 0 0 2px #4b7eb0, 0 0 28px #0088ffcc;
+            color: #e0f0ff;
+        }
+        .restart-btn:active {
+            transform: scale(0.96);
+        }
+        .hint {
+            font-size: 0.72rem;
+            margin-top: 8px;
+            color: #5e7a9c;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-align: center;
+        }
+        .hint span {
+            color: #88bbff;
+            background: #101b2b;
+            padding: 3px 10px;
+            border-radius: 30px;
+            margin: 0 3px;
+            box-shadow: 0 0 0 1px #2a4b6e;
+            display: inline-block;
+        }
+        /* Mobile touch control zones - visual indicator */
+        .mobile-controls {
+            display: none;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+            justify-content: center;
+        }
+        .mobile-btn {
+            flex: 1;
+            max-width: 120px;
+            height: 56px;
+            background: #16263f;
+            border: none;
+            border-radius: 16px;
+            color: #b8e2ff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: 0 0 0 2px #2e5177, 0 0 16px #0077ff44;
+            cursor: pointer;
+            touch-action: none;
+            transition: all 0.08s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .mobile-btn:active {
+            background: #1e3657;
+            box-shadow: 0 0 0 2px #4b7eb0, 0 0 24px #0088ffaa;
+            transform: scale(0.97);
+        }
+        @media (max-width: 600px) {
+            body { padding: 4px; }
+            .game-wrapper { padding: 10px 10px 14px; border-radius: 20px; }
+            .score-box { font-size: 1rem; padding: 6px 14px; }
+            .restart-btn { font-size: 0.85rem; padding: 6px 14px; }
+            .hint { font-size: 0.6rem; margin-top: 6px; }
+            .mobile-controls { display: flex; }
+        }
+        @media (hover: none) and (pointer: coarse) {
+            .mobile-controls { display: flex; }
+        }
+        /* Prevent callout menu on long press */
+        * {
+            -webkit-touch-callout: none;
+        }
+    </style>
+</head>
+<body>
+<div class="game-wrapper">
+    <canvas id="gameCanvas" width="700" height="500"></canvas>
+    <div class="hud">
+        <div class="score-box" id="scoreDisplay">000</div>
+        <button class="restart-btn" id="restartButton">⟳ RESTART</button>
+    </div>
+    <!-- On-screen mobile touch controls -->
+    <div class="mobile-controls" id="mobileControls">
+        <button class="mobile-btn" id="btnLeft" aria-label="Move left">◀</button>
+        <button class="mobile-btn" id="btnRight" aria-label="Move right">▶</button>
+    </div>
+    <div class="hint">
+        <span>← →</span> or <span>A / D</span> · tap screen after loss to restart
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---- CANVAS & CONTEXT ----
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+
+        // ---- GAME DIMENSIONS (fixed internal resolution) ----
+        const W = 700;
+        const H = 500;
+        canvas.width = W;
+        canvas.height = H;
+
+        // ---- GAME STATE ----
+        let gameActive = true;
+        let score = 0;
+        let frame = 0;
+        let animationId = null;
+
+        // ---- PLAYER ----
+        const PLAYER_WIDTH = 70;
+        const PLAYER_HEIGHT = 18;
+        const PLAYER_FIXED_Y = H - 70;
+        const PLAYER_SPEED = 7.5;
+
+        const player = {
+            x: W / 2 - PLAYER_WIDTH / 2,
+            y: PLAYER_FIXED_Y,
+            w: PLAYER_WIDTH,
+            h: PLAYER_HEIGHT
+        };
+
+        // ---- BLOCKS ----
+        let blocks = [];
+        const BLOCK_SIZE = 34;
+        const BASE_FALL_SPEED = 2.7;
+        const SPAWN_RATE = 0.022;
+
+        // ---- INPUT STATE ----
+        const keys = {
+            ArrowLeft: false,
+            ArrowRight: false,
+            a: false,
+            A: false,
+            d: false,
+            D: false
+        };
+        // Mobile button states (separate from keyboard)
+        let mobileLeft = false;
+        let mobileRight = false;
+
+        // ---- HELPERS ----
+        function formatScore(scr) {
+            return Math.min(999, Math.floor(scr)).toString().padStart(3, '0');
+        }
+
+        function resetGame() {
+            gameActive = true;
+            score = 0;
+            blocks = [];
+            frame = 0;
+            player.x = W / 2 - PLAYER_WIDTH / 2;
+            // reset input states
+            keys.ArrowLeft = false;
+            keys.ArrowRight = false;
+            keys.a = false;
+            keys.A = false;
+            keys.d = false;
+            keys.D = false;
+            mobileLeft = false;
+            mobileRight = false;
+            updateScoreDisplay();
+        }
+
+        function updateScoreDisplay() {
+            scoreDisplay.textContent = formatScore(score);
+        }
+
+        function rectCollide(ax, ay, aw, ah, bx, by, bw, bh) {
+            return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+        }
+
+        function spawnBlock() {
+            const x = Math.random() * (W - BLOCK_SIZE);
+            const speedFactor = 0.85 + Math.random() * 0.75;
+            blocks.push({
+                x: x,
+                y: -BLOCK_SIZE,
+                w: BLOCK_SIZE,
+                h: BLOCK_SIZE,
+                speed: BASE_FALL_SPEED * speedFactor,
+                hue: 350 + Math.random() * 20 - 10
+            });
+        }
+
+        // ---- UPDATE ----
+        function updateGame() {
+            if (!gameActive) return;
+
+            // --- player movement (keyboard OR mobile) ---
+            const leftPressed = keys.ArrowLeft || keys.a || keys.A || mobileLeft;
+            const rightPressed = keys.ArrowRight || keys.d || keys.D || mobileRight;
+
+            if (leftPressed) player.x -= PLAYER_SPEED;
+            if (rightPressed) player.x += PLAYER_SPEED;
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.w > W) player.x = W - player.w;
+
+            // --- block movement ---
+            const difficultyMultiplier = 1 + Math.min(2.2, score / 300);
+
+            for (let i = blocks.length - 1; i >= 0; i--) {
+                const b = blocks[i];
+                b.y += b.speed * difficultyMultiplier;
+
+                // collision with player
+                if (rectCollide(player.x, player.y, player.w, player.h, b.x, b.y, b.w, b.h)) {
+                    gameActive = false;
+                }
+
+                // remove off-screen and score
+                if (b.y > H + BLOCK_SIZE) {
+                    blocks.splice(i, 1);
+                    if (gameActive) {
+                        score += 10;
+                        updateScoreDisplay();
+                    }
+                }
+            }
+
+            // if game became inactive due to collision, don't continue updates
+            if (!gameActive) return;
+
+            // spawn new blocks
+            const spawnChance = SPAWN_RATE * (1 + Math.min(1.8, score / 220));
+            if (Math.random() < spawnChance) {
+                spawnBlock();
+            }
+
+            frame++;
+        }
+
+        // ---- DRAW ----
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            // grid
+            ctx.strokeStyle = '#1b314d';
+            ctx.lineWidth = 1.2;
+            ctx.globalAlpha = 0.5;
+            for (let i = 0; i < W; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, H);
+                ctx.strokeStyle = '#1e3d62';
+                ctx.stroke();
+            }
+            for (let i = 0; i < H; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(W, i);
+                ctx.strokeStyle = '#1e3d62';
+                ctx.stroke();
+            }
+            ctx.globalAlpha = 1.0;
+
+            // blocks
+            for (let b of blocks) {
+                ctx.shadowColor = '#ff3b3b';
+                ctx.shadowBlur = 22;
+                ctx.fillStyle = `hsl(${b.hue}, 90%, 60%)`;
+                ctx.beginPath();
+                ctx.roundRect(b.x, b.y, b.w, b.h, 8);
+                ctx.fill();
+
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = `hsl(${b.hue}, 100%, 75%)`;
+                ctx.beginPath();
+                ctx.roundRect(b.x + 4, b.y + 4, b.w - 8, b.h - 8, 6);
+                ctx.fill();
+
+                ctx.shadowBlur = 6;
+                ctx.fillStyle = '#ffdddd';
+                ctx.beginPath();
+                ctx.roundRect(b.x + 8, b.y + 6, 6, 6, 3);
+                ctx.fill();
+            }
+
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+
+            // player
+            ctx.shadowColor = '#00e0ff';
+            ctx.shadowBlur = 28;
+            ctx.fillStyle = '#00ccff';
+            ctx.beginPath();
+            ctx.roundRect(player.x, player.y, player.w, player.h, 12);
+            ctx.fill();
+
+            ctx.shadowBlur = 18;
+            ctx.fillStyle = '#aaeaff';
+            ctx.beginPath();
+            ctx.roundRect(player.x + 6, player.y + 3, player.w - 12, player.h - 6, 8);
+            ctx.fill();
+
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.roundRect(player.x + 16, player.y + 5, 12, 8, 4);
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
+
+            // game over overlay
+            if (!gameActive) {
+                ctx.fillStyle = 'rgba(5, 8, 15, 0.78)';
+                ctx.fillRect(0, 0, W, H);
+
+                ctx.font = 'bold 52px "Segoe UI", system-ui, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = '#ff2266';
+                ctx.shadowBlur = 32;
+                ctx.fillStyle = '#ff4466';
+                ctx.fillText('GAME OVER', W / 2, H / 2 - 30);
+
+                ctx.font = 'bold 24px "Segoe UI", system-ui, sans-serif';
+                ctx.shadowColor = '#00aaff';
+                ctx.shadowBlur = 24;
+                ctx.fillStyle = '#88ddff';
+                ctx.fillText('TAP ANYWHERE TO RESTART', W / 2, H / 2 + 45);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // ---- GAME LOOP ----
+        function gameLoop() {
+            updateGame();
+            draw();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // ---- KEYBOARD EVENTS ----
+        function handleKeyDown(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
+                e.preventDefault();
+            }
+            if (key in keys) keys[key] = true;
+        }
+
+        function handleKeyUp(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'a' || key === 'A' || key === 'd' || key === 'D') {
+                e.preventDefault();
+            }
+            if (key in keys) keys[key] = false;
+        }
+
+        // ---- MOBILE TOUCH CONTROLS ----
+        const btnLeft = document.getElementById('btnLeft');
+        const btnRight = document.getElementById('btnRight');
+
+        function setMobileLeft(state) {
+            mobileLeft = state;
+        }
+        function setMobileRight(state) {
+            mobileRight = state;
+        }
+
+        // touch events for buttons
+        btnLeft.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setMobileLeft(true);
+        }, { passive: false });
+        btnLeft.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            setMobileLeft(false);
+        }, { passive: false });
+        btnLeft.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            setMobileLeft(false);
+        }, { passive: false });
+
+        btnRight.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setMobileRight(true);
+        }, { passive: false });
+        btnRight.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            setMobileRight(false);
+        }, { passive: false });
+        btnRight.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            setMobileRight(false);
+        }, { passive: false });
+
+        // mouse events for buttons (for testing on desktop)
+        btnLeft.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            setMobileLeft(true);
+        });
+        btnLeft.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            setMobileLeft(false);
+        });
+        btnLeft.addEventListener('mouseleave', (e) => {
+            setMobileLeft(false);
+        });
+
+        btnRight.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            setMobileRight(true);
+        });
+        btnRight.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            setMobileRight(false);
+        });
+        btnRight.addEventListener('mouseleave', (e) => {
+            setMobileRight(false);
+        });
+
+        // ---- TAP-TO-RESTART (canvas click/tap after game over) ----
+        function handleCanvasTap(e) {
+            if (!gameActive) {
+                e.preventDefault();
+                resetGame();
+            }
+        }
+
+        canvas.addEventListener('click', handleCanvasTap);
+        canvas.addEventListener('touchstart', (e) => {
+            if (!gameActive) {
+                e.preventDefault();
+                resetGame();
+            }
+        }, { passive: false });
+
+        // ---- RESTART BUTTON ----
+        document.getElementById('restartButton').addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetGame();
+        });
+
+        // ---- PREVENT SCROLLING / ZOOMING ON MOBILE ----
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                if (e.target === document.body || e.target === canvas) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        // prevent context menu
+        canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+        document.getElementById('mobileControls').addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        // ---- START ----
+        resetGame();
+        gameLoop();
+
+        // ---- POLYFILL roundRect ----
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (w < 2 * r) r = w / 2;
+                if (h < 2 * r) r = h / 2;
+                this.moveTo(x + r, y);
+                this.lineTo(x + w - r, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r);
+                this.lineTo(x + w, y + h - r);
+                this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                this.lineTo(x + r, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r);
+                this.lineTo(x, y + r);
+                this.quadraticCurveTo(x, y, x + r, y);
+                return this;
+            };
+        }
+
+        // ---- CLEANUP ----
+        window.addEventListener('beforeunload', () => {
+            if (animationId) cancelAnimationFrame(animationId);
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keyup', handleKeyUp);
+        });
+    })();
+</script>
+</body>
+</html>
