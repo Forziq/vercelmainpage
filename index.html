@@ -138,43 +138,6 @@
       color: var(--amber);
     }
 
-    .header-action { justify-self: end; }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 2.9rem;
-      padding: 0.75rem 1.4rem;
-      border: 1px solid var(--ink);
-      background: transparent;
-      color: var(--ink);
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      line-height: 1;
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
-    }
-
-    .button:hover {
-      background: var(--ink);
-      color: #fff;
-    }
-
-    .button--primary {
-      border-color: var(--amber);
-      background: var(--amber);
-      color: #fff;
-    }
-
-    .button--primary:hover {
-      border-color: var(--terracotta);
-      background: var(--terracotta);
-    }
-
     .hero {
       overflow: hidden;
       border-bottom: 1px solid var(--rule);
@@ -201,7 +164,6 @@
     .section-label,
     .meta,
     .case-study__index,
-    .case-study__status,
     .timeline__date,
     .capability__number {
       margin: 0;
@@ -405,14 +367,6 @@
       font-size: 0.925rem;
     }
 
-    .case-study__status {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px solid var(--amber);
-      color: var(--amber);
-    }
-
     .experience-layout,
     .capabilities-layout {
       display: grid;
@@ -528,22 +482,6 @@
 
     .email-link:hover { color: #ffb59e; }
 
-    .footer-action {
-      grid-column: 10 / -1;
-      justify-self: stretch;
-    }
-
-    .footer-action .button {
-      width: 100%;
-      border-color: #fff8f5;
-      color: #fff8f5;
-    }
-
-    .footer-action .button:hover {
-      background: #fff8f5;
-      color: var(--amber-deep);
-    }
-
     .footer-fineprint {
       display: flex;
       justify-content: space-between;
@@ -607,7 +545,6 @@
       .timeline__item { grid-template-columns: 1fr 2fr; }
       .timeline__summary { grid-column: 2; }
       .footer-copy { grid-column: 1 / span 8; }
-      .footer-action { grid-column: 9 / -1; }
     }
 
     @media (max-width: 700px) {
@@ -681,7 +618,6 @@
       }
 
       .footer-grid { display: block; }
-      .footer-action { margin-top: 3rem; }
 
       .footer-fineprint {
         flex-direction: column;
@@ -711,8 +647,6 @@
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
       </nav>
-
-      <a class="button button--primary header-action" href="game.html">Play Game</a>
     </div>
   </header>
 
@@ -784,7 +718,6 @@
             <h3>Customer experience, content &amp; operations</h3>
             <div class="case-study__details">
               <p>Customer enquiries, custom orders, product photography, promotional content, and day-to-day support for a busy family bakery.</p>
-              <span class="case-study__status">Case study coming soon</span>
             </div>
           </article>
 
@@ -793,7 +726,6 @@
             <h3>Business development &amp; customer communication</h3>
             <div class="case-study__details">
               <p>Prospect conversations, tailored explanations, organised follow-ups, and independently maintained customer records.</p>
-              <span class="case-study__status">Case study coming soon</span>
             </div>
           </article>
         </div>
@@ -860,10 +792,6 @@
           <p class="section-label">05 / Contact</p>
           <h2>Let’s start a conversation.</h2>
           <a class="email-link" href="mailto:forzammil@gmail.com">forzammil@gmail.com</a>
-        </div>
-
-        <div class="footer-action">
-          <a class="button" href="game.html">Play Game</a>
         </div>
       </div>
 
