@@ -367,6 +367,23 @@
       font-size: 0.925rem;
     }
 
+    .case-study__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid currentColor;
+      color: var(--amber);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .case-study__link:hover { color: var(--terracotta); }
+
     .experience-layout,
     .capabilities-layout {
       display: grid;
@@ -726,6 +743,15 @@
             <h3>Business development &amp; customer communication</h3>
             <div class="case-study__details">
               <p>Prospect conversations, tailored explanations, organised follow-ups, and independently maintained customer records.</p>
+            </div>
+          </article>
+
+          <article class="case-study">
+            <p class="case-study__index">03 / Solana Journal</p>
+            <h3>Trading journal &amp; reflection app</h3>
+            <div class="case-study__details">
+              <p>A private web app that imports on-chain Solana trades, rebuilds them into positions, analyses performance and gives each decision a structured review. The interactive demo uses invented data, with an Explain mode that walks through every screen.</p>
+              <a class="case-study__link" href="TradingJournalshowcase/index.html">View the interactive demo <span aria-hidden="true">&rarr;</span></a>
             </div>
           </article>
         </div>
