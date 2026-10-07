@@ -1,0 +1,197 @@
+/* Data and feedback parts: DataTable + Pagination, overlays (Modal, Drawer, bottom sheet, Toast), EmptyState,
+   Skeleton, Progress, Address, TokenAvatar and the SOL / EUR / P&L value displays. */
+
+/* Data table: 40 px rows, sticky canvas header, numbers right-aligned mono. Phones get row cards when given. */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--surface); }
+.table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 18px; }
+.table thead { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+.table th {
+  height: 40px;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.table tr { height: 40px; border-bottom: 1px solid var(--line); transition: background-color var(--duration-fast) var(--ease-out); }
+.table tbody tr:last-child { border-bottom: 0; }
+.table tbody tr:hover,
+.table tbody tr.is-highlight { background: var(--raised); }
+.table td { padding: 8px 12px; color: var(--fg); white-space: nowrap; }
+.table .num { font-family: var(--font-mono); font-size: 13px; line-height: 16px; font-variant-numeric: tabular-nums; }
+.table .align-right { text-align: right; }
+.table .align-center { text-align: center; }
+.sort-button { display: inline-flex; align-items: center; gap: 4px; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.sort-button:hover { color: var(--fg); }
+.sort-button svg.icon { width: 14px; height: 14px; }
+.sort-button .is-unsorted { opacity: 0.5; }
+.row-cards { display: flex; flex-direction: column; gap: 8px; }
+.row-cards > li { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--surface); }
+.has-cards { display: none; }
+@media (min-width: 768px) {
+  .has-cards { display: block; }
+  .row-cards { display: none; }
+}
+
+/* Pagination */
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.pagination ul { display: flex; align-items: center; gap: 4px; }
+.pagination .btn { width: 44px; height: 44px; padding: 0; font-family: var(--font-mono); font-size: 12px; }
+.page-gap { padding: 0 4px; color: var(--muted); }
+@media (min-width: 768px) {
+  .pagination .btn { width: 28px; height: 28px; }
+}
+
+/* Overlays: Modal (sheet on phones, centred pop from 768 px) and Drawer (sheet on phones, right panel from 768 px).
+   They open at once with data-state="open"; on close they stay for the 150 ms exit with data-state="closed". */
+.overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+.overlay-drawer { justify-content: flex-end; }
+.overlay[data-state="closed"] { pointer-events: none; }
+.overlay-backdrop { position: absolute; inset: 0; background: rgb(10 11 13 / 0.7); animation: fade-in var(--duration-base) var(--ease-out) backwards; }
+.overlay-panel {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-height: 90vh;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: var(--raised);
+  box-shadow: var(--shadow-float);
+  outline: none;
+  animation: sheet-in var(--duration-base) var(--ease-out) backwards;
+}
+.overlay-drawer .overlay-panel { max-height: 85vh; }
+.overlay[data-state="closed"] .overlay-backdrop { animation: fade-in var(--duration-exit) var(--ease-out) reverse both; }
+.overlay[data-state="closed"] .overlay-panel { animation: sheet-in var(--duration-exit) var(--ease-out) reverse both; }
+.overlay-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.overlay-head .text-body-sm { margin-top: 2px; color: var(--muted); }
+.overlay-head .btn { margin: -4px -8px 0 0; }
+.overlay-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+.overlay-foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 20px; border-top: 1px solid var(--line); }
+@media (min-width: 768px) {
+  .overlay-modal { align-items: center; padding: 24px; }
+  .overlay-modal .overlay-panel { max-width: 512px; border-radius: var(--radius-card); animation-name: pop-in; }
+  .overlay-modal[data-state="closed"] .overlay-panel { animation-name: pop-in; }
+  .overlay-drawer { align-items: stretch; }
+  .overlay-drawer .overlay-panel { width: var(--inspector); max-height: none; border-radius: var(--radius-card) 0 0 var(--radius-card); animation-name: panel-in; }
+  .overlay-drawer[data-state="closed"] .overlay-panel { animation-name: panel-in; }
+}
+
+/* The shell's More menu: a bottom sheet on phones. */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  background: rgb(0 0 0 / 0.6);
+  animation: fade-in var(--duration-base) var(--ease-out) backwards;
+}
+.sheet-backdrop[hidden] { display: none; }
+.sheet {
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: var(--raised);
+  box-shadow: var(--shadow-float);
+  animation: sheet-in var(--duration-base) var(--ease-out) backwards;
+}
+.sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.sheet-list { display: flex; flex-direction: column; gap: 4px; }
+.sheet-list .btn { width: 100%; justify-content: flex-start; }
+.sheet-list .btn[aria-current="page"] { background: var(--surface); color: var(--fg); }
+
+/* Toasts: bottom right (above the bottom nav on phones), at most three open. */
+.toasts { position: fixed; right: 16px; bottom: 80px; left: 16px; z-index: 60; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: none; }
+.toast {
+  display: flex;
+  width: 100%;
+  max-width: 384px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--raised);
+  box-shadow: var(--shadow-float);
+  pointer-events: auto;
+  animation: rise-in var(--duration-base) var(--ease-out) both;
+}
+.toast[data-state="closed"] { pointer-events: none; animation: fade-in var(--duration-exit) var(--ease-out) reverse both; }
+.toast > svg.icon { margin-top: 2px; }
+.toast-text { min-width: 0; flex: 1; }
+.toast-text .text-body-sm { margin-top: 2px; color: var(--muted); }
+.icon-button-sm { display: inline-flex; padding: 2px; border-radius: var(--radius-badge); color: var(--muted); }
+.icon-button-sm:hover { color: var(--fg); }
+@media (min-width: 768px) {
+  .toasts { right: 24px; bottom: 24px; left: auto; }
+}
+
+/* Empty state and skeleton */
+.empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 40px 24px; border: 1px dashed var(--line); border-radius: var(--radius-card); text-align: center; }
+.empty > svg.icon { width: 24px; height: 24px; color: var(--muted); }
+.empty .text-body-sm { max-width: 384px; color: var(--muted); }
+.empty-action { margin-top: 8px; }
+.skeleton { position: relative; height: 40px; overflow: hidden; border-radius: var(--radius-control); background: var(--raised); }
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent, var(--raised-hover), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.6s linear infinite;
+}
+.skeleton-stack { display: flex; flex-direction: column; gap: 8px; }
+
+/* Progress: 6 px bar; the fill scales (transform), it never changes width. */
+.progress { width: 100%; height: 6px; overflow: hidden; border-radius: 9999px; background: var(--raised); }
+.progress-fill { height: 100%; background: var(--accent); transform-origin: left; transition: transform var(--duration-base) var(--ease-out); }
+.progress-profit .progress-fill { background: var(--profit); }
+.progress-loss .progress-fill { background: var(--loss); }
+
+/* Address, token avatar */
+.address { display: inline-flex; min-width: 0; align-items: center; gap: 4px; color: var(--muted); font-family: var(--font-mono); font-size: 12px; line-height: 16px; }
+.address-full { word-break: break-all; }
+.address-button { display: inline-flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: var(--radius-badge); color: var(--muted); }
+.address-button:hover { color: var(--fg); }
+.address-button svg.icon { width: 14px; height: 14px; }
+.avatar {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--raised);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+}
+.avatar-lg { width: 40px; height: 40px; font-size: 14px; line-height: 18px; }
+.avatar-win { border-color: rgb(47 208 123 / 0.4); }
+.avatar-loss { border-color: rgb(240 82 91 / 0.4); }
+.avatar-breakeven { border-color: var(--line-strong); }
+
+/* SOL mark, SOL amount, P&L value and the EUR line under it */
+.sol-icon { display: inline-flex; align-items: center; color: var(--muted); }
+.sol-icon.is-inherit { color: inherit; }
+.sol-icon svg { width: auto; height: 0.72em; flex-shrink: 0; fill: currentColor; }
+.sol-amount { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.pnl { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pnl .sol-icon { margin-left: 4px; opacity: 0.8; }
+.pnl-unit { margin-left: 4px; font-size: 0.85em; opacity: 0.8; }
+.fiat-sub { display: block; font-family: var(--font-mono); font-size: 12px; line-height: 16px; white-space: nowrap; }
+.fiat-sub:not(.is-toned) { color: var(--muted); }
+.fiat-sub.is-toned { opacity: 0.8; }

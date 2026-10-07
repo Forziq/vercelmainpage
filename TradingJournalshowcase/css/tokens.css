@@ -1,0 +1,115 @@
+/* Design tokens, copied from the app (UI rules §1 and §7). Change them only together with the app. */
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/geist-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Colour */
+  --bg: #0a0b0d;
+  --surface: #111317;
+  --raised: #171a1f;
+  --raised-hover: #1e2229;
+  --line: #22262d;
+  --line-strong: #343a46;
+  --fg: #e6e8eb;
+  --muted: #8b929c;
+  --accent: #7c8cff;
+  --accent-active: #6a7ae8;
+  --on-accent: #0a0b0d;
+  --profit: #2fd07b;
+  --loss: #f0525b;
+  --neutral: #9aa3ae;
+  --warning: #f2b84b;
+
+  /* Type families */
+  --font-display: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Layout */
+  --gutter: 16px;
+  --page: 24px;
+  --sidebar: 240px;
+  --sidebar-rail: 64px;
+  --topbar: 56px;
+  --inspector: 380px;
+  --content: 1600px;
+
+  /* Radius and elevation */
+  --radius-badge: 4px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --shadow-float: 0 8px 24px -4px rgb(0 0 0 / 0.6);
+
+  /* Motion (UI rules §7) */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+  --duration-exit: 150ms;
+  --duration-flash: 800ms;
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Type scale: one class per token, same names as the app's utilities. */
+.text-headline-lg { font-family: var(--font-display); font-size: 28px; line-height: 34px; letter-spacing: -0.02em; font-weight: 600; }
+.text-headline-md { font-family: var(--font-display); font-size: 20px; line-height: 26px; letter-spacing: -0.015em; font-weight: 600; }
+.text-title-sm { font-size: 16px; line-height: 22px; letter-spacing: -0.01em; font-weight: 500; }
+.text-body-md { font-size: 14px; line-height: 20px; letter-spacing: -0.005em; }
+.text-body-sm { font-size: 13px; line-height: 18px; }
+.text-label-sm { font-size: 12px; line-height: 16px; letter-spacing: 0.02em; font-weight: 500; text-transform: uppercase; }
+.text-data-lg { font-family: var(--font-mono); font-size: 20px; line-height: 24px; letter-spacing: -0.02em; font-weight: 600; }
+.text-data-md { font-family: var(--font-mono); font-size: 14px; line-height: 18px; font-weight: 500; }
+.text-data-sm { font-family: var(--font-mono); font-size: 13px; line-height: 16px; }
+.text-data-xs { font-family: var(--font-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.01em; }
+.font-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+.text-fg { color: var(--fg); }
+.text-muted { color: var(--muted); }
+.text-profit { color: var(--profit); }
+.text-loss { color: var(--loss); }
+.text-neutral { color: var(--neutral); }
+.text-warning { color: var(--warning); }
+.text-accent { color: var(--accent); }
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.98); } }
+@keyframes panel-in { from { transform: translateX(100%); } }
+@keyframes shimmer { to { transform: translateX(200%); } }
+
+/* The one reduced-motion switch, as in the app: everything ends at once. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

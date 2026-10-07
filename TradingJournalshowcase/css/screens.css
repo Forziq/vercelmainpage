@@ -1,0 +1,115 @@
+/* Screen layouts. SH01 has the page header, the placeholder and the not-found view; later tasks add the screens. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: rise-in var(--duration-base) var(--ease-out) backwards;
+}
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.page-header h1 {
+  color: var(--fg);
+}
+.page-header h1:focus {
+  outline: none;
+}
+.page-header p {
+  margin-top: 4px;
+}
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  text-align: center;
+}
+.placeholder svg.icon {
+  width: 24px;
+  height: 24px;
+  color: var(--muted);
+}
+.placeholder .btn {
+  margin-top: 8px;
+}
+
+/* Overview (#/) */
+.ov { gap: 40px; }
+.ov-section { display: flex; flex-direction: column; gap: 16px; }
+.ov-section-head { display: flex; flex-direction: column; gap: 4px; max-width: 720px; }
+.ov-hero { display: flex; flex-direction: column; gap: 12px; }
+.ov-hero h1:focus { outline: none; }
+.ov-hero-meta { display: flex; flex-wrap: wrap; align-self: flex-start; align-items: center; gap: 8px; padding-right: 20px; }
+.ov-pitch { max-width: 760px; color: var(--fg); font-weight: 400; }
+.ov-hero .text-muted { max-width: 760px; }
+.ov-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.ov-answer { max-width: 760px; }
+.ov-grid { display: grid; gap: var(--gutter); }
+.ov-grid > .card { display: flex; flex-direction: column; gap: 8px; }
+@media (min-width: 768px) {
+  .ov-grid-2, .ov-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ov-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.ov-grid-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 1280px) {
+  .ov-grid-4, .ov-grid-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Data-flow diagram: a 5-column snake from 768 px, 2 columns on phones. */
+.flow-wide { display: none; }
+.flow-narrow { display: block; }
+@media (min-width: 768px) {
+  .flow-wide { display: block; }
+  .flow-narrow { display: none; }
+}
+.flow-svg { display: block; width: 100%; height: auto; margin-bottom: 12px; }
+.flow-node rect { fill: var(--raised); stroke: var(--line); stroke-width: 1; }
+.flow-title { fill: var(--fg); font-family: var(--font-sans); font-size: 13px; font-weight: 500; }
+.flow-step { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+.flow-note { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+.flow-edge { stroke: var(--line-strong); stroke-width: 1.5; }
+.flow-head { fill: var(--line-strong); }
+
+.ov-rules { display: flex; flex-direction: column; gap: 6px; margin: 4px 0; }
+.ov-rules li { display: flex; align-items: flex-start; gap: 8px; }
+.ov-rules svg.icon { margin-top: 1px; color: var(--muted); }
+.ov-stack-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.ov-tile-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+/* The calendar tile spans the gallery; on phones its week list would be very long, so the tile is left out there. */
+.ov-grid > .ov-tile-wide { display: none; }
+@media (min-width: 768px) {
+  .ov-grid > .ov-tile-wide { display: flex; grid-column: 1 / -1; }
+}
+.ov-shot { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-control); }
+.ov-shot svg { display: block; width: 100%; height: auto; }
+.ov-roadmap { display: grid; gap: 12px; }
+@media (min-width: 768px) {
+  .ov-roadmap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* #/kit gallery (hidden route, removed in SH13) */
+.kit-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; }
+.kit-stack { display: flex; flex-direction: column; gap: 16px; }
+.kit-stack-tight { display: inline-flex; flex-direction: column; gap: 8px; }
+.kit-narrow { width: 100%; max-width: 480px; }
+.kit-narrow.kit-stack-tight { display: flex; }
+.kit-grid { display: grid; width: 100%; gap: 16px; }
+.kit-token { display: inline-flex; align-items: center; gap: 8px; }
+.kit-card-row { display: flex; align-items: center; justify-content: space-between; }
+.kit-strip { display: flex; }
+@media (min-width: 768px) {
+  .kit-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) {
+  .kit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kit-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

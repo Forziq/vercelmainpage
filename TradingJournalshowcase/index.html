@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Interactive demo of a private trading-reflection journal, with invented data." />
+    <meta name="color-scheme" content="dark" />
+    <title>Solana Journal (demo)</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/widgets.css" />
+    <link rel="stylesheet" href="css/charts.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/explain.css" />
+    <link rel="stylesheet" href="css/trading.css" />
+    <link rel="stylesheet" href="css/reflection.css" />
+    <link rel="stylesheet" href="css/periods.css" />
+    <script defer src="js/meta.js"></script>
+    <script defer src="js/data.js"></script>
+    <script defer src="js/stats.js"></script>
+    <script defer src="js/core/icons.js"></script>
+    <script defer src="js/core/dom.js"></script>
+    <script defer src="js/core/format.js"></script>
+    <script defer src="js/core/engine.js"></script>
+    <script defer src="js/core/replay.js"></script>
+    <script defer src="js/core/metrics.js"></script>
+    <script defer src="js/core/periods.js"></script>
+    <script defer src="js/core/store.js"></script>
+    <script defer src="js/core/store-actions.js"></script>
+    <script defer src="js/core/coach.js"></script>
+    <script defer src="js/core/reflection.js"></script>
+    <script defer src="js/core/fiat.js"></script>
+    <script defer src="js/core/analytics.js"></script>
+    <script defer src="js/core/trade-list.js"></script>
+    <script defer src="js/core/calendar.js"></script>
+    <script defer src="js/core/critiques.js"></script>
+    <script defer src="js/core/widgets.js"></script>
+    <script defer src="js/core/overlay.js"></script>
+    <script defer src="js/core/lightbox.js"></script>
+    <script defer src="js/core/charts.js"></script>
+    <script defer src="js/core/grids.js"></script>
+    <script defer src="js/core/sim.js"></script>
+    <script defer src="js/explain/engine.js"></script>
+    <script defer src="js/explain/markers.js"></script>
+    <script defer src="js/explain/callouts/overview.js"></script>
+    <script defer src="js/explain/callouts/kit.js"></script>
+    <script defer src="js/explain/callouts/dashboard.js"></script>
+    <script defer src="js/explain/callouts/trades.js"></script>
+    <script defer src="js/explain/callouts/trade-detail.js"></script>
+    <script defer src="js/explain/callouts/token.js"></script>
+    <script defer src="js/explain/callouts/inbox.js"></script>
+    <script defer src="js/explain/callouts/reflection.js"></script>
+    <script defer src="js/explain/callouts/coach.js"></script>
+    <script defer src="js/explain/callouts/calendar.js"></script>
+    <script defer src="js/explain/callouts/journal.js"></script>
+    <script defer src="js/explain/callouts/reviews.js"></script>
+    <script defer src="js/core/shell.js"></script>
+    <script defer src="js/screens/overview-content.js"></script>
+    <script defer src="js/screens/overview.js"></script>
+    <script defer src="js/screens/kit.js"></script>
+    <script defer src="js/screens/trade-table.js"></script>
+    <script defer src="js/screens/dashboard.js"></script>
+    <script defer src="js/screens/trades.js"></script>
+    <script defer src="js/screens/trade-corrections.js"></script>
+    <script defer src="js/screens/trade-detail.js"></script>
+    <script defer src="js/screens/token.js"></script>
+    <script defer src="js/screens/review-form.js"></script>
+    <script defer src="js/screens/full-reflection.js"></script>
+    <script defer src="js/screens/screenshots.js"></script>
+    <script defer src="js/screens/coach-panel.js"></script>
+    <script defer src="js/screens/inbox.js"></script>
+    <script defer src="js/screens/critique-panel.js"></script>
+    <script defer src="js/screens/day-detail.js"></script>
+    <script defer src="js/screens/calendar.js"></script>
+    <script defer src="js/screens/journal.js"></script>
+    <script defer src="js/screens/review-stats.js"></script>
+    <script defer src="js/screens/reviews.js"></script>
+    <script defer src="js/core/router.js"></script>
+  </head>
+  <body>
+    <a id="skip-link" class="skip-link" href="#main">Skip to content</a>
+
+    <aside id="sidebar" class="sidebar"></aside>
+
+    <div class="shell-main">
+      <header class="topbar">
+        <span class="topbar-title">Solana Journal</span>
+        <div id="topbar-actions" class="topbar-actions"></div>
+      </header>
+      <main id="main" class="main" tabindex="-1">
+        <div id="view">
+          <noscript>
+            <p class="text-body-md">This demo needs JavaScript. It runs entirely in your browser and sends nothing anywhere.</p>
+          </noscript>
+        </div>
+        <p id="shell-footer" class="shell-footer text-data-xs"></p>
+      </main>
+    </div>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Main"></nav>
+
+    <div id="more-sheet" class="sheet-backdrop" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="more-title">
+        <div class="sheet-head">
+          <h2 id="more-title" class="text-title-sm">More</h2>
+          <button type="button" class="btn btn-ghost btn-icon sheet-close" aria-label="Close">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+          </button>
+        </div>
+        <ul class="sheet-list"></ul>
+      </div>
+    </div>
+  </body>
+</html>
