@@ -27,9 +27,11 @@
   };
   function load() {
     var d = clone(window.DEMO);
+    // The transactions made after the last sync, which the simulated Sync imports (sync.js).
+    d.pending = d.pending || { tokens: [], events: [], rates: {} };
     var decimals = {};
-    d.tokens.forEach(function (t) { decimals[t.mint] = t.decimals; });
-    d.events.forEach(function (e) {
+    d.tokens.concat(d.pending.tokens).forEach(function (t) { decimals[t.mint] = t.decimals; });
+    d.events.concat(d.pending.events).forEach(function (e) {
       Object.keys(EVENT_DEFAULTS).forEach(function (k) { if (e[k] === undefined) e[k] = EVENT_DEFAULTS[k]; });
       e.tokenDecimals = e.tokenAmountRaw === null ? null : decimals[e.mint];
     });
@@ -168,7 +170,8 @@
 
   function vocab(kind, opts) {
     var list = data().vocab[kind];
-    return opts && opts.includeArchived ? list : list.filter(function (v) { return !v.archived; });
+    // An inactive rule stays on the Rules page but leaves the review checklist, like the app's `active` flag.
+    return opts && opts.includeArchived ? list : list.filter(function (v) { return !v.archived && (kind !== "rules" || v.active !== false); });
   }
   var names = function (kind, filter) {
     var out = {};

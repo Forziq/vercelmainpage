@@ -53,13 +53,15 @@
       id: "dash-countup",
       screen: "dashboard",
       anchor: "dash-countup",
-      title: "Numbers count up once",
-      plain: "On the first visit the headline numbers count up from zero, and the last frame is exactly the formatted value. Trades counts every position entered in the range, open ones included.",
+      title: "Numbers count up",
+      plain: "When the dashboard opens the headline numbers count up from zero, a range change counts on from the old values, and the last frame is exactly the formatted value. Trades counts every position entered in the range, open ones included.",
       technical: {
-        text: "The count-up only changes what is drawn: screen readers get the final value at once, and with reduced motion switched on the numbers appear immediately. Needs review does not count up, at the owner's request.",
+        text: "The count-up only changes what is drawn: screen readers get the final value at once, and with reduced motion switched on the numbers appear immediately. A value changed by a sync also gets a short neutral tint, never red or green. Needs review does not count up, at the owner's request.",
         code: { label: "lib/format/ticker.ts", lines: [
           "/** First-load count-up; must equal `--transition-duration-slower` in globals.css. */",
           "export const COUNT_UP_MS = 600;",
+          "/** Count from the previous to the new values after a range change. */",
+          "export const RECOUNT_MS = 300;",
         ] },
       },
     },

@@ -1,7 +1,8 @@
 // Explain mode (docs/showcase.md §6): the top-bar toggle puts a numbered marker on every visible [data-explain]
-// anchor of the current screen that has a callout; a marker opens a small popover. The markers live in one layer at
-// the top of <main>, so they follow the page when it scrolls and come before the content in the tab order. When
-// Explain is off the layer is removed, so nothing covers the page.
+// anchor of the current screen that has a callout; a marker opens a small popover. The screen's markers live in one
+// layer at the top of <main>, so they follow the page when it scrolls and come before the content in the tab order.
+// The shell's own callouts (screen "shell": search, sync) get a second layer in the sticky top bar, numbered first,
+// on every app screen but the overview. When Explain is off the layers are removed, so nothing covers the page.
 (function () {
   var SJ = (window.SJ = window.SJ || {});
   var h = SJ.dom.h;
@@ -10,6 +11,7 @@
 
   var on = false;
   var layer = null;
+  var shellLayer = null;
   var markers = {};
   var pop = null;
   var frame = 0;
@@ -29,23 +31,32 @@
   /** Adds, numbers, places and removes markers to match the anchors now visible. Returns the marker count. */
   function sync() {
     if (!on || !layer) return 0;
-    var callouts = X.forScreen(screenName());
-    var origin = layer.getBoundingClientRect();
-    var width = layer.parentNode.clientWidth;
     var seen = {};
     var n = 0;
-    Array.prototype.forEach.call(document.querySelectorAll("#view [data-explain]"), function (el) {
-      var c = callouts[el.getAttribute("data-explain")];
-      if (!c || seen[c.id] || el.getClientRects().length === 0) return;
-      seen[c.id] = true;
-      var m = markers[c.id] || (markers[c.id] = marker(c));
-      m.textContent = String(++n);
-      m.setAttribute("aria-label", "Explanation " + n + ": " + c.title);
-      var at = X.place(el.getBoundingClientRect(), origin, width);
-      m.style.left = at.left + "px";
-      m.style.top = at.top + "px";
-      // Re-inserting only when out of order keeps a focused marker focused.
-      if (layer.children[n - 1] !== m) layer.insertBefore(m, layer.children[n - 1] || null);
+    var screen = screenName();
+    var scopes = [
+      { layer: shellLayer, selector: ".topbar [data-explain]", callouts: screen && screen !== "overview" ? X.forScreen("shell") : {} },
+      { layer: layer, selector: "#view [data-explain]", callouts: X.forScreen(screen) },
+    ];
+    scopes.forEach(function (scope) {
+      if (!scope.layer) return;
+      var origin = scope.layer.getBoundingClientRect();
+      var width = scope.layer.parentNode.clientWidth;
+      var count = 0;
+      Array.prototype.forEach.call(document.querySelectorAll(scope.selector), function (el) {
+        var c = scope.callouts[el.getAttribute("data-explain")];
+        if (!c || seen[c.id] || el.getClientRects().length === 0) return;
+        seen[c.id] = true;
+        var m = markers[c.id] || (markers[c.id] = marker(c));
+        m.textContent = String(++n);
+        m.setAttribute("aria-label", "Explanation " + n + ": " + c.title);
+        var at = X.place(el.getBoundingClientRect(), origin, width);
+        m.style.left = at.left + "px";
+        m.style.top = at.top + "px";
+        // Re-inserting only when out of order keeps a focused marker focused.
+        if (scope.layer.children[count] !== m) scope.layer.insertBefore(m, scope.layer.children[count] || null);
+        count++;
+      });
     });
     Object.keys(markers).forEach(function (id) {
       if (seen[id]) return;
@@ -107,14 +118,30 @@
       layer = h("div", { class: "explain-layer" });
       var main = document.getElementById("main");
       main.insertBefore(layer, main.firstChild);
+      var bar = document.querySelector(".topbar");
+      if (bar) shellLayer = bar.appendChild(h("div", { class: "explain-layer" }));
       if (sync() === 0) SJ.overlay.toast({ title: "No explanations on this screen yet", body: "Try the overview: its numbered markers explain the project.", tone: "info" });
     } else {
       closePopover(false);
       if (layer) layer.remove();
+      if (shellLayer) shellLayer.remove();
       layer = null;
+      shellLayer = null;
       markers = {};
     }
     return on;
+  }
+
+  /** Turns Explain on and opens one callout's popover with Under the hood open (the tour's link). False when its anchor is not on screen. */
+  function reveal(id) {
+    setOn(true);
+    sync();
+    var m = markers[id];
+    if (!m) return false;
+    if (!pop || pop.id !== id) openPopover(X.all().filter(function (c) { return c.id === id; })[0], m);
+    var details = pop && pop.el.querySelector("details");
+    if (details) details.open = true;
+    return true;
   }
 
   function init() {
@@ -136,6 +163,6 @@
 
   Object.assign(X, {
     init: init, sync: sync, isOn: function () { return on; }, setOn: setOn, toggle: function () { return setOn(!on); },
-    close: function () { closePopover(false); },
+    close: function () { closePopover(false); }, reveal: reveal,
   });
 })();

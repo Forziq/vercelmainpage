@@ -7,8 +7,7 @@
 .inbox-progress .progress { flex: 1; }
 .inbox-progress > span { white-space: nowrap; }
 .inbox-card { display: flex; flex-direction: column; gap: 16px; }
-.card-enter { animation: card-enter 150ms var(--ease-out); }
-@keyframes card-enter { from { opacity: 0; transform: translateY(4px); } }
+.card-enter { animation: card-enter var(--duration-fast) var(--ease-out) backwards; }
 .inbox-card-head { display: flex; align-items: flex-start; gap: 12px; }
 .inbox-card-title { min-width: 0; flex: 1; }
 .inbox-card-title h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--font-display); }
@@ -137,7 +136,6 @@
 .coach-body { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
 .coach-pending { display: flex; align-items: center; gap: 8px; }
 .spin { animation: spin 1s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 .coach-error { padding: 8px 12px; border: 1px solid rgb(240 82 91 / 0.25); border-radius: var(--radius-control); background: rgb(240 82 91 / 0.08); color: var(--loss); }
 .coach-output { display: flex; flex-direction: column; gap: 16px; }
 .coach-section { display: flex; flex-direction: column; gap: 8px; }

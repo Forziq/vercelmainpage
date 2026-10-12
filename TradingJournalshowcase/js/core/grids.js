@@ -43,7 +43,8 @@
   }
 
   /** matrix[day][block] of cells → the grid (scrolls sideways below 640 px). metric: pnl | winRate | score */
-  function heatmap(matrix, metric) {
+  function heatmap(matrix, metric, reveal) {
+    reveal = reveal && !SJ.motion.reduced();
     var maxAbs = matrix.reduce(function (m, row) {
       return row.reduce(function (mm, c) { return Math.max(mm, Math.abs(c.netPnl)); }, m);
     }, 0);
@@ -54,7 +55,8 @@
         row.map(function (cell, b) {
           var thin = cell.n > 0 && cell.n < MIN_N;
           var label = heatLabel(DAYS[d], b, cell);
-          return h("span", { role: "cell", title: cell.n > 0 ? label : null, class: cx("hm-cell", thin ? "is-thin" : heatTint(heatValue(cell, metric), metric, maxAbs)) },
+          return h("span", { role: "cell", title: cell.n > 0 ? label : null, class: cx("hm-cell", reveal && "hm-reveal", thin ? "is-thin" : heatTint(heatValue(cell, metric), metric, maxAbs)),
+            style: reveal ? "--delay: " + SJ.motion.revealDelay(d, b, matrix.length, row.length) + "ms" : null },
             cell.n > 0 && h("span", { class: "sr-only", text: label }), h("span", { "aria-hidden": "true", text: thin ? "" : heatText(cell, metric) }));
         }));
     });

@@ -108,6 +108,8 @@
     var focused = document.activeElement && document.activeElement.getAttribute ? document.activeElement.getAttribute("data-refocus") : null;
     watchers.splice(0).forEach(function (stop) { stop(); });
     var main = SJ.dom.clear(document.getElementById("view"));
+    // The page enter plays on a new page only, never on a redraw of the same one (the app keeps the page's DOM then).
+    main.classList.toggle("is-redraw", redraw);
     current = { path: "/" + path, route: found ? found.route : null, params: found ? found.params : {}, query: hashQuery(), redraw: redraw };
 
     var screen = found && SJ.screens[found.route.name];

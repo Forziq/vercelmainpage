@@ -28,6 +28,13 @@
 .chart-tooltip-label { margin-bottom: 4px; color: var(--muted); }
 .chart-empty { padding: 32px 0; text-align: center; }
 
+/* First-mount draw-in (600 ms): bars grow from the zero line, the line is wiped in from the left. Transform only. */
+.is-drawing .chart-bar { transform-box: fill-box; transform-origin: bottom; animation: grow-y var(--duration-slower) var(--ease-out) backwards; }
+.is-drawing .chart-bar.from-top { transform-origin: top; }
+.is-drawing .chart-bar.from-left { transform-origin: left; animation-name: grow-x; }
+.is-drawing .chart-bar.from-right { transform-origin: right; animation-name: grow-x; }
+.is-drawing .draw-wipe { transform-box: fill-box; transform-origin: left; animation: grow-x var(--duration-slower) var(--ease-out) backwards; }
+
 /* Weekday × two-hour heatmap: five opacity steps per colour; empty = surface; thin cells hatched and dimmed. */
 .hm-scroll { position: relative; overflow-x: auto; }
 .hm-grid { display: grid; min-width: 640px; gap: 4px; font-family: var(--font-mono); font-size: 12px; line-height: 16px; font-variant-numeric: tabular-nums; }
@@ -50,6 +57,8 @@
   opacity: 0.6;
 }
 .hm-empty { background: var(--surface); }
+/* First mount: a diagonal fade sweep, delays from SJ.motion.revealDelay (≤ 400 ms) so it ends within 600 ms. */
+.hm-reveal { animation: fade-in var(--duration-base) var(--ease-out) backwards; animation-delay: var(--delay, 0ms); }
 .hm-p0 { background: rgb(47 208 123 / 0.1); }
 .hm-p1 { background: rgb(47 208 123 / 0.2); }
 .hm-p2 { background: rgb(47 208 123 / 0.35); }

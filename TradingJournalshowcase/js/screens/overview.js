@@ -24,7 +24,7 @@
       h("p", { class: "ov-pitch text-title-sm", text: C.pitch }),
       h("p", { class: "text-body-md text-muted", text: C.domain }),
       h("div", { class: "ov-actions" },
-        ui.button({ label: "Take the 2-minute tour", variant: "secondary", disabled: true, attrs: { title: "The guided tour is added in a later step" } }),
+        ui.button({ label: "Take the 2-minute tour", variant: "secondary", icon: "play", onclick: function () { SJ.tour.start(); } }),
         h("a", { class: "btn btn-primary", href: "#/dashboard", text: "Explore freely" })));
   }
 

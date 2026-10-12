@@ -5658,7 +5658,7 @@ window.DEMO = {
       { eventId: 440, lamports: 1245152n, eur: "0.22", allocation: "acquisition", flags: ["voided_in_journal"] },
       { eventId: 441, lamports: 911915n, eur: "0.16", allocation: "acquisition", flags: ["voided_in_journal"] },
       { eventId: 442, lamports: 1047931n, eur: "0.18", allocation: "acquisition", flags: ["voided_in_journal"] },
-      { eventId: 443, lamports: 118000n, eur: "0.02", allocation: "unallocated", flags: ["voided_in_journal"] },
+      { eventId: 443, lamports: 118000n, eur: "0.02", allocation: "unallocated" },
       { eventId: 444, lamports: 3303535n, eur: "0.58", allocation: "disposal", flags: ["voided_in_journal"] },
       { eventId: 445, lamports: 5591000n, eur: "0.97", allocation: "acquisition" },
       { eventId: 446, lamports: 2445785n, eur: "0.42", allocation: "disposal" },
@@ -5829,5 +5829,15 @@ window.DEMO = {
   totals: {
     "demo-wallet-a": { trades: 24, wins: 10, losses: 11, breakevens: 3, netPnl: 2075586445n, fees: 369760377n },
     "demo-wallet-b": { trades: 136, wins: 55, losses: 71, breakevens: 10, netPnl: 2371807577n, fees: 2131229747n },
+  },
+  pending: {
+    tokens: [
+      { mint: "2zLCqDH2OdZ5jfwPBlpSKRea9pqlxxU8UYkv7FlUwWZz", symbol: "QUIBR", name: "Quartz Bramble", decimals: 6, supplyRaw: 1000000000000000n, createdAt: "2026-10-04T18:14:15.000Z" },
+    ],
+    events: [
+      { id: 586, walletId: "demo-wallet-b", signature: "4q1C9EJP5drlDdSwZK8rOahi2kFKIxRgzPUE7SIQ2iWXw9VIU6S51p6qb0HVwMsa", slot: 380690287, blockTime: "2026-10-04T18:55:15.000Z", kind: "BUY", mint: "2zLCqDH2OdZ5jfwPBlpSKRea9pqlxxU8UYkv7FlUwWZz", tokenAmountRaw: 12503295976139n, swapSol: -600000000n, networkBaseFee: 5000n, priorityFee: 40000n, tip: 580000n, platformFee: 6000000n, rentPaid: 2039280n, venue: "pump_curve" },
+      { id: 587, walletId: "demo-wallet-b", signature: "aFLEeklAPSqasmINNGQsbNDTOPASmwT7bl9xBcvBG3pOFpSuCVR0rARWDXFHyDP1", slot: 380690672, blockTime: "2026-10-04T18:57:49.000Z", kind: "SELL", mint: "2zLCqDH2OdZ5jfwPBlpSKRea9pqlxxU8UYkv7FlUwWZz", tokenAmountRaw: 12503295976139n, swapSol: 680700000n, networkBaseFee: 5000n, priorityFee: 63000n, platformFee: 6807000n, rentRefunded: 2039280n, venue: "pump_curve" },
+    ],
+    rates: { "2026-10-04T18:55": "151.42", "2026-10-04T18:57": "151.30" },
   },
 };

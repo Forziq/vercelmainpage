@@ -6,6 +6,7 @@
   gap: 24px;
   animation: rise-in var(--duration-base) var(--ease-out) backwards;
 }
+.is-redraw > .page { animation: none; }
 .page-header {
   display: flex;
   flex-wrap: wrap;

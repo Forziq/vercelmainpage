@@ -34,9 +34,12 @@
   var when = function (at, pattern) { return f.localTime(at, settings().timeZone, pattern); };
 
   function tabs(active) {
-    return h("nav", { class: "tablist", "aria-label": "Review period" }, TABS.map(function (t) {
-      return h("a", { class: "tab text-body-md", href: t[0], "aria-current": t[2] === active ? "page" : null, text: t[1] });
+    var nav = h("nav", { class: "tablist", "aria-label": "Review period" }, TABS.map(function (t) {
+      return h("a", { class: "tab text-body-md", href: t[0], "aria-current": t[2] === active ? "page" : null, text: t[1], onclick: function () { marker.carry(); } });
     }));
+    // The tabs are links, so the next page draws a new tab row; carrying the position lets its underline slide on.
+    var marker = SJ.motion.slidingMarker(nav, '[aria-current="page"]', { className: "tab-marker", scale: true, key: "tabs:reviews" });
+    return nav;
   }
   var heading = function (title, description, actions, meta) {
     return h("header", { class: "page-header" }, h("div", null, h("div", { class: "rv-title-row" }, h("h1", { class: "text-headline-lg", tabindex: "-1", text: title }), meta),

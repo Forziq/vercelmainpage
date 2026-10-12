@@ -11,11 +11,11 @@
 
   /**
    * 1–5 → grades A–F, Enter → save, S → skip, J/K → next/previous. Nothing fires while typing, with Cmd/Ctrl/Alt held
-   * or inside an open dialog; Enter on a link does nothing. Returns { type, grade? } or null.
+   * or inside an open dialog or the guided tour's panel; Enter on a link does nothing. Returns { type, grade? } or null.
    */
   function keyAction(e) {
     var target = e.target && e.target.nodeType === 1 ? e.target : null;
-    var inDialog = !!(target && target.closest && target.closest('[aria-modal="true"]'));
+    var inDialog = !!(target && target.closest && target.closest('[aria-modal="true"], .tour'));
     if (e.metaKey || e.ctrlKey || e.altKey || inDialog || isTextEntry(target)) return null;
     var i = "12345".indexOf(e.key);
     if (e.key.length === 1 && i >= 0) return { type: "grade", grade: GRADES[i] };

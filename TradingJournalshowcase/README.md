@@ -11,8 +11,8 @@ part works. It contains no personal information, no real wallet, no keys and no 
 - `index.html`: the app shell; every page is a hash route such as `#/dashboard`.
 - `css/`: the app's design tokens and styles, copied in. `fonts/`: self-hosted fonts and their licence.
 - `js/`: `meta.js` holds the snapshot date shown on every page; `core/` has the router, shell and helpers.
-- `js/explain/`: the Explain mode (numbered markers and popovers) and one callout file per screen; everything
-  that needs a server in the real app is simulated by `js/core/sim.js`. **Reset demo** in the top bar undoes your changes.
+- `js/explain/`: the Explain mode (numbered markers and popovers), one callout file per screen and the guided tour
+  (`tour.js`, steps in `callouts/tour.js`, started from the overview); everything that needs a server in the real app is simulated by `js/core/sim.js`. **Reset demo** in the top bar undoes your changes.
 - The demo data and any generated files are produced by scripts in the app's repository and committed here as
   plain JavaScript, so this folder never has to run them.
 

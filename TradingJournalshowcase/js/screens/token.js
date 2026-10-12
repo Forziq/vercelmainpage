@@ -79,7 +79,7 @@
       if (reentry && !marked.reentry) { marked.reentry = true; A(reentry, "token-reentry"); }
       var lesson = r.lesson && r.lesson.trim() && h("blockquote", { class: "takeaway text-body-md" }, h("span", { class: "sr-only", text: "Takeaway: " }), r.lesson.trim());
       var tags = (r.tagIds || []).map(function (id) { return tagNames[id]; }).filter(Boolean);
-      var notes = (lesson || tags.length) && h("div", { class: "timeline-notes" }, lesson,
+      var notes = (lesson || tags.length > 0) && h("div", { class: "timeline-notes" }, lesson,
         tags.length > 0 && h("ul", { class: "tag-row", "aria-label": "Tags" }, tags.map(function (g) { return h("li", null, ui.tag({ label: g.name, kind: g.polarity === "mistake" ? "mistake" : "strength" })); })));
       if (notes && !marked.takeaway) { marked.takeaway = true; A(notes, "token-takeaway"); }
       return h("li", { "aria-label": "Position " + (i + 1) },

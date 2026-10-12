@@ -26,8 +26,6 @@
 .cal-month.move-next { animation: slide-from-right var(--duration-base) var(--ease-out) backwards; }
 .cal-month.move-prev { animation: slide-from-left var(--duration-base) var(--ease-out) backwards; }
 .cal-month.move-jump { animation: fade-in var(--duration-base) var(--ease-out) backwards; }
-@keyframes slide-from-right { from { opacity: 0; transform: translateX(12px); } }
-@keyframes slide-from-left { from { opacity: 0; transform: translateX(-12px); } }
 .cal-desktop { display: none; }
 .cal-table { display: flex; flex-direction: column; gap: 4px; }
 .cal-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }

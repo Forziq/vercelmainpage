@@ -131,6 +131,9 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--accent); }
 }
 .nav-link:hover { background: var(--surface); color: var(--fg); }
 .nav-link[aria-current="page"] { background: var(--raised); color: var(--fg); }
+/* Until the sliding marker is measured, the current link draws its own bar. */
+.sidebar.has-marker .nav-link[aria-current="page"]::before { display: none; }
+.nav-marker { z-index: 1; width: 2px; height: 24px; margin-top: 6px; border-radius: 9999px; background: var(--accent); }
 .nav-link[aria-current="page"]::before {
   content: "";
   position: absolute;
@@ -208,7 +211,7 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--accent); }
   background: var(--bg);
   padding-bottom: env(safe-area-inset-bottom);
 }
-.bottom-nav ul { display: flex; }
+.bottom-nav ul { position: relative; display: flex; }
 .bottom-nav li { display: flex; flex: 1; }
 .bottom-slot {
   position: relative;
@@ -228,18 +231,20 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--accent); }
 .bottom-slot svg.icon { width: 20px; height: 20px; }
 .bottom-slot[aria-current="page"],
 .bottom-slot.is-active { color: var(--accent); }
-.bottom-slot[aria-current="page"]::before,
-.bottom-slot.is-active::before {
-  content: "";
+/* One marker for five equal slots: it slides by its own width per index. */
+.bottom-nav .bottom-marker {
   position: absolute;
   top: -1px;
-  left: 50%;
-  width: 32px;
-  height: 2px;
-  margin-left: -16px;
-  border-radius: 9999px;
-  background: var(--accent);
+  left: 0;
+  display: flex;
+  width: 20%;
+  justify-content: center;
+  pointer-events: none;
+  transform: translateX(calc(var(--nav-index, 0) * 100%));
+  transition: transform var(--duration-base) var(--ease-out);
 }
+.bottom-nav .bottom-marker[hidden] { display: none; }
+.bottom-marker::before { content: ""; width: 32px; height: 2px; border-radius: 9999px; background: var(--accent); }
 .bottom-icon { position: relative; display: inline-flex; }
 .bottom-icon .nav-count { top: -6px; right: -12px; }
 

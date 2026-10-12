@@ -48,19 +48,24 @@
     return item.href === "/inbox" && inboxCount > 0 ? item.label + ", " + inboxCount + " to review" : item.label;
   }
 
-  function sidebarLink(item) {
+  function sidebarLink(item, flash) {
     var badge = item.href === "/inbox" && inboxCount > 0;
     return h(
       "a",
-      { class: "nav-link", href: "#" + item.href, "data-href": item.href, title: item.label, "aria-label": linkLabel(item) },
+      { class: SJ.dom.cx("nav-link", flash && "flash-host"), href: "#" + item.href, "data-href": item.href, title: item.label, "aria-label": linkLabel(item) },
+      flash && SJ.motion.flashTint(),
       icon(item.icon),
       h("span", { class: "nav-label", text: item.label }),
       badge && h("span", { class: "nav-count", "aria-hidden": "true", text: countLabel(inboxCount) })
     );
   }
 
+  var sideMarker = null;
+
   function renderSidebar() {
     var aside = SJ.dom.clear(document.getElementById("sidebar"));
+    // The Inbox link flashes when a sync changed its count (the shell stays on screen, so it is always "mounted").
+    var flash = SJ.motion.changed("nav-inbox", inboxCount, true);
     aside.appendChild(
       h("a", { class: "sidebar-brand", href: "#/", title: "Overview" },
         h("span", { class: "brand-dot", "aria-hidden": "true" }),
@@ -69,10 +74,14 @@
     aside.appendChild(
       h("nav", { class: "sidebar-nav", "aria-label": "Main" },
         NAV_GROUPS.map(function (g) {
-          return h("div", { class: "nav-group" }, h("h2", { class: "text-label-sm", text: g.label }), g.items.map(sidebarLink));
+          return h("div", { class: "nav-group" }, h("h2", { class: "text-label-sm", text: g.label }),
+            g.items.map(function (item) { return sidebarLink(item, flash && item.href === "/inbox"); }));
         }))
     );
     aside.appendChild(h("div", { class: "sidebar-foot" }, sidebarLink(SETTINGS_ITEM)));
+    // Group headings and the footer rule out pure CSS, so the marker measures the current link (and jumps on scroll).
+    sideMarker = SJ.motion.slidingMarker(aside, '.nav-link[aria-current="page"]', { className: "nav-marker", fixed: true, key: "sidebar" });
+    aside.querySelector(".sidebar-nav").addEventListener("scroll", function () { sideMarker.update(false); });
   }
 
   function renderBottomNav() {
@@ -88,17 +97,16 @@
     slots.push(h("li", null,
       h("button", { type: "button", id: "more-button", class: "bottom-slot", "aria-haspopup": "dialog", "aria-expanded": "false", onclick: openMore },
         icon("menu"), "More")));
-    nav.appendChild(h("ul", null, slots));
+    // Equal slots, so the marker is pure CSS: translateX(index × 100%), right on first paint (setActive sets the index).
+    nav.appendChild(h("ul", null, h("li", { class: "bottom-marker", "aria-hidden": "true", hidden: true }), slots));
   }
 
   function renderTopBar() {
     var actions = SJ.dom.clear(document.getElementById("topbar-actions"));
-    var later = "Not active yet in this demo";
-    actions.appendChild(h("span", { class: "badge", title: "Every number and name in this demo is invented", text: "Demo data" }));
-    actions.appendChild(
-      h("button", { type: "button", class: "btn btn-ghost btn-icon btn-wide-md", disabled: true, "aria-label": "Search", title: later },
-        icon("search"), h("span", { class: "hide-sm", text: "Search" }), h("kbd", { class: "kbd hide-sm", "aria-hidden": "true", text: "⌘K" }))
-    );
+    actions.appendChild(SJ.explain.anchor(h("span", { class: "badge", title: "Every number and name in this demo is invented", text: "Demo data" }), "shell-single"));
+    actions.appendChild(SJ.explain.anchor(
+      h("button", { type: "button", id: "search-button", class: "btn btn-ghost btn-icon btn-wide-md", "aria-label": "Search", "aria-haspopup": "dialog", "aria-keyshortcuts": "Meta+K Control+K", title: "Search (⌘K or Ctrl+K)", onclick: function () { SJ.palette.open(); } },
+        icon("search"), h("span", { class: "hide-sm", text: "Search" }), h("kbd", { class: "kbd hide-sm", "aria-hidden": "true", text: "⌘K" })), "shell-search"));
     actions.appendChild(
       h("button", { type: "button", id: "explain-toggle", class: "btn btn-ghost btn-icon btn-wide-md", "aria-pressed": String(SJ.explain.isOn()), "aria-label": "Explain", title: "Show numbered explanations on this screen", onclick: SJ.explain.toggle },
         icon("lightbulb"), h("span", { class: "hide-sm", text: "Explain" }))
@@ -106,15 +114,25 @@
     actions.appendChild(
       h("button", { type: "button", class: "btn btn-ghost btn-icon", "aria-label": "Reset demo", title: "Reset demo: undo every change you made", onclick: resetDemo }, icon("rotate-ccw"))
     );
-    actions.appendChild(
-      h("button", { type: "button", class: "btn btn-secondary btn-sm btn-sync", disabled: true, "aria-label": "Sync", title: later },
-        icon("refresh-cw"), h("span", { class: "hide-sm", text: "Sync" }))
-    );
+    var sync = h("button", { type: "button", id: "sync-button", class: "btn btn-secondary btn-sm btn-sync", "aria-label": "Sync wallet", title: "Sync wallet: import new transactions", onclick: function () { SJ.sync.sync(); } });
+    actions.appendChild(SJ.explain.anchor(sync, "shell-sync"));
+    var paint = function (st) {
+      var running = st.phase === "running";
+      SJ.dom.clear(sync);
+      SJ.dom.append(sync, [icon(running ? "loader-circle" : "refresh-cw", running ? "spin" : null), h("span", { class: "hide-sm", text: running ? "Syncing…" : "Sync" })]);
+      sync.disabled = running;
+      sync.setAttribute("aria-busy", String(running));
+      sync.setAttribute("aria-label", running ? "Syncing wallet" : "Sync wallet");
+    };
+    paint(SJ.sync.state());
+    SJ.sync.on(paint);
   }
 
-  /** Restores the generated data: stops simulations, closes any explanation and redraws the current screen. */
+  /** Restores the generated data: exits the tour, stops simulations, closes any explanation and redraws the current screen. */
   function resetDemo() {
+    if (SJ.tour) SJ.tour.exit();
     SJ.sim.cancelAll();
+    SJ.sync.reset();
     SJ.explain.close();
     SJ.store.reset();
     if (SJ.router) SJ.router.refresh();
@@ -136,6 +154,13 @@
     var more = document.getElementById("more-button");
     var inMore = MOBILE_MORE.some(function (i) { return isActive(path, i.href); });
     if (more) more.classList.toggle("is-active", inMore);
+    var index = inMore ? MOBILE_PRIMARY.length : MOBILE_PRIMARY.map(function (i) { return isActive(path, i.href); }).indexOf(true);
+    var bottom = document.querySelector(".bottom-marker");
+    if (bottom) {
+      bottom.hidden = index < 0;
+      bottom.style.setProperty("--nav-index", String(Math.max(index, 0)));
+    }
+    if (sideMarker) sideMarker.update(true);
   }
 
   function openMore() {
@@ -166,6 +191,7 @@
     renderTopBar();
     renderFooter();
     SJ.explain.init();
+    SJ.palette.init();
     // The Inbox count in the nav follows the store (a review, a void or Reset demo changes it).
     var count = function () { if (SJ.store.needsReview() !== inboxCount) setInboxCount(SJ.store.needsReview()); };
     SJ.store.on(count);

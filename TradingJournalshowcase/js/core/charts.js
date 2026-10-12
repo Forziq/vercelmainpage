@@ -186,9 +186,32 @@
   var BUILDERS = { line: lineChart, bars: barChart, histogram: histogram, barList: barList };
 
   /**
+   * Draw-in decorations on freshly drawn markup: each bar grows from its zero line (the side follows the sign of its
+   * value; histogram counts grow up) and the cumulative line and area are wiped in through a clip whose rect scales.
+   */
+  function decorateDrawIn(holder, kind, data) {
+    Array.prototype.forEach.call(holder.querySelectorAll(".chart-slot"), function (slotEl) {
+      var bar = slotEl.querySelector(".chart-bar");
+      if (!bar) return;
+      var d = data[Number(slotEl.getAttribute("data-i"))];
+      var negative = kind === "barList" ? d.value < 0 : kind === "bars" && d.y < 0;
+      bar.classList.add(kind === "barList" ? (negative ? "from-right" : "from-left") : negative ? "from-top" : "from-bottom");
+    });
+    var svgEl = holder.querySelector("svg");
+    var drawn = holder.querySelectorAll(".chart-line, polygon");
+    if (!svgEl || !drawn.length) return;
+    var id = SJ.dom.uid("draw");
+    var left = parseFloat(holder.querySelector(".chart-line").getAttribute("points")) || 0;
+    svgEl.insertAdjacentHTML("afterbegin", '<defs><clipPath id="' + id + '"><rect class="draw-wipe" x="' + left + '" y="0" width="' +
+      Math.max(1, Number(svgEl.getAttribute("width")) - left) + '" height="' + svgEl.getAttribute("height") + '"/></clipPath></defs>');
+    Array.prototype.forEach.call(drawn, function (el) { el.setAttribute("clip-path", "url(#" + id + ")"); });
+  }
+
+  /**
    * Mounts a chart: a figure (role img, `label` as its name) that redraws at its own width and shows the tooltip
-   * on pointer hover or with the arrow keys once focused. Empty data shows `empty` instead.
-   * o: { label, empty, height, ...builder options }
+   * on pointer hover or with the arrow keys once focused. Empty data shows `empty` instead. It draws in on its first
+   * paint when it mounts with a new page (`drawIn` overrides that); later data or a resize appears at once.
+   * o: { label, empty, height, drawIn, ...builder options }
    */
   function render(kind, data, o) {
     var h = SJ.dom.h;
@@ -198,12 +221,19 @@
     var fig = h("figure", { class: "chart-figure", role: "img", "aria-label": o.label, tabindex: "0" }, holder, tip);
     var width = 0;
     var active = -1;
+    var drawIn = (o.drawIn !== undefined ? o.drawIn : !(SJ.router && SJ.router.current().redraw)) && !SJ.motion.reduced();
 
     function draw() {
       var w = Math.floor(fig.clientWidth) || 600;
       if (w === width) return;
       width = w;
       holder.innerHTML = BUILDERS[kind](data, Object.assign({}, o, { width: w }));
+      if (drawIn) {
+        drawIn = false;
+        decorateDrawIn(holder, kind, data);
+        fig.classList.add("is-drawing");
+        setTimeout(function () { fig.classList.remove("is-drawing"); }, SJ.motion.DRAW_IN_MS);
+      }
       show(active);
     }
     function slots() { return holder.querySelectorAll(".chart-slot"); }

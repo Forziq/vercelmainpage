@@ -1,0 +1,40 @@
+/* Analytics, Strategies, Mistakes and Rules (SH09): breakdown cards in one column, two from 1600 px (the app splits at
+   1280 px, where the eight columns would scroll beside the demo's sidebar); phone cards show a group's numbers as a
+   small definition grid. */
+
+.tabular { font-variant-numeric: tabular-nums; }
+.an-grid { display: grid; gap: var(--gutter); }
+.an-card { min-width: 0; }
+.an-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.an-mobile { display: flex; flex-direction: column; gap: 8px; }
+.an-small { margin-left: 6px; }
+/* The heatmap's metric toggle drops below its title on a phone instead of squeezing it. */
+.an-card .card-head { flex-wrap: wrap; }
+.an-card .card-head > div:first-child { flex: 1 1 240px; }
+@media (min-width: 1600px) {
+  .an-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.group-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin: 0; }
+.group-grid > div { min-width: 0; }
+.group-grid dd { margin: 2px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.compare-row { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+/* Vocabulary pages */
+.vocab-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.vocab-name > .text-body-sm { max-width: 48ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vocab-name-row { display: flex; align-items: center; gap: 8px; }
+.vocab-card { display: flex; flex-direction: column; gap: 12px; }
+.vocab-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.vocab-card-row { display: flex; align-items: center; gap: 12px; }
+.vocab-card-row .vocab-adherence { flex: 1; }
+.vocab-section { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.vocab-sentences { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.vocab-stats { display: grid; gap: var(--gutter); }
+.vocab-auto { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.vocab-adherence { display: flex; min-width: 160px; flex-direction: column; gap: 4px; }
+.vocab-form { display: flex; flex-direction: column; gap: 16px; }
+@media (min-width: 768px) {
+  .vocab-stats { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+}

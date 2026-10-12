@@ -8,9 +8,9 @@
   var A = SJ.explain.anchor;
   var RANGES = [{ value: "7d", label: "7D" }, { value: "30d", label: "30D" }, { value: "90d", label: "90D" }, { value: "all", label: "All" }];
   var RANGE_TEXT = { "7d": "Last 7 days", "30d": "Last 30 days", "90d": "Last 90 days", all: "All history" };
-  var COUNT_MS = 600;
-  var STAGGER_MS = 40;
-  var counted = false;
+  var M = SJ.motion;
+  // The headline values last shown, so a redraw (a range change, a sync) counts on from them.
+  var shown = {};
 
   var signed = function (v) { return f.sol(v, { signed: true }); };
   var pnlTone = function (v) { return v === null ? "default" : ui.toneOf(f.signOf(v)); };
@@ -21,25 +21,13 @@
   };
 
   /**
-   * Counts a formatted number up from zero on the first visit, keeping its sign and decimals. Display only: screen
-   * readers get the final value at once, the last frame is exactly `text`, and "—" or "∞" are shown as they are.
+   * A headline value: counts up from zero when the dashboard opens (staggered with the cards) and from the previous
+   * value after a range change or a sync (ui/Ticker). Display only; "—" and "∞" are shown as they are.
    */
-  function ticker(text, index) {
-    var m = /^([+-]?)(\d+)(\.\d+)?$/.exec(text);
-    if (counted || !m || SJ.overlay.reducedMotion()) return h("span", { text: text });
-    var el = h("span", { "aria-hidden": "true" });
-    var target = Number(m[2] + (m[3] || ""));
-    var decimals = m[3] ? m[3].length - 1 : 0;
-    var start = null;
-    function frame(now) {
-      if (start === null) start = now + index * STAGGER_MS;
-      var p = Math.max(0, Math.min(1, (now - start) / COUNT_MS));
-      el.textContent = p >= 1 ? text : m[1] + (target * (1 - Math.pow(1 - p, 3))).toFixed(decimals);
-      if (p < 1) requestAnimationFrame(frame);
-    }
-    el.textContent = m[1] + (0).toFixed(decimals);
-    requestAnimationFrame(frame);
-    return h("span", null, h("span", { class: "sr-only", text: text }), el);
+  function ticker(label, text, index, redraw) {
+    var from = redraw && shown[label] !== undefined ? shown[label] : redraw ? text : null;
+    shown[label] = text;
+    return M.ticker(text, { from: from, delay: index * M.ENTER_STAGGER_MS });
   }
 
   function header(range) {
@@ -51,25 +39,34 @@
       A(h("div", null, picker), "dash-range"));
   }
 
-  function primary(d) {
+  function primary(d, redraw) {
     var s = d.summary;
     var none = s.trades === 0;
-    return h("div", { class: "dash-primary" },
-      A(ui.statCard({ hero: true, className: "dash-hero", label: "Net P&L", value: ticker(signed(s.netPnl), 0), unit: "SOL", tone: pnlTone(none ? null : s.netPnl), sub: eurLine(d.eur.netPnl, true, !none), delta: s.trades + " closed" }), "dash-net"),
-      A(ui.statCard({ label: "Win rate", value: ticker(f.rate(s.winRate), 1), unit: s.winRate === null ? null : "%", delta: s.wins + "W · " + s.losses + "L · " + s.breakevens + " BE" }), "dash-winrate"),
-      ui.statCard({ label: "Profit factor", value: ticker(f.profitFactor(s.profitFactor), 2) }),
-      A(ui.statCard({ label: "Trades", value: ticker(String(d.entered), 3), delta: d.open > 0 ? d.open + " open" : null }), "dash-countup"),
+    var card = function (o, text, index) {
+      return ui.statCard(Object.assign(o, { value: ticker(o.label, text, index, redraw), flash: M.changed("dash:" + o.label, text, redraw) }));
+    };
+    var grid = h("div", { class: "dash-primary" },
+      A(card({ hero: true, className: "dash-hero", label: "Net P&L", unit: "SOL", tone: pnlTone(none ? null : s.netPnl), sub: eurLine(d.eur.netPnl, true, !none), delta: s.trades + " closed" }, signed(s.netPnl), 0), "dash-net"),
+      A(card({ label: "Win rate", unit: s.winRate === null ? null : "%", delta: s.wins + "W · " + s.losses + "L · " + s.breakevens + " BE" }, f.rate(s.winRate), 1), "dash-winrate"),
+      card({ label: "Profit factor" }, f.profitFactor(s.profitFactor), 2),
+      A(card({ label: "Trades", delta: d.open > 0 ? d.open + " open" : null }, String(d.entered), 3), "dash-countup"),
       // No count-up on this card (owner decision 2026-10-03), only the entrance.
       A(h("a", { class: "stat-link", href: "#/inbox", "aria-label": d.needsReview + " trades need review. Open the Inbox" },
-        ui.statCard({ label: "Needs review", value: String(d.needsReview), delta: "Open Inbox →" })), "dash-review"));
+        ui.statCard({ label: "Needs review", value: String(d.needsReview), delta: "Open Inbox →", flash: M.changed("dash:Needs review", String(d.needsReview), redraw) })), "dash-review"));
+    // First load only: the five cards rise in, 40 ms apart.
+    if (!redraw) Array.prototype.forEach.call(grid.children, function (el, i) {
+      el.classList.add("dash-enter");
+      el.style.setProperty("--delay", i * M.ENTER_STAGGER_MS + "ms");
+    });
+    return grid;
   }
 
   function group(title, stats) {
     return ui.card({ label: title, padding: "none", className: "stat-group" }, [h("h2", { class: "stat-group-title text-label-sm text-muted", text: title }), h("div", { class: "stat-group-grid" }, stats)]);
   }
-  var stat = function (o) { return ui.statCard(Object.assign({ compact: true }, o)); };
 
-  function secondary(d) {
+  function secondary(d, redraw) {
+    var stat = function (o) { return ui.statCard(Object.assign({ compact: true, flash: M.changed("dash:" + o.label, o.value, redraw) }, o)); };
     var s = d.summary;
     var st = d.streak;
     var limits = SJ.analytics.describeLimits(d.limits);
@@ -100,38 +97,6 @@
       ]), "dash-discipline"));
   }
 
-  var HEALTH = [
-    ["parseFailures", "Parse failures", "#/settings", "Transactions the parser could not read; listed under Sync status."],
-    ["unsupportedEvents", "Unsupported events", "#/settings", "Protocols or pairs the parser skips; they are left out of every trade."],
-    ["missingRates", "Missing EUR rates", "#/settings", "Events with no SOL/EUR rate; each sync fetches more, minutes with no candle stay blank."],
-    ["unlinkedRent", "Unlinked rent", "#/settings/sol", "Rent paid or refunded that no trade holds."],
-    ["unlabelledSolIn", "Unlabelled incoming SOL", "#/settings/sol", "Label the sender once (cashback, deposit…); it applies to every payment."],
-    ["orphanFees", "Orphan fees", "#/settings", "Failed swaps no trade holds, e.g. of a voided trade; their fees still count."],
-    ["writtenOff", "Written-off trades", "#/trades?status=written_off", "Basis written off in the journal; check each one is meant."],
-    ["unreviewed", "Unreviewed trades", "#/inbox", "Finished trades waiting in the Inbox."],
-  ];
-
-  /** Every check with a count and a link to where it is fixed; all of the owner's wallets count. */
-  function health() {
-    var counts = SJ.store.health();
-    var open = HEALTH.filter(function (r) { return counts[r[0]] > 0; });
-    var body = open.length === 0
-      ? h("p", { class: "health-clear text-body-md" }, SJ.dom.icon("check-circle", "text-muted"), "Everything looks complete")
-      : h("ul", { class: "health-list" }, open.map(function (r) {
-        return h("li", null, h("a", { href: r[2], class: "health-row" },
-          h("span", { class: "health-count font-mono text-data-md text-warning", text: String(counts[r[0]]) }),
-          h("span", { class: "health-text" },
-            h("span", { class: "text-body-md text-fg" }, r[1], r[0] === "orphanFees" && h("span", { class: "text-muted" }, " · ", ui.solAmount(f.sol(counts.orphanFeeLamports, { decimals: 6 }), "font-mono text-data-sm"))),
-            h("span", { class: "text-body-sm text-muted", text: r[3] })),
-          SJ.dom.icon("chevron-right", "text-muted")));
-      }));
-    return A(ui.card({ labelledby: "data-health-title" }, [
-      ui.cardHeader({ id: "data-health-title", title: "Data health", size: "label", meta: open.length ? open.length + " of " + HEALTH.length + " need attention" : null }),
-      body,
-      open.length > 0 && open.length < HEALTH.length && h("p", { class: "health-foot text-body-sm text-muted", text: "The other " + (HEALTH.length - open.length) + " checks are clear." }),
-    ]), "dash-health");
-  }
-
   function chartCard(id, title, meta, content, actions) {
     return ui.card({ labelledby: id, padding: "lg", className: "chart-card" }, [ui.cardHeader({ id: id, title: title, size: "label", meta: meta, actions: actions }), content]);
   }
@@ -140,14 +105,15 @@
     var holder = h("div");
     var titleId = "chart-period";
     var card;
-    function draw(period) {
+    // The Day/Week switch shows the other series at once; only the first mount draws in.
+    function draw(period, drawIn) {
       var data = period === "day" ? d.daily.map(function (x) { return { x: x.day, y: x.netPnl }; }) : d.weekly.map(function (w) { return { x: w.week, y: w.netPnl }; });
-      SJ.dom.clear(holder).appendChild(SJ.charts.render("bars", data, { label: "Net P&L per " + period, xFormat: dayLabel, tipLabel: function (x) { return period === "week" ? "Week of " + dayLabel(x.x) : dayLabel(x.x); } }));
+      SJ.dom.clear(holder).appendChild(SJ.charts.render("bars", data, { label: "Net P&L per " + period, drawIn: drawIn === false ? false : undefined, xFormat: dayLabel, tipLabel: function (x) { return period === "week" ? "Week of " + dayLabel(x.x) : dayLabel(x.x); } }));
       if (card) card.querySelector("#" + titleId).textContent = period === "day" ? "Daily net P&L" : "Weekly net P&L";
     }
-    var toggle = ui.segmented({ label: "Group by", size: "sm", value: "day", options: [{ value: "day", label: "Day" }, { value: "week", label: "Week" }], onChange: draw });
+    var toggle = ui.segmented({ label: "Group by", size: "sm", value: "day", options: [{ value: "day", label: "Day" }, { value: "week", label: "Week" }], onChange: function (p) { draw(p, false); } });
     card = chartCard(titleId, "Daily net P&L", null, holder, toggle);
-    draw("day");
+    draw("day", true);
     return card;
   }
 
@@ -186,10 +152,9 @@
     var range = new URLSearchParams(SJ.router.query()).get("range");
     if (!SJ.analytics.RANGE_DAYS.hasOwnProperty(range)) range = "30d";
     var d = SJ.analytics.dashboard(range);
+    var redraw = SJ.router.current().redraw;
     SJ.router.watch(SJ.router.refresh);
-    var page = h("div", { class: "page" }, header(range), primary(d), secondary(d), health(), charts(d), recent());
-    counted = true;
-    return page;
+    return h("div", { class: "page" }, header(range), primary(d, redraw), secondary(d, redraw), SJ.healthPanel.card({ anchor: "dash-health" }), charts(d), recent());
   }
 
   SJ.screens = SJ.screens || {};

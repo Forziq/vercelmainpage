@@ -82,10 +82,13 @@
   /** Net P&L, win rate (decided trades) and rule compliance (reviewed trades) of every matching trade, all pages. */
   function strip(s) {
     var decided = s.wins + s.losses;
+    var redraw = SJ.router.current().redraw;
+    // A value changed by a sync flashes; a filter or sort change (the same redraw, no import) does not.
+    var stat = function (o) { return ui.statCard(Object.assign({ compact: true, flash: SJ.motion.changed("trades:" + o.label, o.value, redraw) }, o)); };
     return A(ui.card({ label: "Summary of the filtered trades", padding: "none", className: "summary-strip" }, [
-      ui.statCard({ compact: true, label: "Net P&L", value: f.sol(s.netPnl, { signed: true }), unit: "SOL", tone: ui.toneOf(f.signOf(s.netPnl)), delta: "Decided trades" }),
-      ui.statCard({ compact: true, label: "Win rate", value: f.rate(s.winRate), unit: s.winRate === null ? null : "%", delta: decided === 0 ? "No wins or losses" : s.wins + " W / " + s.losses + " L" }),
-      ui.statCard({ compact: true, label: "Rule compliance", value: f.rate(s.compliance), unit: s.compliance === null ? null : "%", delta: s.reviewed === 0 ? "No reviewed trades" : s.reviewed + " reviewed" }),
+      stat({ label: "Net P&L", value: f.sol(s.netPnl, { signed: true }), unit: "SOL", tone: ui.toneOf(f.signOf(s.netPnl)), delta: "Decided trades" }),
+      stat({ label: "Win rate", value: f.rate(s.winRate), unit: s.winRate === null ? null : "%", delta: decided === 0 ? "No wins or losses" : s.wins + " W / " + s.losses + " L" }),
+      stat({ label: "Rule compliance", value: f.rate(s.compliance), unit: s.compliance === null ? null : "%", delta: s.reviewed === 0 ? "No reviewed trades" : s.reviewed + " reviewed" }),
     ]), "trades-strip");
   }
 

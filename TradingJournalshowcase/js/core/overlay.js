@@ -9,9 +9,7 @@
   var EXIT_MS = 150;
   var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
 
-  function reducedMotion() {
-    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  }
+  var reducedMotion = SJ.motion.reduced;
 
   /** Removes `node` after the exit animation, or at once under reduced motion. */
   function exit(node) {

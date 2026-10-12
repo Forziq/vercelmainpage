@@ -92,10 +92,14 @@
       side);
   }
 
-  /** o: { label, value ("—" when unknown), unit ("SOL" draws the mark), tone, delta, deltaTone, sub, hero, compact } */
+  /**
+   * o: { label, value ("—" when unknown), unit ("SOL" draws the mark), tone, delta, deltaTone, sub, hero, compact,
+   * flash (true: the value was just changed by a sync, SJ.motion.changed) }
+   */
   function statCard(o) {
     var unit = o.unit === "SOL" ? SJ.ui.solIcon({ className: "text-body-sm" }) : o.unit && h("span", { class: "text-body-sm text-muted", text: o.unit });
-    return h("div", { role: "group", "aria-label": o.label, class: cx(o.compact ? "stat-compact" : "stat", o.hero && "stat-hero", o.className) },
+    return h("div", { role: "group", "aria-label": o.label, class: cx(o.compact ? "stat-compact" : "stat", o.hero && "stat-hero", o.flash && "flash-host", o.className) },
+      o.flash && SJ.motion.flashTint(),
       h("div", { class: "text-label-sm text-muted", text: o.label }),
       h("div", { class: "stat-value" }, h("span", { class: cx("font-mono", TONE_TEXT[o.tone || "default"]) }, o.value), unit),
       o.sub,
@@ -177,7 +181,10 @@
     return group;
   }
 
-  /** Radio group styled as a segmented bar; arrow keys move the selection. o: { label, options [{value,label}], value, onChange, size } */
+  /**
+   * Radio group styled as a segmented bar; arrow keys move the selection and the pill slides to it.
+   * o: { label, options [{value,label}], value, onChange, size }
+   */
   function segmented(o) {
     var value = o.value;
     var group = h("div", { role: "radiogroup", "aria-label": o.label, class: cx("segmented", o.size === "sm" && "segmented-sm", o.className) });
@@ -194,6 +201,7 @@
     function choose(v, focus) {
       value = v;
       paint();
+      marker.update(true);
       if (focus) buttons[o.options.map(function (x) { return x.value; }).indexOf(v)].focus();
       if (o.onChange) o.onChange(v);
     }
@@ -206,10 +214,11 @@
     });
     append(group, buttons);
     paint();
+    var marker = SJ.motion.slidingMarker(group, '[aria-checked="true"]', { className: "segment-marker", key: "segmented:" + o.label });
     return group;
   }
 
-  /** Underline tabs (WAI-ARIA tabs). o: { label, items [{id, label, content: node | function}], value, onChange } */
+  /** Underline tabs (WAI-ARIA tabs) with a sliding underline. o: { label, items [{id, label, content: node | function}], value, onChange } */
   function tabs(o) {
     var base = uid("tabs");
     var active = o.value || o.items[0].id;
@@ -228,6 +237,7 @@
         if (on && focus) buttons[i].focus();
         if (on) panels.appendChild(h("div", { role: "tabpanel", class: "tabpanel", id: base + "-panel-" + t.id, "aria-labelledby": buttons[i].id }, typeof t.content === "function" ? t.content() : t.content));
       });
+      if (marker) marker.update(true);
       if (o.onChange && !silent) o.onChange(id);
     }
     list.addEventListener("keydown", function (e) {
@@ -240,7 +250,9 @@
     });
     append(list, buttons);
     var root = h("div", null, list, panels);
+    var marker = null;
     select(active, false, true);
+    marker = SJ.motion.slidingMarker(list, '[aria-selected="true"]', { className: "tab-marker", scale: true });
     return root;
   }
 

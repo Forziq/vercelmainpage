@@ -15,8 +15,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out), scale var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), scale var(--duration-fast) var(--ease-out);
 }
 .btn:active:not(:disabled) { scale: 0.97; }
 .btn:disabled,
@@ -115,8 +114,7 @@
   font-size: 13px;
   line-height: 18px;
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
 }
 .chip { height: 40px; color: var(--muted); }
 .tag { color: var(--fg); }
@@ -147,8 +145,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
   background: var(--surface);
-  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out), scale var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out), scale var(--duration-fast) var(--ease-out);
 }
 .grade-option:hover { border-color: var(--line-strong); }
 .grade-option:active { scale: 0.97; }
@@ -185,7 +182,7 @@
 }
 
 /* Underline tabs */
-.tablist { display: flex; gap: 16px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+.tablist { position: relative; display: flex; gap: 16px; overflow-x: auto; border-bottom: 1px solid var(--line); }
 .tab {
   display: flex;
   height: 40px;
@@ -201,6 +198,34 @@
 .tab[aria-current="page"] { border-bottom-color: var(--accent); color: var(--fg); }
 .tabpanel { padding-top: 16px; }
 
+/* Sliding selection markers (SJ.motion.slidingMarker): placed by JS, they slide with transform only. Until one is
+   measured its container lacks has-marker and the selected item draws its own background or underline. */
+.slide-marker { position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none; transition: transform var(--duration-base) var(--ease-out); }
+.has-marker > .slide-marker { opacity: 1; }
+.slide-marker.is-jump { transition: none; }
+.segment-marker { border-radius: var(--radius-badge); background: var(--raised); }
+.segmented.has-marker .segment[aria-checked="true"] { background: transparent; }
+.tab-marker { top: auto; bottom: 0; width: 1px; height: 2px; background: var(--accent); transform-origin: left; }
+.tablist.has-marker .tab[aria-selected="true"],
+.tablist.has-marker .tab[aria-current="page"] { border-bottom-color: transparent; }
+
+/* Sync change flash: a neutral accent tint behind the content that fades out; the host keeps its size. */
+.flash-host { position: relative; isolation: isolate; }
+.change-flash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(124 140 255 / 0.15);
+  pointer-events: none;
+  animation: change-flash var(--duration-flash) var(--ease-out) both;
+}
+
+/* Count-up: the invisible final value under the frame keeps the width, so the unit never moves. */
+.ticker { display: inline-grid; }
+.ticker > [aria-hidden] { grid-area: 1 / 1; }
+.ticker-final { visibility: hidden; }
+
 /* Checklist row (a rule): box on the right; an unchecked alert row is tinted loss. */
 .check-row {
   display: flex;
@@ -214,8 +239,7 @@
   background: var(--surface);
   color: var(--fg);
   text-align: left;
-  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
 }
 .check-row:hover { border-color: var(--line-strong); }
 .check-row > .check-label { flex: 1; }
