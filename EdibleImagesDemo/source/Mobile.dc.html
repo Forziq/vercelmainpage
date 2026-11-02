@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<title>Edible Images homepage concept, mobile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Merienda+One&amp;display=swap" rel="stylesheet">
+<style>
+body { margin: 0; background: #fff; }
+.ei {
+  --teal: #04817C; --teal-d: #03625E; --ink: #103B3A; --purple: #9E00A3; --orchid: #BE51C1;
+  --pink: #F9A8CF; --pink-l: #FDEAF3; --yellow: #FFD23F; --yellow-l: #FFF6D1; --aqua: #CDEFEA; --aqua-l: #EBF8F6;
+  --gut: 16px;
+  container-type: inline-size;
+  font-family: 'Figtree', system-ui, sans-serif; font-size: 17px; line-height: 1.5; color: var(--ink); background: #fff;
+  overflow-x: clip; -webkit-font-smoothing: antialiased;
+}
+.ei *, .ei *::before, .ei *::after { box-sizing: border-box; }
+:where(.ei) img { display: block; max-width: 100%; height: auto; }
+:where(.ei) :where(h1, h2, h3, p, ol, ul, figure, blockquote) { margin: 0; padding: 0; }
+:where(.ei) :where(ol, ul) { list-style: none; }
+:where(.ei) a { color: inherit; }
+.ei h1, .ei h2 { font-family: 'Merienda One', cursive; font-weight: 400; font-synthesis: none; letter-spacing: -0.01em; line-height: 1.14; }
+.ei h2 { font-size: 32px; color: var(--teal-d); }
+.ei h3 { font-size: 21px; line-height: 1.3; font-weight: 700; }
+.ei :focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; border-radius: 6px; }
+.on-dark :focus-visible { outline-color: var(--yellow); }
+.wrap { width: 100%; max-width: 1344px; margin-inline: auto; padding-inline: var(--gut); }
+.sec { padding-block: 64px; }
+.sec-head { margin-bottom: 28px; }
+.sec-head p { margin-top: 8px; font-size: 19px; max-width: 46ch; }
+
+/* top bars */
+.concept { background: var(--ink); color: #fff; font-size: 14px; line-height: 1.3; font-weight: 500; text-align: center; padding: 7px 12px; }
+.announce { background: var(--yellow); color: var(--ink); font-size: 15px; font-weight: 600; text-align: center; padding: 8px 12px; }
+.head { background: #fff; position: relative; z-index: 5; }
+.head-in { display: flex; align-items: center; gap: 4px; min-height: 76px; }
+.logo { display: block; margin-right: auto; border-radius: 50%; }
+.logo img { width: 66px; height: 66px; }
+.nav { display: none; }
+.icon-btn { width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: none; color: var(--teal-d); border-radius: 50%; cursor: pointer; padding: 0; text-decoration: none; transition: background-color .15s; }
+.icon-btn:hover { background: var(--aqua-l); }
+.icon-btn:active { background: var(--aqua); }
+.menu-btn { display: inline-flex; }
+.menu { background: #fff; padding: 0 var(--gut) 16px; }
+.menu a { display: flex; align-items: center; min-height: 52px; font-size: 19px; font-weight: 600; text-decoration: none; color: var(--ink); }
+.menu a.is-star { color: var(--purple); }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 12px 28px; border: 0; border-radius: 999px; font: inherit; font-size: 19px; font-weight: 700; line-height: 1.2; text-decoration: none; cursor: pointer; transition: transform .12s ease, background-color .15s ease; }
+.btn:active { transform: scale(.97); }
+.btn-sun { background: var(--yellow); color: var(--ink); }
+.btn-sun:hover { background: #FFC61A; }
+.btn-text { background: transparent; color: #fff; text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+.btn-text:hover { text-decoration-color: var(--yellow); }
+
+/* hero */
+.hero { position: relative; background: var(--teal); color: #fff; overflow: hidden; }
+.hero-in { display: grid; grid-template-columns: minmax(0, 1fr); padding-top: 32px; }
+.hero h1 { font-size: 46px; line-height: 1.12; color: #fff; }
+.hero h1 span { display: block; }
+.hero-sub { margin-top: 16px; font-size: 19px; line-height: 1.45; max-width: 34ch; }
+.hero-price { margin-top: 20px; font-size: 19px; font-weight: 600; }
+.hero-price strong { font-size: 28px; font-weight: 700; color: var(--yellow); margin-left: 4px; }
+.hero-acts { display: grid; gap: 4px; margin-top: 16px; }
+.cake { position: relative; aspect-ratio: 1; }
+.cake-base { width: 100%; height: 100%; object-fit: contain; }
+.hero-cake { width: 122%; margin-top: 12px; margin-left: 2%; margin-bottom: -26%; }
+.cake-topper { position: absolute; left: 18.6%; top: 18.6%; width: 62.8%; height: 62.8%; border-radius: 50%; overflow: hidden; animation: settle .9s cubic-bezier(.2, .8, .2, 1) both .15s; }
+.cake-topper img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); }
+@keyframes settle { from { transform: scale(1.14) translateY(-10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.ph-tag { display: inline-block; margin-top: 16px; background: #fff; color: var(--ink); font-size: 15px; font-weight: 600; line-height: 1.2; padding: 7px 12px; border-radius: 8px; }
+.scallop { height: 20px; background: url(/_blob/954942749408b787d0cc50c5dfb8362f) repeat-x center bottom / 56px 20px; }
+.hero .scallop { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 2; }
+
+/* trust */
+.trust { padding-block: 32px 0; }
+.trust ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+.trust li { display: grid; gap: 6px; align-content: start; }
+.trust svg { color: var(--teal); }
+.trust b { font-size: 19px; line-height: 1.25; font-weight: 700; }
+.trust span { font-size: 17px; line-height: 1.35; }
+
+/* how it works */
+.steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.step { min-width: 0; }
+.step-tile { display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 20px; }
+.step:nth-child(1) .step-tile { height: 200px; background: var(--yellow-l); }
+.step:nth-child(2) .step-tile { height: 240px; background: var(--pink-l); }
+.step:nth-child(3) .step-tile { height: 300px; background: var(--aqua); }
+.step:nth-child(1) img { width: 150px; height: 150px; border-radius: 12px; }
+.step:nth-child(2) img { width: 196px; height: 196px; border-radius: 50%; }
+.step:nth-child(3) img { width: 380px; max-width: none; height: 380px; }
+.step h3 { margin-top: 14px; font-size: 21px; }
+.step p { margin-top: 4px; }
+.step-no { color: var(--purple); }
+
+/* ranges */
+.ranges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.range { position: relative; display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; text-decoration: none; color: var(--ink); transition: background-color .15s; min-height: 220px; }
+.range:nth-child(1) { background: var(--pink-l); grid-column: 1 / -1; }
+.range:nth-child(2) { background: var(--aqua); }
+.range:nth-child(3) { background: var(--yellow-l); }
+.range:nth-child(4) { background: var(--aqua-l); grid-column: 1 / -1; }
+.range-text { padding: 16px 16px 12px; }
+.range-name { font-size: 21px; font-weight: 700; line-height: 1.2; }
+.range-text span { display: block; font-size: 17px; line-height: 1.35; margin-top: 2px; }
+.range-img { margin-top: auto; align-self: center; width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 16px; transition: transform .25s ease; }
+.range:hover .range-img { transform: scale(1.04); }
+.range:nth-child(1) .range-img, .range:nth-child(4) .range-img { width: 190px; height: 190px; }
+.ph { display: flex; align-items: center; justify-content: center; text-align: center; background: #EDEFEE; color: #3F4F4E; font-size: 15px; font-weight: 600; line-height: 1.25; padding: 12px; }
+.range .ph { margin-top: auto; align-self: center; width: 150px; height: 150px; border-radius: 50%; margin-bottom: 16px; }
+
+/* best sellers */
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 62%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); scroll-padding-inline: var(--gut); }
+.rail::-webkit-scrollbar { display: none; }
+.prod { scroll-snap-align: start; display: block; text-decoration: none; color: var(--ink); border-radius: 16px; }
+.prod img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 16px; background: var(--aqua-l); transition: transform .25s ease; }
+.prod:hover img { transform: scale(1.02); }
+.prod b { display: block; margin-top: 10px; font-size: 17px; line-height: 1.3; font-weight: 600; }
+.prod span { display: block; margin-top: 2px; font-size: 19px; font-weight: 700; color: var(--teal-d); }
+
+/* design your own */
+.star { background: var(--purple); color: #fff; }
+.star h2 { color: #fff; font-size: 36px; }
+.star .sec-head p { color: #fff; }
+.studio { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.stage { position: relative; overflow: hidden; height: 420px; margin-inline: calc(var(--gut) * -1); }
+.stage-cake { position: absolute; left: 50%; top: 50%; width: 500px; height: 500px; max-width: none; transform: translate(-50%, -50%); }
+.t-mock { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; overflow: hidden; border-style: solid; border-width: 10px; text-align: center; color: var(--ink); transition: width .25s ease, height .25s ease, border-radius .25s ease, border-color .2s ease; padding: 8px; }
+.t-circle { width: 312px; height: 312px; border-radius: 50%; }
+.t-square { width: 240px; height: 240px; border-radius: 6px; }
+.t-rectangle { width: 212px; height: 278px; border-radius: 6px; }
+.t-photo { width: 50%; aspect-ratio: 1; flex: 0 0 auto; border-radius: 50%; overflow: hidden; background: #EDEFEE; display: flex; align-items: center; justify-content: center; color: #3F4F4E; font-size: 13px; font-weight: 600; line-height: 1.2; }
+.t-photo img { width: 100%; height: 100%; object-fit: cover; }
+.t-name { font-family: 'Merienda One', cursive; font-size: 27px; line-height: 1.1; color: var(--teal-d); max-width: 86%; overflow-wrap: anywhere; }
+.t-msg { font-size: 15px; line-height: 1.2; font-weight: 500; max-width: 80%; overflow-wrap: anywhere; }
+.t-square .t-photo { width: 46%; }
+.t-square .t-name { font-size: 24px; }
+.t-square .t-msg, .t-rectangle .t-msg { font-size: 15px; }
+.t-rectangle .t-photo { width: 62%; }
+.sheet-note { display: flex; align-items: center; gap: 14px; margin-top: 14px; font-size: 17px; font-weight: 600; line-height: 1.3; }
+.mini { flex: 0 0 auto; width: 48px; aspect-ratio: 210 / 297; background: #fff; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 2px; padding: 2px; }
+.mini i { display: block; background: var(--teal); }
+.panel { background: #fff; color: var(--ink); border-radius: 24px; padding: 20px 16px; display: grid; gap: 20px; }
+.field label, .field .lab { display: block; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.field input[type=text] { width: 100%; min-height: 52px; border: 2px solid #7E9B99; border-radius: 12px; padding: 10px 14px; font: inherit; font-size: 19px; color: var(--ink); background: #fff; }
+.field input[type=text]:focus-visible { border-color: var(--purple); }
+.upload-input { position: absolute; width: 2px; height: 2px; opacity: 0; overflow: hidden; }
+.field label.upload { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; border-radius: 12px; background: var(--aqua-l); color: var(--teal-d); font-weight: 700; cursor: pointer; padding: 10px 14px; margin: 0 !important; font-size: 17px !important; transition: background-color .15s; }
+.field label.upload:hover { background: var(--aqua); }
+.upload-input:focus-visible + label.upload { outline: 3px solid var(--purple); outline-offset: 3px; }
+.hint { margin-top: 8px; font-size: 15px; line-height: 1.4; }
+.err { margin-top: 8px; font-size: 15px; line-height: 1.4; font-weight: 600; color: #A3123F; }
+.two, .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.segs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; background: var(--aqua-l); padding: 5px; border-radius: 14px; }
+.seg { min-height: 48px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer; padding: 4px 6px; transition: background-color .15s, color .15s; }
+.seg:hover { background: var(--aqua); }
+.seg.on { background: var(--teal-d); color: #fff; }
+.swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.swatch { width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; background: #fff; transition: transform .12s; }
+.swatch:active { transform: scale(.94); }
+.swatch i { display: block; width: 36px; height: 36px; border-radius: 50%; }
+.swatch.on { outline: 3px solid var(--ink); outline-offset: -1px; }
+.buy { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.buy b { font-size: 28px; font-weight: 700; color: var(--teal-d); line-height: 1; }
+.btn-teal { background: var(--teal); color: #fff; flex: 1 1 auto; }
+.btn-teal:hover { background: var(--teal-d); }
+
+/* size guide */
+.sizes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+.sz-sheet { aspect-ratio: 210 / 297; background: var(--aqua-l); display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 3%; border-radius: 4px; }
+.sz-sheet img { border-radius: 50%; aspect-ratio: 1; object-fit: cover; }
+.w2 { width: 24.2%; } .w4 { width: 48.4%; } .w6 { width: 72.6%; } .w8 { width: 96.7%; }
+.sz-rect { width: 96.7%; height: 89.8%; border-radius: 3px !important; aspect-ratio: auto !important; object-fit: cover; }
+.size b { display: block; margin-top: 10px; font-size: 21px; line-height: 1.25; }
+.size span { font-size: 17px; }
+.size-rect { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+
+/* application */
+.apply { background: var(--pink-l); }
+.apply-in { display: grid; gap: 28px; }
+.tips { display: grid; gap: 20px; counter-reset: t; }
+.tips li { counter-increment: t; display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 14px; font-size: 19px; line-height: 1.4; font-weight: 500; }
+.tips li::before { content: counter(t); width: 48px; height: 48px; border-radius: 50%; background: var(--purple); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 21px; }
+.apply-img { width: 100%; max-width: 520px; margin-inline: auto; }
+
+/* reviews */
+.reviews { background: var(--yellow); }
+.rev-in { display: grid; gap: 20px; }
+.reviews h2 { color: var(--ink); }
+.stars { display: flex; gap: 2px; margin-top: 14px; color: var(--purple); }
+.rating { margin-top: 8px; font-size: 19px; font-weight: 600; max-width: 30ch; }
+.reviews blockquote p { font-size: 24px; line-height: 1.3; font-weight: 600; }
+.reviews figcaption { margin-top: 8px; font-size: 19px; }
+
+/* delivery */
+.deliver { display: grid; gap: 24px; }
+.deliver h3 { color: var(--teal-d); margin-bottom: 6px; font-size: 21px; }
+.deliver p { max-width: 58ch; }
+
+/* footer */
+.foot { background: var(--teal); padding: 48px var(--gut) 24px; margin-top: 8px; }
+.card-wrap { max-width: 1120px; margin-inline: auto; }
+.card { background: #fff; padding: 24px 20px; border-radius: 0 0 20px 20px; display: grid; gap: 28px; }
+.card-brand img { width: 104px; height: 104px; }
+.card-brand p { margin-top: 10px; font-size: 19px; font-weight: 600; }
+.card h3 { font-size: 19px; color: var(--teal-d); margin-bottom: 4px; }
+.card a { display: flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.imprint { text-align: center; color: #fff; font-size: 15px; margin-top: 20px; }
+
+@keyframes rise { from { opacity: .3; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sec-head, .step, .range, .prod, .size, .tips li, .deliver div, .rev-in figure { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 30%; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ei *, .ei *::before, .ei *::after { animation: none !important; transition: none !important; }
+}
+
+@container (min-width: 760px) {
+  .ei-root { --gut: 32px; }
+  .sec { padding-block: 96px; }
+  .ei h2 { font-size: 42px; }
+  .trust ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .steps { grid-template-columns: 3fr 4fr 5fr; align-items: end; gap: 12px; }
+  .step:nth-child(1) .step-tile { height: 220px; }
+  .step:nth-child(2) .step-tile { height: 300px; }
+  .step:nth-child(3) .step-tile { height: 400px; }
+  .step:nth-child(1) img { width: 180px; height: 180px; }
+  .step:nth-child(2) img { width: 250px; height: 250px; }
+  .step:nth-child(1) img, .step:nth-child(2) img { max-width: 84%; height: auto; aspect-ratio: 1; }
+  .step:nth-child(3) img { width: 520px; height: 520px; }
+  .step { display: flex; flex-direction: column; justify-content: flex-end; }
+  .step p { min-height: 3em; }
+  .step h3, .step p { padding-inline: 4px; }
+  .rail { grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: visible; margin-inline: 0; padding-inline: 0; }
+  .sizes { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  .size-rect { grid-column: auto; display: block; }
+  .deliver { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
+  .rev-in { grid-template-columns: 5fr 7fr; align-items: center; gap: 48px; }
+  .reviews blockquote p { font-size: 36px; }
+  .apply-in { grid-template-columns: 7fr 5fr; align-items: center; gap: 48px; }
+  .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card { grid-template-columns: 1.2fr 1fr 1fr; padding: 32px 40px; }
+  .ranges { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+  .range:nth-child(1), .range:nth-child(4) { grid-column: span 2; }
+  .range:nth-child(2) { grid-column: span 1; }
+  .range:nth-child(3) { grid-column: span 1; }
+  .range:nth-child(1) { grid-row: span 2; }
+  .range:nth-child(4) { grid-column: 3 / 5; flex-direction: row; align-items: center; }
+  .range:nth-child(4) .range-img { margin: 16px 24px 16px auto; }
+  .range:nth-child(1) .range-img { width: 340px; height: 340px; margin-bottom: 32px; }
+  .range-text { padding: 20px 24px 12px; }
+}
+
+@container (min-width: 1040px) {
+  .ei-root { --gut: 48px; }
+  .sec { padding-block: 120px; }
+  .head-in { min-height: 88px; gap: 8px; }
+  .logo img { width: 76px; height: 76px; }
+  .logo { margin-right: 28px; }
+  .nav { display: flex; align-items: center; gap: 4px; margin-right: auto; }
+  .nav a { display: inline-flex; align-items: center; min-height: 48px; padding: 8px 14px; border-radius: 999px; font-size: 17px; font-weight: 600; text-decoration: none; color: var(--ink); transition: background-color .15s; }
+  .nav a:hover { background: var(--aqua-l); }
+  .nav a.is-star { color: var(--purple); }
+  .menu-btn, .menu { display: none; }
+  .hero-in { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; min-height: 640px; padding-block: 56px 72px; }
+  .hero h1 { font-size: 72px; }
+  .hero-sub { font-size: 21px; margin-top: 22px; }
+  .hero-price { margin-top: 26px; font-size: 21px; }
+  .hero-price strong { font-size: 36px; }
+  .hero-acts { display: flex; gap: 12px; align-items: center; }
+  .btn-sun { padding-inline: 36px; }
+  .hero-cake { position: absolute; width: 860px; right: -120px; top: -40px; margin: 0; }
+  .ph-tag { position: absolute; z-index: 3; left: max(var(--gut), calc((100% - 1344px) / 2 + var(--gut))); bottom: 36px; margin: 0; }
+  .studio { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px; align-items: center; }
+  .stage { height: 660px; margin: 0; overflow: visible; }
+  .stage-cake { width: 660px; height: 660px; }
+  .t-circle { width: 412px; height: 412px; border-width: 14px; }
+  .t-square { width: 320px; height: 320px; border-width: 14px; }
+  .t-rectangle { width: 280px; height: 368px; border-width: 14px; }
+  .t-name { font-size: 36px; }
+  .t-square .t-name { font-size: 32px; }
+  .t-msg, .t-square .t-msg, .t-rectangle .t-msg { font-size: 21px; }
+  .t-photo { font-size: 17px; }
+  .panel { padding: 28px; }
+  .star h2 { font-size: 48px; }
+}
+</style>
+</helmet>
+<div class="ei ei-root">
+
+<p class="concept">Concept preview for Edible Images. Not the live website.</p>
+<p class="announce">Free delivery anywhere in Ireland.</p>
+
+<header class="head">
+  <div class="wrap head-in">
+    <a class="logo" href="#top" aria-label="Edible Images home"><img src="/_blob/978eddd0cb8503ecf5ca503d371dd811" alt="Edible Images logo" width="185" height="185"></a>
+    <nav class="nav" aria-label="Main">
+      <a class="is-star" href="#design">Make Your Own</a>
+      <a href="#ranges">Birthdays</a>
+      <a href="#ranges">Occasions</a>
+      <a href="#ranges">Characters</a>
+      <a href="#ranges">Sports</a>
+      <a href="#help">Help</a>
+    </nav>
+    <button class="icon-btn" type="button" aria-label="Search">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20.5 20.5 16 16"></path></svg>
+    </button>
+    <button class="icon-btn" type="button" aria-label="Basket">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18l-2 11H5L3 9Z"></path><path d="m8 9 3-6M16 9l-3-6"></path></svg>
+    </button>
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded="{{menuExpanded}}" aria-controls="mobile-menu" onClick="{{toggleMenu}}">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6.5h18M3 12h18M3 17.5h18"></path></svg>
+    </button>
+  </div>
+  <sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+    <nav class="menu" id="mobile-menu" aria-label="Mobile">
+      <a class="is-star" href="#design" onClick="{{closeMenu}}">Make Your Own</a>
+      <a href="#ranges" onClick="{{closeMenu}}">Birthdays</a>
+      <a href="#ranges" onClick="{{closeMenu}}">Occasions</a>
+      <a href="#ranges" onClick="{{closeMenu}}">Characters</a>
+      <a href="#ranges" onClick="{{closeMenu}}">Sports</a>
+      <a href="#help" onClick="{{closeMenu}}">Help</a>
+    </nav>
+  </sc-if>
+</header>
+
+<main id="top">
+
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <div class="wrap hero-in">
+    <div>
+      <h1 id="hero-title"><span>Your photo.</span> <span>Your message.</span> <span>On their cake.</span></h1>
+      <p class="hero-sub">Upload a photo, add a message and we'll post your edible topper to your door.</p>
+      <p class="hero-price">Personalised topper <strong>€10.50</strong></p>
+      <div class="hero-acts">
+        <a class="btn btn-sun" href="#design">Design your topper</a>
+        <a class="btn btn-text" href="#bestsellers">Browse designs</a>
+      </div>
+      <p class="ph-tag">Placeholder: swap for a cake photo</p>
+    </div>
+    <div class="cake hero-cake">
+      <img class="cake-base" src="/_blob/755248ab238f41d7a4ce62c1531be4dd" alt="Iced cake seen from above with pink piped edging and a round personalised topper in the middle" width="1600" height="1600">
+      <div class="cake-topper"><img src="/_blob/0fc5ddeffaae02788e6e98e87f1dae23" alt="" width="600" height="600"></div>
+    </div>
+  </div>
+  <div class="scallop" aria-hidden="true"></div>
+</section>
+
+<section class="trust" aria-label="Why order from us">
+  <div class="wrap">
+    <ul>
+      <li><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h12v10H2zM14 10h4l4 4v3h-8z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17.5" cy="18" r="2"></circle></svg><b>Free Irish delivery</b><span>Anywhere in Ireland</span></li>
+      <li><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg><b>Posted within 1 working day</b><span>Then up to 2 days in the post</span></li>
+      <li><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M4 15v4h16v-4"></path></svg><b>Upload your own image</b><span>JPG, JPEG, GIF or PNG</span></li>
+      <li><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v13H3zM3 7l9 7 9-7"></path></svg><b>Packed with care</b><span>Grip-seal bag in a board-backed A4 envelope</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="how-title">How it works</h2></div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-tile"><img src="/_blob/d734c4d901b30c80ab3f4840b22bb368" alt="Dinosaur birthday topper design with a space for your photo" width="600" height="600" loading="lazy"></div>
+        <h3><span class="step-no">1.</span> Choose or upload</h3>
+        <p>Pick from 246 designs or upload your own image.</p>
+      </li>
+      <li class="step">
+        <div class="step-tile"><img src="/_blob/0fc5ddeffaae02788e6e98e87f1dae23" alt="Round balloon topper with the name Mikhayla added" width="600" height="600" loading="lazy"></div>
+        <h3><span class="step-no">2.</span> Add your message</h3>
+        <p>Type the name and message. We print it and post it to you.</p>
+      </li>
+      <li class="step">
+        <div class="step-tile"><img src="/_blob/b07cdebca92414ff1f66bbd3935c8eb3" alt="The finished topper in place on an iced cake" width="1600" height="1600" loading="lazy"></div>
+        <h3><span class="step-no">3.</span> Apply it to your cake</h3>
+        <p>It works on shop-bought or homemade cakes and cupcakes.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="ranges" aria-labelledby="ranges-title" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="ranges-title">Shop by range</h2></div>
+    <div class="ranges">
+      <a class="range" href="#ranges">
+        <div class="range-text"><div class="range-name">Birthdays</div><span>Mermaids, dinosaurs, comics and more</span></div>
+        <img class="range-img" src="/_blob/3e0ba24311d559cc1a8bad498cf4bc37" alt="" width="600" height="600" loading="lazy">
+      </a>
+      <a class="range" href="#ranges">
+        <div class="range-text"><div class="range-name">Occasions</div><span>Baby births, christenings and weddings</span></div>
+        <img class="range-img" src="/_blob/def467e2f6e99a8d61568efd83deea19" alt="" width="600" height="600" loading="lazy">
+      </a>
+      <a class="range" href="#ranges">
+        <div class="range-text"><div class="range-name">Characters</div></div>
+        <div class="ph">Characters image goes here</div>
+      </a>
+      <a class="range" href="#ranges">
+        <div class="range-text"><div class="range-name">Sports</div></div>
+        <img class="range-img" src="/_blob/985e1964a41decfa357078ea81fb419b" alt="" width="600" height="600" loading="lazy">
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="bestsellers" aria-labelledby="best-title" style="padding-top: 0">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="best-title">Best sellers</h2></div>
+    <div class="rail" tabindex="0" role="group" aria-labelledby="best-title">
+      <sc-for list="{{products}}" as="p" hint-placeholder-count="5">
+        <a class="prod" href="#bestsellers"><img src="{{p.img}}" alt="{{p.name}}" width="600" height="600" loading="lazy"><b>{{p.name}}</b><span>{{p.price}}</span></a>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section class="sec star on-dark" id="design" aria-labelledby="design-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="design-title">Design your own topper</h2>
+      <p>Change anything below and watch your topper update.</p>
+    </div>
+    <div class="studio" data-ui>
+      <div>
+        <div class="stage">
+          <img class="stage-cake" src="/_blob/755248ab238f41d7a4ce62c1531be4dd" alt="" width="1600" height="1600" loading="lazy">
+          <div class="t-mock {{shapeClass}}" style="border-color: {{border}}" role="img" aria-label="{{previewLabel}}">
+            <div class="t-photo">
+              <sc-if value="{{image}}" hint-placeholder-val="{{ false }}"><img src="{{image}}" alt=""></sc-if>
+              <sc-if value="{{noImage}}" hint-placeholder-val="{{ true }}"><span>Your image</span></sc-if>
+            </div>
+            <div class="t-name">{{name}}</div>
+            <div class="t-msg">{{message}}</div>
+          </div>
+        </div>
+        <p class="sheet-note" aria-live="polite">
+          <span class="mini" aria-hidden="true"><sc-for list="{{miniCells}}" as="c" hint-placeholder-count="2"><i style="{{c.style}}"></i></sc-for></span>
+          <span>{{sizeNote}}</span>
+        </p>
+      </div>
+      <form class="panel" onSubmit="{{noSubmit}}">
+        <div class="two">
+          <div class="field"><label for="t-name">Name</label><input id="t-name" type="text" value="{{name}}" onChange="{{onName}}" maxlength="24" autocomplete="off"></div>
+          <div class="field"><label for="t-msg">Message</label><input id="t-msg" type="text" value="{{message}}" onChange="{{onMessage}}" maxlength="40" autocomplete="off"></div>
+        </div>
+        <div class="field">
+          <input class="upload-input" id="t-file" type="file" accept=".jpg,.jpeg,.gif,.png,image/jpeg,image/gif,image/png" aria-describedby="t-file-hint" onChange="{{onFile}}">
+          <label class="upload" for="t-file">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M4 15v4h16v-4"></path></svg>
+            <span>{{uploadLabel}}</span>
+          </label>
+          <p class="hint" id="t-file-hint">JPG, JPEG, GIF and PNG are accepted, but not Word or PDF files.</p>
+          <sc-if value="{{fileError}}" hint-placeholder-val="{{ false }}"><p class="err" role="alert">{{fileError}}</p></sc-if>
+        </div>
+        <div class="stack">
+          <div class="field">
+            <span class="lab" id="lab-shape">Shape</span>
+            <div class="segs" role="group" aria-labelledby="lab-shape">
+              <sc-for list="{{shapes}}" as="s" hint-placeholder-count="3"><button class="seg {{s.cls}}" type="button" aria-pressed="{{s.pressed}}" onClick="{{s.pick}}">{{s.label}}</button></sc-for>
+            </div>
+          </div>
+          <div class="field">
+            <span class="lab" id="lab-size">Size</span>
+            <div class="segs" role="group" aria-labelledby="lab-size">
+              <sc-for list="{{sizes}}" as="s" hint-placeholder-count="4"><button class="seg {{s.cls}}" type="button" aria-pressed="{{s.pressed}}" onClick="{{s.pick}}">{{s.label}}</button></sc-for>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <span class="lab" id="lab-border">Border colour</span>
+          <div class="swatches" role="group" aria-labelledby="lab-border">
+            <sc-for list="{{borders}}" as="b" hint-placeholder-count="6"><button class="swatch {{b.cls}}" type="button" aria-label="{{b.label}}" aria-pressed="{{b.pressed}}" onClick="{{b.pick}}"><i style="background: {{b.hex}}"></i></button></sc-for>
+          </div>
+        </div>
+        <div class="buy">
+          <b>€10.50</b>
+          <button class="btn btn-teal" type="button">Add to basket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="sizes" aria-labelledby="size-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="size-title">Size guide</h2>
+      <p>Every size to scale on one printed page.</p>
+    </div>
+    <div class="sizes">
+      <div class="size">
+        <div class="sz-sheet" aria-hidden="true"><sc-for list="{{twelve}}" as="n" hint-placeholder-count="12"><img class="w2" src="/_blob/0fc5ddeffaae02788e6e98e87f1dae23" alt="" loading="lazy"></sc-for></div>
+        <b>2"</b><span>12 images per page</span>
+      </div>
+      <div class="size">
+        <div class="sz-sheet" aria-hidden="true"><img class="w4" src="/_blob/3e0ba24311d559cc1a8bad498cf4bc37" alt="" loading="lazy"><img class="w4" src="/_blob/3e0ba24311d559cc1a8bad498cf4bc37" alt="" loading="lazy"></div>
+        <b>4"</b><span>2 images per page</span>
+      </div>
+      <div class="size">
+        <div class="sz-sheet" aria-hidden="true"><img class="w6" src="/_blob/def467e2f6e99a8d61568efd83deea19" alt="" loading="lazy"></div>
+        <b>6"</b><span>1 image per page</span>
+      </div>
+      <div class="size">
+        <div class="sz-sheet" aria-hidden="true"><img class="w8" src="/_blob/985e1964a41decfa357078ea81fb419b" alt="" loading="lazy"></div>
+        <b>8"</b><span>1 image per page</span>
+      </div>
+      <div class="size size-rect">
+        <div class="sz-sheet" aria-hidden="true"><img class="sz-rect" src="/_blob/a1073d9303eea1984aa500b255e8aa33" alt="" loading="lazy"></div>
+        <div><b>Rectangle 8"</b><span>8" x 10.5"</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec apply" id="help" aria-labelledby="apply-title">
+  <div class="wrap apply-in">
+    <div>
+      <div class="sec-head"><h2 id="apply-title">How to apply it</h2></div>
+      <ol class="tips">
+        <li><span>Keep the backing on until you're ready.</span></li>
+        <li><span>Cut the image while it's still on the backing.</span></li>
+        <li><span>Lower it onto the iced cake from the middle outwards, then smooth gently.</span></li>
+      </ol>
+    </div>
+    <img class="apply-img" src="/_blob/b07cdebca92414ff1f66bbd3935c8eb3" alt="A round topper smoothed flat on an iced cake" width="1600" height="1600" loading="lazy">
+  </div>
+</section>
+
+<section class="sec reviews" aria-labelledby="rev-title">
+  <div class="wrap rev-in">
+    <div>
+      <h2 id="rev-title">Reviews</h2>
+      <div class="stars" aria-hidden="true">
+        <sc-for list="{{fiveStars}}" as="n" hint-placeholder-count="5"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 6.2 6.8.8-5 4.6 1.3 6.7-6-3.4-6 3.4 1.3-6.7-5-4.6 6.8-.8L12 2.5Z"></path></svg></sc-for>
+      </div>
+      <p class="rating">Rated 5.00 out of 5 from 20 customer reviews for the personalised topper</p>
+    </div>
+    <figure>
+      <blockquote><p>‘Can't fault the speed or service’</p></blockquote>
+      <figcaption>Graham</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" id="delivery" aria-labelledby="del-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="del-title">Delivery and returns</h2></div>
+    <div class="deliver">
+      <div>
+        <h3>Delivery</h3>
+        <p>Delivery is free anywhere in Ireland. We print and post your order within 1 working day, then it takes up to 2 days in the post. It's packed in a grip-seal bag inside a board-backed A4 envelope.</p>
+      </div>
+      <div>
+        <h3>Returns</h3>
+        <p>For food hygiene reasons, we can't accept returns for ordering mistakes, a change of mind or late arrival. If your image is damaged or printed incorrectly, we can replace it once it's been sent back to us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot on-dark">
+  <div class="card-wrap">
+    <div class="scallop" aria-hidden="true"></div>
+    <div class="card">
+      <div class="card-brand">
+        <img src="/_blob/978eddd0cb8503ecf5ca503d371dd811" alt="Edible Images logo" width="185" height="185" loading="lazy">
+        <p>Galway</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <a href="mailto:info@edibleimages.ie">info@edibleimages.ie</a>
+        <a href="tel:+353851420706">+353 85 142 0706</a>
+        <a href="#top">Facebook</a>
+      </div>
+      <div>
+        <h3>Help</h3>
+        <a href="#help">Application tips</a>
+        <a href="#delivery">Delivery and returns</a>
+        <a href="#sizes">Size guide</a>
+      </div>
+    </div>
+  </div>
+  <p class="imprint">Nikki Rogers T/A Edible Images</p>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":9180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { menuOpen: false, name: 'Aoife', message: 'Happy 7th birthday', shape: 'circle', size: 4, border: 'pink', image: '', fileName: '', fileError: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const shapeList = [['circle', 'Circle'], ['square', 'Square'], ['rectangle', 'Rectangle']];
+    const sizeList = [2, 4, 6, 8];
+    const borderList = [
+      ['pink', 'Pink', '#F06AA8'], ['teal', 'Teal', '#04817C'], ['purple', 'Purple', '#9E00A3'],
+      ['orchid', 'Orchid', '#BE51C1'], ['yellow', 'Sunny yellow', '#FFD23F'], ['aqua', 'Soft aqua', '#7ED9CF']
+    ];
+    const perPage = { 2: 12, 4: 2, 6: 1, 8: 1 };
+    const count = perPage[s.size];
+    const widthPct = s.size / 8.27 * 100;
+    const heightOfSheet = s.shape === 'rectangle' ? widthPct * 1.3125 : widthPct;
+    const cellStyle = 'width: ' + (s.size === 2 ? 24 : widthPct * 0.9).toFixed(1) + '%; aspect-ratio: ' + (s.shape === 'rectangle' ? '8 / 10.5' : '1') + '; border-radius: ' + (s.shape === 'circle' ? '50%' : '1px');
+    const cap = s.shape.charAt(0).toUpperCase() + s.shape.slice(1);
+    const dims = (s.shape === 'rectangle' && s.size === 8) ? '8" x 10.5"' : s.size + '"';
+    const current = borderList.find((b) => b[0] === s.border);
+    return {
+      menuOpen: s.menuOpen,
+      menuExpanded: s.menuOpen ? 'true' : 'false',
+      toggleMenu: () => this.setState({ menuOpen: !this.state.menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      products: [
+        { name: 'Comic cake topper', price: '€9.50', img: '/_blob/7c53d77355c13db726ba4c8efe1c57a1' },
+        { name: 'Birthday Girl 2', price: '€7.99', img: '/_blob/93f51e68e7bd85036738746183cf7d6d' },
+        { name: 'Mermaid Party', price: '€9.50', img: '/_blob/ac850739a746a5d8fb202d0c66040e89' },
+        { name: 'Dinosaur Birthday', price: '€9.50', img: '/_blob/d734c4d901b30c80ab3f4840b22bb368' },
+        { name: 'Balloon Cake Topper Green', price: '€9.50', img: '/_blob/a1073d9303eea1984aa500b255e8aa33' }
+      ],
+      name: s.name,
+      message: s.message,
+      image: s.image,
+      noImage: !s.image,
+      fileError: s.fileError,
+      uploadLabel: s.fileName ? 'Change image (' + s.fileName + ')' : 'Upload image',
+      shapeClass: 't-' + s.shape,
+      border: current[2],
+      previewLabel: 'Preview of a ' + s.size + ' inch ' + s.shape + ' topper for ' + (s.name || 'your cake') + ' with a ' + current[1].toLowerCase() + ' border',
+      sizeNote: cap + ' ' + dims + ': ' + count + (count === 1 ? ' image' : ' images') + ' per page',
+      miniCells: Array.from({ length: count }, () => ({ style: cellStyle })),
+      twelve: Array.from({ length: 12 }, (_, i) => i),
+      fiveStars: [1, 2, 3, 4, 5],
+      onName: (e) => this.setState({ name: e.target.value }),
+      onMessage: (e) => this.setState({ message: e.target.value }),
+      noSubmit: (e) => e.preventDefault(),
+      onFile: (e) => {
+        const input = e.target;
+        const file = input.files && input.files[0];
+        if (!file) return;
+        if (!/\.(jpe?g|gif|png)$/i.test(file.name)) {
+          input.value = '';
+          this.setState({ fileError: 'That file type won\'t work. Upload a JPG, JPEG, GIF or PNG.' });
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => this.setState({ image: reader.result, fileName: file.name, fileError: '' });
+        reader.readAsDataURL(file);
+      },
+      shapes: shapeList.map((x) => ({ label: x[1], cls: s.shape === x[0] ? 'on' : '', pressed: s.shape === x[0] ? 'true' : 'false', pick: () => this.setState({ shape: x[0] }) })),
+      sizes: sizeList.map((x) => ({ label: x + '"', cls: s.size === x ? 'on' : '', pressed: s.size === x ? 'true' : 'false', pick: () => this.setState({ size: x }) })),
+      borders: borderList.map((x) => ({ label: x[1], hex: x[2], cls: s.border === x[0] ? 'on' : '', pressed: s.border === x[0] ? 'true' : 'false', pick: () => this.setState({ border: x[0] }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
