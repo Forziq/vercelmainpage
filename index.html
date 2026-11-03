@@ -122,44 +122,40 @@
     }
     .pin { position: sticky; top: 0; height: 100svh; }
 
-    .pin h1 {
+    .pin .name {
       display: inline-block;
       padding: var(--m) 0 0 var(--m);
       font-size: var(--step-name);
       pointer-events: auto;
     }
-    .pin .first { position: relative; display: inline-block; will-change: transform; }
-    .pin .last { position: absolute; right: var(--m); bottom: var(--m); will-change: transform; }
+    .pin .first { position: relative; display: inline-block; }
+    .pin .last { position: absolute; right: var(--m); bottom: var(--m); }
+    .lag .pin .first, .lag .pin .last { will-change: transform; }
 
-    /* Each word is drawn as two clipped halves: the top half takes the ink of the section
-       under the word's top edge, the bottom half the ink of the section under its bottom
-       edge, so the change happens exactly where the section edge crosses the letters. */
-    .pin .w { position: relative; display: block; color: var(--ink); }
-    .js .pin .w { color: transparent; }
-    /* The halves extend 0.25em past the word's box on every side, so glyphs that
-       overhang it (the tail of the R) are never cut; only the split line clips. */
-    .js .pin .w::before,
-    .js .pin .w::after {
-      content: attr(data-text);
+    /* With script on, the real heading stays for screen readers and selection, and each panel
+       draws its own copy of the name in its ink: pinned to the screen with sticky and clipped
+       to the panel, so the ink changes exactly where a panel edge crosses the letters, and the
+       browser does it while scrolling with no script involved (smooth on phones). */
+    .js .pin-track .name { color: transparent; }
+    .ink {
       position: absolute;
-      inset: -0.25em;
-      padding: 0.25em;
-      white-space: nowrap;
+      top: -100svh;
+      bottom: -100svh;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      pointer-events: none;
     }
-    .js .pin .w::before {
-      color: var(--top, var(--ink));
-      clip-path: inset(0 0 calc(100% - var(--cut, 100%) - 0.25em) 0);
-    }
-    .js .pin .w::after {
-      color: var(--bot, var(--ink));
-      clip-path: inset(calc(var(--cut, 100%) + 0.25em) 0 0 0);
-    }
+    /* The last panel's copy lets go when the panel does, so the name scrolls away with it. */
+    .run > .panel:last-child .ink { bottom: 0; }
+    .ink .name { pointer-events: none; }
 
     .panel {
       position: relative;
       height: 100svh;
       min-height: 560px;
       overflow: hidden;
+      overflow: clip; /* clip, not hidden, so the sticky name inside still pins to the screen */
     }
 
     /* Hero: a type poster with the index of the work */
@@ -626,7 +622,7 @@
     <section class="run" id="work" aria-label="Egor Grigorciuc and selected work">
       <div class="pin-track">
         <div class="pin">
-          <h1 class="display">
+          <h1 class="display name">
             <span class="first"><span class="w" data-text="Egor">Egor</span></span>
             <span class="last"><span class="w" data-text="Grigorciuc">Grigorciuc</span></span>
             <span class="sr-only">, web designer and developer</span>
@@ -865,65 +861,61 @@
         risers.forEach(function (el) { el.classList.add("is-in"); });
       }
 
-      // The pinned name takes the ink of the panel behind it, split along the panel's edge.
-      var panels = Array.prototype.slice.call(document.querySelectorAll(".run .panel"));
-      var words = Array.prototype.slice.call(document.querySelectorAll(".pin .first, .pin .last"));
-      function panelAt(y) {
-        for (var i = 0; i < panels.length; i++) {
-          var r = panels[i].getBoundingClientRect();
-          if (y >= r.top && y < r.bottom) return { el: panels[i], rect: r };
-        }
-        return null;
-      }
-      function inkOf(p) { return p ? p.el.getAttribute("data-ink") : "var(--ink)"; }
-      function paint() {
-        words.forEach(function (word) {
-          var r = word.getBoundingClientRect();
-          var top = panelAt(r.top), bot = panelAt(r.bottom - 1);
-          // No edge behind the word: push the cut well past it so nothing is clipped.
-          var cut = r.height * 2;
-          if (top && bot && top.el !== bot.el) cut = Math.max(0, Math.min(r.height, top.rect.bottom - r.top));
-          word.style.setProperty("--top", inkOf(top));
-          word.style.setProperty("--bot", inkOf(bot));
-          word.style.setProperty("--cut", cut + "px");
-        });
-      }
+      // The pinned name takes the ink of the panel behind it: each panel gets its own copy,
+      // which the CSS pins and clips to that panel.
+      document.querySelectorAll(".run .panel").forEach(function (panel) {
+        var ink = document.createElement("div");
+        ink.className = "ink";
+        ink.setAttribute("aria-hidden", "true");
+        ink.style.color = panel.getAttribute("data-ink");
+        ink.innerHTML = '<div class="pin"><p class="display name">' +
+          '<span class="first"><span class="w">Egor</span></span>' +
+          '<span class="last"><span class="w">Grigorciuc</span></span></p></div>';
+        panel.insertBefore(ink, panel.firstChild);
+      });
+
       // Each word trails the scroll and eases back into its corner, as if catching up.
       // GRIGORCIUC lags a little more than EGOR so the two don't move as one block.
-      var EASE = [0.28, 0.22];  // share of the gap closed per 60fps frame
-      var MAX_LAG = 56;         // px; however fast the scroll, the name trails by this much at most
-      var runEl = document.querySelector(".run");
-      var pos = [window.scrollY, window.scrollY];
-      var running = false, lastT = 0;
-      function lagStep(t) {
-        var dt = lastT ? Math.min(64, t - lastT) : 16.7;
-        lastT = t;
-        var y = window.scrollY, moving = false;
-        // The lag only applies while the name is pinned. It fades out over the last
-        // MAX_LAG px of the pinned run, so there is no jump when the name is released.
-        var released = runEl.offsetTop + runEl.offsetHeight - window.innerHeight;
-        var hold = Math.max(0, Math.min(1, (released - y) / MAX_LAG));
-        words.forEach(function (word, i) {
-          var off = 0;
-          if (!reduce) {
+      // Only with a mouse or trackpad: touch scrolling runs off the main thread, faster than
+      // script can follow, so on phones the name stays put and the browser keeps it smooth.
+      if (!reduce && window.matchMedia("(hover: hover) and (pointer: fine)").matches) startLag();
+      function startLag() {
+        document.documentElement.classList.add("lag");
+        var words = [
+          Array.prototype.slice.call(document.querySelectorAll(".pin .first")),
+          Array.prototype.slice.call(document.querySelectorAll(".pin .last"))
+        ];
+        var EASE = [0.28, 0.22];  // share of the gap closed per 60fps frame
+        var MAX_LAG = 56;         // px; however fast the scroll, the name trails by this much at most
+        var runEl = document.querySelector(".run");
+        var pos = [window.scrollY, window.scrollY];
+        var running = false, lastT = 0;
+        function lagStep(t) {
+          var dt = lastT ? Math.min(64, t - lastT) : 16.7;
+          lastT = t;
+          var y = window.scrollY, moving = false;
+          // The lag only applies while the name is pinned. It fades out over the last
+          // MAX_LAG px of the pinned run, so there is no jump when the name is released.
+          var released = runEl.offsetTop + runEl.offsetHeight - window.innerHeight;
+          var hold = Math.max(0, Math.min(1, (released - y) / MAX_LAG));
+          words.forEach(function (copies, i) {
             pos[i] = Math.max(y - MAX_LAG, Math.min(y + MAX_LAG, pos[i]));
             pos[i] += (y - pos[i]) * (1 - Math.pow(1 - EASE[i], dt / 16.7));
-            off = (pos[i] - y) * hold;
+            var off = (pos[i] - y) * hold;
             if (Math.abs(pos[i] - y) < 0.3) { pos[i] = y; off = 0; } else moving = true;
             if (Math.abs(off) < 0.3) off = 0;
-          }
-          word.style.transform = off ? "translate3d(0," + off.toFixed(2) + "px,0)" : "";
-        });
-        paint();
-        if (moving) requestAnimationFrame(lagStep);
-        else { running = false; lastT = 0; }
+            var transform = off ? "translate3d(0," + off.toFixed(2) + "px,0)" : "";
+            copies.forEach(function (word) { word.style.transform = transform; });
+          });
+          if (moving) requestAnimationFrame(lagStep);
+          else { running = false; lastT = 0; }
+        }
+        function kick() {
+          if (!running) { running = true; requestAnimationFrame(lagStep); }
+        }
+        window.addEventListener("scroll", kick, { passive: true });
+        window.addEventListener("resize", kick);
       }
-      function kick() {
-        if (!running) { running = true; requestAnimationFrame(lagStep); }
-      }
-      window.addEventListener("scroll", kick, { passive: true });
-      window.addEventListener("resize", kick);
-      paint();
 
       // QuotePaid: the quote fills in as the page scrolls.
       var stage = document.querySelector(".story__stage");
