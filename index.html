@@ -1,848 +1,992 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IE">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff8f5">
-  <title>Egor Grigorciuc — Digital Business &amp; E-commerce</title>
-  <meta name="description" content="The portfolio of Egor Grigorciuc, a BSc Digital Business &amp; E-commerce student working across customer experience, content and business development.">
+  <meta name="theme-color" content="#efefec">
+  <title>Egor Grigorciuc, web designer and developer</title>
+  <meta name="description" content="Egor Grigorciuc designs websites and web apps in Dublin, then builds them himself. Work includes QuotePaid and Solana Journal.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&amp;family=Chivo:wght@400;700;900&amp;display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add("js");</script>
   <style>
     :root {
-      --paper: #fff8f5;
-      --paper-light: #ffffff;
-      --parchment: #f4ece8;
-      --ink: #1e1b19;
-      --ink-soft: #55423d;
-      --amber: #7c2d12;
-      --amber-deep: #5e1700;
-      --terracotta: #c2410c;
-      --rule: #dcc1b9;
-      --font-display: "EB Garamond", Georgia, serif;
-      --font-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
-      --page-width: 1280px;
-      --gutter: clamp(1.25rem, 4vw, 3rem);
-      --section-space: clamp(5rem, 10vw, 9rem);
+      --bg: #efefec;
+      --surface: #e4e4e0;
+      --ink: #1c1c1c;
+      --muted: #4f4d47;
+      --qp: #1747c8;
+      --qp-deep: #1540b8;
+      --sj: #101116;
+
+      --font: "Chivo", "Helvetica Neue", Arial, sans-serif;
+      --font-ui: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", Arial, sans-serif;
+      --step-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+      --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+      --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
+      --step-name: clamp(3rem, 8vw, 8rem);
+
+      --m: clamp(16px, 2.2vw, 32px);
+      --zone: calc(var(--step-name) * 0.82 + var(--m) * 2);
+      --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 2rem;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      min-width: 320px;
-      background: var(--paper);
+      background: var(--bg);
       color: var(--ink);
-      font-family: var(--font-body);
-      font-size: 1rem;
-      line-height: 1.65;
+      font-family: var(--font);
+      font-size: var(--step-body);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
+    img { display: block; max-width: 100%; }
     a { color: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
+    p { margin: 0; }
 
-    :focus-visible {
-      outline: 2px solid var(--terracotta);
-      outline-offset: 4px;
+    :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+    ::selection { background: var(--ink); color: var(--bg); }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip: rect(0 0 0 0); white-space: nowrap;
     }
 
-    ::selection {
-      background: var(--amber);
-      color: #fff;
+    .skip {
+      position: fixed; z-index: 50; top: var(--m); left: var(--m);
+      padding: 12px 16px; background: var(--ink); color: var(--bg);
+      font-weight: 700; text-decoration: none;
+      transform: translateY(-200%);
     }
+    .skip:focus { transform: none; }
 
-    .skip-link {
-      position: fixed;
-      z-index: 100;
-      top: 1rem;
-      left: 1rem;
-      padding: 0.75rem 1rem;
-      transform: translateY(-180%);
-      background: var(--ink);
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .skip-link:focus { transform: translateY(0); }
-
-    .page-shell {
-      width: min(100%, var(--page-width));
-      margin: 0 auto;
-      padding-inline: var(--gutter);
-    }
-
-    .site-header { border-bottom: 1px solid var(--rule); }
-
-    .site-header__inner {
+    .grid {
       display: grid;
-      grid-template-columns: 3fr 6fr 3fr;
-      align-items: center;
-      min-height: 6.5rem;
-      gap: 1.5rem;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--m);
+      padding-inline: var(--m);
     }
 
-    .wordmark {
+    .display {
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 0.88;
+      text-transform: uppercase;
+    }
+
+    .btn {
       display: inline-flex;
-      flex-direction: column;
-      width: fit-content;
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      font-weight: 500;
-      line-height: 0.95;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 0;
+      background: var(--ink);
+      color: var(--bg);
+      font: 700 var(--step-small)/1 var(--font);
+      letter-spacing: 0;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 160ms var(--ease);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0) scale(0.98); }
+
+    .link {
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+      transition: text-underline-offset 160ms var(--ease);
+    }
+    .link:hover { text-underline-offset: 7px; }
+
+    /* ---------- The pinned run: hero and the two projects ---------- */
+
+    .run { position: relative; }
+
+    .pin-track {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .pin { position: sticky; top: 0; height: 100svh; }
+
+    .pin h1 {
+      display: inline-block;
+      padding: var(--m) 0 0 var(--m);
+      font-size: var(--step-name);
+      pointer-events: auto;
+    }
+    .pin .first { position: relative; display: inline-block; will-change: transform; }
+    .pin .last { position: absolute; right: var(--m); bottom: var(--m); will-change: transform; }
+
+    /* Each word is drawn as two clipped halves: the top half takes the ink of the section
+       under the word's top edge, the bottom half the ink of the section under its bottom
+       edge, so the change happens exactly where the section edge crosses the letters. */
+    .pin .w { position: relative; display: block; color: var(--ink); }
+    .js .pin .w { color: transparent; }
+    /* The halves extend 0.25em past the word's box on every side, so glyphs that
+       overhang it (the tail of the R) are never cut; only the split line clips. */
+    .js .pin .w::before,
+    .js .pin .w::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: -0.25em;
+      padding: 0.25em;
+      white-space: nowrap;
+    }
+    .js .pin .w::before {
+      color: var(--top, var(--ink));
+      clip-path: inset(0 0 calc(100% - var(--cut, 100%) - 0.25em) 0);
+    }
+    .js .pin .w::after {
+      color: var(--bot, var(--ink));
+      clip-path: inset(calc(var(--cut, 100%) + 0.25em) 0 0 0);
+    }
+
+    .panel {
+      position: relative;
+      height: 100svh;
+      min-height: 560px;
+      overflow: hidden;
+    }
+
+    /* Hero: a type poster with the index of the work */
+    .panel--hero { background: var(--bg); }
+
+    .hero-nav {
+      position: absolute;
+      top: calc(var(--m) + 0.6rem);
+      right: var(--m);
+      display: flex;
+      gap: 24px;
+    }
+    .hero-nav a {
+      font-size: var(--step-small);
+      font-weight: 700;
       text-decoration: none;
     }
+    .hero-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-    .wordmark small {
-      margin-top: 0.55rem;
-      color: var(--ink-soft);
-      font-family: var(--font-body);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+    .hero-body {
+      position: absolute;
+      inset: var(--zone) 0;
+      align-items: center;
+    }
+
+    .hero-copy { grid-column: 1 / 5; }
+    .hero-copy p { font-size: var(--step-lead); line-height: 1.3; max-width: 30ch; }
+    .hero-copy .btn { margin-top: 32px; }
+
+    .index {
+      grid-column: 6 / 13;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: clamp(24px, 3vw, 44px);
+    }
+    .index a {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      column-gap: 24px;
+      text-decoration: none;
+    }
+    .index__name {
+      grid-column: 1 / -1;
+      font-size: min(var(--step-head), 5.4vw);
+      transition: transform 260ms var(--ease);
+    }
+    .index__what { margin-top: 12px; font-size: var(--step-small); }
+    .index__year {
+      margin-top: 12px;
+      font-size: var(--step-small);
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .index a:hover .index__name,
+    .index a:focus-visible .index__name { transform: translateX(14px); }
+
+    /* Project panels */
+    .panel--qp { background: var(--qp-deep); color: var(--bg); }
+    .panel--sj { background: var(--sj); color: var(--bg); }
+
+    .plate {
+      position: absolute;
+      inset: var(--zone) 0;
+      align-items: center;
+    }
+    .plate__shot {
+      grid-column: 3 / 11;
+      grid-row: 1;
+      height: 100%;
+      overflow: hidden;
+      align-self: center;
+    }
+    .plate__shot img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top left;
+    }
+    .plate__title { grid-column: 1 / 3; grid-row: 1; align-self: center; }
+    .plate__title h2 {
+      margin: 0;
+      font-size: clamp(1.375rem, 2vw, 1.875rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
       line-height: 1;
       text-transform: uppercase;
     }
+    .plate__title p { margin-top: 10px; font-size: var(--step-small); }
+    .plate__fact { grid-column: 11 / 13; grid-row: 1; align-self: center; font-size: var(--step-small); }
+    .plate__fact .link { display: inline-block; margin-top: 10px; }
 
-    .primary-nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(1rem, 2.5vw, 2.25rem);
-    }
+    /* ---------- QuotePaid: the quote fills in as you scroll ---------- */
 
-    .primary-nav a {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
-
-    .primary-nav a {
-      padding-block: 0.4rem;
-      border-bottom: 1px solid transparent;
-    }
-
-    .primary-nav a:hover {
-      border-color: var(--amber);
-      color: var(--amber);
-    }
-
-    .hero {
-      overflow: hidden;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .hero__inner {
+    .story { position: relative; height: 260svh; background: var(--bg); }
+    .story__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      min-height: min(47rem, calc(100svh - 6.5rem));
-      padding-block: clamp(4.5rem, 9vw, 8rem) 3rem;
+      align-content: center;
+      justify-items: center;
+      padding: var(--m);
+    }
+    .story__top, .story__bottom {
+      font-size: clamp(2.5rem, 5.6vw, 5.5rem);
+      text-align: center;
+    }
+    .story__top { margin-bottom: 20px; }
+    .story__bottom { margin-top: 20px; }
+
+    .story__frame {
+      width: min(32vw, 480px);
+      padding: clamp(14px, 1.4vw, 22px);
+      background: var(--qp);
     }
 
-    .hero__edition {
-      grid-column: 1 / span 2;
-      align-self: stretch;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding-right: 2rem;
-      border-right: 1px solid var(--rule);
-    }
-
-    .kicker,
-    .section-label,
-    .meta,
-    .case-study__index,
-    .timeline__date,
-    .capability__number {
-      margin: 0;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+    /* The quote itself, built in the product's own type and lines */
+    .qcard {
+      background: #ffffff;
+      color: #12161c;
+      font-family: var(--font-ui);
+      font-size: clamp(0.8125rem, 0.55rem + 0.45vw, 0.9375rem);
+      letter-spacing: 0;
       line-height: 1.3;
-      text-transform: uppercase;
+      border: 1px solid #12161c; /* taste-skill-ignore: the product's own quote card */
+      border-radius: 10px;
+      overflow: hidden;
     }
-
-    .hero__edition .kicker {
-      color: var(--amber);
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-    }
-
-    .hero__folio {
-      color: var(--ink-soft);
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-style: italic;
-    }
-
-    .hero__content {
-      grid-column: 3 / -1;
+    .qrow {
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
-      padding-left: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      gap: 12px;
+      padding: 0.85em 1.15em;
+    }
+    .qhead { border-bottom: 1px solid #12161c; } /* taste-skill-ignore: the product's own quote card */
+    .qhead span:first-child, .qmeta small { letter-spacing: 0.06em; color: #4a5260; }
+    .qhead span:last-child { font-variant-numeric: tabular-nums; }
+    .qmeta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #d5d9de; /* taste-skill-ignore: the product's own quote card */
+    }
+    .qmeta div { padding: 0.85em 1.15em; }
+    .qmeta div + div { border-left: 1px solid #d5d9de; } /* taste-skill-ignore: the product's own quote card */
+    .qmeta small { display: block; font-size: 0.85em; }
+
+    .qbody { position: relative; min-height: 13.2em; }
+    .qnote {
+      position: absolute;
+      inset: 0;
+      padding: 1.1em 1.15em;
+      color: #4a5260;
+      transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+    }
+    .qnote strong { display: block; margin-bottom: 0.4em; color: #1747c8; }
+    .qline {
+      border-bottom: 1px solid #e3e6ea; /* taste-skill-ignore: the product's own quote card */
+      font-variant-numeric: tabular-nums;
+      transition: opacity 420ms var(--ease), transform 420ms var(--ease);
+      transition-delay: calc(var(--i) * 140ms);
+    }
+    .qline--vat { color: #4a5260; border-bottom-color: #12161c; }
+
+    .qtotal { padding-block: 1em; border-bottom: 1px solid #d5d9de; } /* taste-skill-ignore: the product's own quote card */
+    .qtotal strong {
+      font-size: 1.9em;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .qdep { position: relative; min-height: 4.4em; font-variant-numeric: tabular-nums; }
+    .qdep > span:last-child { transition: color 300ms var(--ease); }
+    .stamp {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      padding: 0.15em 0.8em 0.3em;
+      border: 3px solid #1c7a43;
+      border-radius: 6px;
+      color: #1c7a43;
+      font-weight: 700;
+      font-size: 1.35em;
+      letter-spacing: 0.14em;
+      line-height: 1.1;
+      text-align: center;
+      text-transform: uppercase;
+      transform: translate(-50%, -50%) rotate(-6deg);
+      transition: opacity 260ms var(--ease), transform 420ms cubic-bezier(0.3, 1.6, 0.5, 1);
+    }
+    .stamp small { display: block; font-size: 0.45em; letter-spacing: 0.08em; font-weight: 400; }
+
+    /* Stage 1: only the voice note. Stage 2: priced lines. Stage 3: deposit paid. */
+    .js .story__stage[data-stage="1"] .qline { opacity: 0; transform: translateY(10px); transition-delay: 0ms; }
+    .js .story__stage:not([data-stage="1"]) .qnote { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+    .js .story__stage:not([data-stage="3"]) .stamp { opacity: 0; transform: translate(-50%, -50%) rotate(-14deg) scale(1.8); }
+    .js .story__stage:not([data-stage="3"]) .qdep > span:last-child { color: #6b7380; }
+
+    .story__side {
+      position: absolute;
+      top: 50%;
+      width: min(28ch, calc((100% - 30vw) / 2 - var(--m) * 3));
+      transform: translateY(-50%);
+      font-size: var(--step-small);
+    }
+    .story__facts { left: var(--m); }
+    .story__notes { right: var(--m); }
+
+    .facts { margin: 0; display: grid; gap: 18px; }
+    .facts dt { color: var(--muted); }
+    .facts dd { margin: 2px 0 0; font-weight: 700; }
+    .story__facts .btn { margin-top: 28px; }
+
+    .notes { margin: 0; padding: 0; list-style: none; display: grid; gap: 18px; }
+    .notes li {
+      font-size: var(--step-body);
+      color: var(--muted);
+      transition: color 300ms var(--ease), transform 300ms var(--ease);
+    }
+    .notes li.is-on { color: var(--ink); transform: translateX(-6px); }
+    html:not(.js) .notes li { color: var(--ink); }
+
+
+    .story__extra {
+      display: none;
+      width: min(100%, 520px);
+      margin-top: 20px;
+      text-align: center;
+    }
+    .story__extra .notes li { display: none; transform: none; }
+    .story__extra .notes li.is-on,
+    html:not(.js) .story__extra .notes li { display: block; color: var(--ink); }
+    .story__extra .btn { margin-top: 16px; }
+
+    /* ---------- Solana Journal: try it here ---------- */
+
+    .sj { padding-block: clamp(96px, 10vw, 150px); background: var(--surface); }
+    .sj__head { grid-column: 1 / 5; align-self: start; }
+    .sj__head h2 { font-size: var(--step-head); }
+    .sj__head p { margin-top: 28px; max-width: 40ch; }
+    .sj__head p + p { margin-top: 16px; }
+    .sj__actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px 24px;
+      margin-top: 32px;
+    }
+    .sj__actions .link { font-size: var(--step-small); }
+
+    .sj__frame {
+      grid-column: 5 / 13;
+      position: relative;
+      aspect-ratio: 2000 / 1138;
+      overflow: hidden;
+      background: var(--sj);
+    }
+    .sj__frame img, .sj__frame iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: 0;
+      object-fit: cover; object-position: top left;
     }
 
-    .hero h1 {
-      max-width: 10ch;
+    .sj__plates {
+      grid-column: 1 / 13;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--m);
+      margin-top: clamp(80px, 9vw, 140px);
+    }
+    .sj__plates figure { margin: 0; }
+    .sj__plates figure:first-child { grid-column: 1 / 9; }
+    .sj__plates figure:last-child { grid-column: 9 / 13; align-self: end; }
+    .sj__plates .pic { overflow: hidden; background: var(--sj); }
+    .sj__plates figure:first-child .pic { aspect-ratio: 2000 / 1143; }
+    .sj__plates figure:last-child .pic { aspect-ratio: 1372 / 1616; }
+    .sj__plates img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+    .sj__plates figcaption { margin-top: 14px; max-width: 46ch; font-size: var(--step-small); }
+
+    /* ---------- About ---------- */
+
+    .about { padding-block: clamp(96px, 9vw, 140px); }
+    .about__facts { grid-column: 1 / 4; }
+    .about__body { grid-column: 5 / 12; }
+    .about__body h2 { font-size: var(--step-head); }
+    .about__body p {
+      margin-top: 32px;
+      font-size: var(--step-lead);
+      line-height: 1.35;
+      max-width: 44ch;
+    }
+    .about__record {
+      grid-column: 1 / 13;
+      display: grid;
+      grid-template-columns: subgrid;
+      margin-top: 120px;
+    }
+    .record { grid-column: span 3; }
+    .record:first-child { grid-column: 5 / 8; }
+    .record h3 { margin: 0 0 14px; font-size: var(--step-small); font-weight: 700; }
+    .record ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .record li { font-size: var(--step-small); }
+
+    /* ---------- Contact ---------- */
+
+    .contact {
+      position: relative;
+      min-height: 72svh;
+      padding: var(--m);
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .contact h2 {
       margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(4rem, 9vw, 8.6rem);
+      max-width: 30ch;
+      font-size: var(--step-lead);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    .contact__mail {
+      position: absolute;
+      left: var(--m);
+      right: var(--m);
+      bottom: calc(var(--m) * 2 + 2.5rem);
+      display: block;
+      font-size: 8.1vw;
       font-weight: 400;
       letter-spacing: -0.045em;
-      line-height: 0.86;
-    }
-
-    .hero h1 em {
-      color: var(--amber);
-      font-weight: 400;
-    }
-
-    .hero__bottom {
-      display: grid;
-      grid-template-columns: minmax(0, 5fr) minmax(15rem, 3fr);
-      align-items: end;
-      gap: 3rem;
-      margin-top: 5rem;
-    }
-
-    .hero__intro {
-      max-width: 48ch;
-      margin: 0;
-      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-      line-height: 1.65;
-    }
-
-    .hero__aside {
-      padding-top: 1rem;
-      border-top: 1px solid var(--ink);
-    }
-
-    .hero__aside .meta { color: var(--amber); }
-
-    .hero__aside p:last-child {
-      margin: 0.6rem 0 0;
-      color: var(--ink-soft);
-      font-size: 0.875rem;
-    }
-
-    .section { padding-block: var(--section-space); }
-    .section--parchment { background: var(--parchment); }
-
-    .section-heading {
-      display: grid;
-      grid-template-columns: 3fr 9fr;
-      align-items: baseline;
-      margin-bottom: clamp(3.5rem, 7vw, 6rem);
-    }
-
-    .section-label { color: var(--amber); }
-
-    .section-title {
-      max-width: 18ch;
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 5.5vw, 5.2rem);
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      line-height: 0.98;
-    }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 3fr 5fr 4fr;
-      gap: clamp(2rem, 5vw, 5rem);
-    }
-
-    .profile-lead {
-      grid-column: 2;
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(1.65rem, 3vw, 2.5rem);
-      letter-spacing: -0.012em;
-      line-height: 1.25;
-    }
-
-    .profile-copy {
-      grid-column: 3;
-      margin: 0;
-      color: var(--ink-soft);
-      font-size: 1rem;
-    }
-
-    .study-note {
-      grid-column: 2 / -1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 2rem;
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .study-note__item { padding: 1.25rem 1.5rem 1.25rem 0; }
-
-    .study-note__item + .study-note__item {
-      padding-left: 1.5rem;
-      border-left: 1px solid var(--rule);
-    }
-
-    .study-note__item span {
-      display: block;
-      color: var(--ink-soft);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .study-note__item strong {
-      display: block;
-      margin-top: 0.45rem;
-      font-family: var(--font-display);
-      font-size: 1.25rem;
-      font-weight: 500;
-      line-height: 1.25;
-    }
-
-    .work-intro {
-      display: grid;
-      grid-template-columns: 3fr 9fr;
-      margin-bottom: 2rem;
-    }
-
-    .work-intro p {
-      grid-column: 2;
-      max-width: 62ch;
-      margin: 0;
-      color: var(--ink-soft);
-    }
-
-    .case-studies { border-top: 1px solid var(--ink); }
-
-    .case-study {
-      display: grid;
-      grid-template-columns: 3fr 5fr 4fr;
-      gap: clamp(1.5rem, 4vw, 4rem);
-      padding-block: clamp(2rem, 4vw, 3.25rem);
-      border-bottom: 1px solid var(--rule);
-      transition: background-color 180ms ease;
-    }
-
-    .case-study:hover { background: rgba(255, 255, 255, 0.45); }
-    .case-study__index { color: var(--terracotta); }
-
-    .case-study h3 {
-      max-width: 18ch;
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(1.9rem, 3.4vw, 3.1rem);
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.04;
-    }
-
-    .case-study__details {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      min-height: 10rem;
-    }
-
-    .case-study__details p {
-      margin: 0;
-      color: var(--ink-soft);
-      font-size: 0.925rem;
-    }
-
-    .case-study__link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px solid currentColor;
-      color: var(--amber);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      line-height: 1;
       text-decoration: none;
-      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 200ms var(--ease);
     }
-
-    .case-study__link:hover { color: var(--terracotta); }
-
-    .experience-layout,
-    .capabilities-layout {
-      display: grid;
-      grid-template-columns: 3fr 9fr;
-    }
-
-    .timeline {
-      grid-column: 2;
-      margin: 0;
-      padding: 0;
-      border-top: 1px solid var(--ink);
-      list-style: none;
-    }
-
-    .timeline__item {
-      display: grid;
-      grid-template-columns: 2fr 4fr 3fr;
-      gap: 2rem;
-      padding-block: 2rem;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .timeline__date {
-      color: var(--amber);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .timeline__role h3 {
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: 1.55rem;
-      font-weight: 500;
-      line-height: 1.2;
-    }
-
-    .timeline__role p,
-    .timeline__summary {
-      margin: 0.4rem 0 0;
-      color: var(--ink-soft);
-      font-size: 0.875rem;
-    }
-
-    .timeline__summary { margin-top: 0; }
-
-    .capabilities {
-      grid-column: 2;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      margin: 0;
-      padding: 0;
-      border-top: 1px solid var(--ink);
-      list-style: none;
-    }
-
-    .capability {
-      display: grid;
-      grid-template-columns: 3rem 1fr;
-      gap: 1rem;
-      align-items: baseline;
-      padding: 1.4rem 1.5rem 1.4rem 0;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .capability:nth-child(even) {
-      padding-left: 1.5rem;
-      border-left: 1px solid var(--rule);
-    }
-
-    .capability__number {
-      color: var(--terracotta);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .capability span:last-child {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 500;
-      line-height: 1.2;
-    }
-
-    .site-footer {
-      padding-block: clamp(4rem, 8vw, 7rem) 2rem;
-      background: var(--amber-deep);
-      color: #fff8f5;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      align-items: end;
-    }
-
-    .footer-copy { grid-column: 1 / span 8; }
-    .footer-copy .section-label { color: #ffb59e; }
-
-    .footer-copy h2 {
-      max-width: 12ch;
-      margin: 1.5rem 0 2.5rem;
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 7vw, 6.7rem);
-      font-weight: 400;
-      letter-spacing: -0.035em;
-      line-height: 0.9;
-    }
-
-    .email-link {
-      display: inline-block;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px solid currentColor;
-      font-size: clamp(1rem, 2vw, 1.3rem);
-      text-decoration: none;
-    }
-
-    .email-link:hover { color: #ffb59e; }
-
-    .footer-fineprint {
+    .contact__mail:hover { color: #ffffff; }
+    .contact__mail .at-break { display: none; }
+    .contact__foot {
+      position: absolute;
+      left: var(--m);
+      right: var(--m);
+      bottom: var(--m);
       display: flex;
       justify-content: space-between;
-      gap: 2rem;
-      margin-top: 6rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255, 248, 245, 0.32);
-      color: #ffb59e;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      gap: 16px;
+      font-size: var(--step-small);
     }
 
-    @media (max-width: 900px) {
-      .site-header__inner { grid-template-columns: 1fr auto; }
+    /* ---------- Footer ---------- */
 
-      .primary-nav {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        justify-content: flex-start;
-        padding-bottom: 1.25rem;
-        overflow-x: auto;
-      }
+    .foot {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: baseline;
+      gap: 24px;
+      padding: 160px var(--m) 30px;
+      font-size: var(--step-small);
+      color: var(--muted);
+    }
+    .foot nav { display: flex; gap: 24px; }
+    .foot nav a { color: var(--ink); font-weight: 700; text-decoration: none; }
+    .foot nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .foot p:last-child { justify-self: end; }
 
-      .hero__edition {
-        grid-column: 1 / span 1;
-        padding-right: 1rem;
-      }
+    /* ---------- Entrances ---------- */
 
-      .hero__content {
-        grid-column: 2 / -1;
-        padding-left: 2rem;
-      }
+    .js .rise {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+      transition-delay: var(--d, 0ms);
+    }
+    .js .rise.is-in { opacity: 1; transform: none; }
 
-      .hero__bottom { grid-template-columns: 1fr; }
+    /* ---------- Tablet ---------- */
 
-      .section-heading,
-      .profile-grid,
-      .work-intro,
-      .case-study,
-      .experience-layout,
-      .capabilities-layout {
-        grid-template-columns: 2fr 6fr;
-      }
+    @media (max-width: 1080px) {
+      .plate { grid-template-rows: auto 1fr auto; align-items: stretch; }
+      .plate__title { grid-column: 1 / 13; grid-row: 1; align-self: start; }
+      .plate__shot { grid-column: 1 / 13; grid-row: 2; margin-top: 16px; }
+      .plate__fact { grid-column: 1 / 13; grid-row: 3; margin-top: 16px; }
 
-      .profile-lead,
-      .profile-copy,
-      .work-intro p,
-      .timeline,
-      .capabilities { grid-column: 2; }
+      .hero-copy { grid-column: 1 / 13; align-self: end; }
+      .index { grid-column: 1 / 13; align-self: start; margin-top: 88px; }
+      .index__name { font-size: var(--step-head); }
+      .hero-body { grid-template-rows: auto auto; align-content: center; }
 
-      .profile-copy { margin-top: 1rem; }
-      .study-note { grid-column: 2; }
-      .case-study__index { grid-column: 1; }
-
-      .case-study h3,
-      .case-study__details { grid-column: 2; }
-
-      .case-study__details { min-height: auto; }
-      .timeline__item { grid-template-columns: 1fr 2fr; }
-      .timeline__summary { grid-column: 2; }
-      .footer-copy { grid-column: 1 / span 8; }
+      .story__side { display: none; }
+      .story__extra { display: block; }
+      .story__frame { width: min(64vw, 420px); }
     }
 
-    @media (max-width: 700px) {
-      .site-header__inner { min-height: 5rem; }
-      .primary-nav { gap: 1.25rem; }
+    /* ---------- Phone ---------- */
 
-      .primary-nav a {
-        font-size: 0.7rem;
-        white-space: nowrap;
+    @media (max-width: 760px) {
+      :root {
+        --step-name: 12.4vw;
+        --zone: calc(12.4vw * 0.82 + 32px);
+        --step-small: 0.875rem;
+        --step-body: 1.125rem;
+        --step-lead: 1.25rem;
+        --step-head: 2.5rem;
       }
 
-      .hero__inner {
-        min-height: auto;
-        padding-block: 3.5rem 2.5rem;
+      .panel { min-height: 0; }
+
+      .hero-nav { top: var(--m); gap: 14px; }
+      .hero-nav a:not(:last-child) { display: none; }
+      .hero-copy .btn { width: 100%; margin-top: 24px; }
+      .index { margin-top: 88px; gap: 28px; }
+      .index__name { font-size: var(--step-head); }
+      .index__what, .index__year { margin-top: 6px; }
+
+      .plate { gap: 0; }
+      .plate__title h2 { font-size: var(--step-lead); }
+      .plate__title p { margin-top: 4px; }
+      .plate__fact { margin-top: 12px; }
+
+      .story__top, .story__bottom { font-size: var(--step-head); }
+      .story__frame { width: min(100%, 380px); padding: 12px; }
+      .qcard { font-size: 0.8125rem; }
+
+      .sj__head, .sj__frame { grid-column: 1 / 13; }
+      .sj__frame { margin-top: 40px; }
+      .sj__plates figure:first-child,
+      .sj__plates figure:last-child { grid-column: 1 / 13; }
+      .sj__plates figure:last-child { margin-top: 48px; }
+
+      .about__facts, .about__body { grid-column: 1 / 13; }
+      .about__body { grid-row: 1; }
+      .about__facts .facts { grid-template-columns: 1fr 1fr; margin-top: 48px; }
+      .about__record { margin-top: 48px; row-gap: 40px; }
+      .record, .record:first-child { grid-column: 1 / 13; }
+
+      .contact { min-height: 80svh; }
+      .contact__mail {
+        top: 47svh;
+        bottom: auto;
+        font-size: 11.5vw;
+        white-space: normal;
       }
+      .contact__mail .at-break { display: inline; }
+      .contact__foot { flex-direction: column; gap: 12px; }
 
-      .hero__edition { display: none; }
-
-      .hero__content {
-        grid-column: 1 / -1;
-        padding-left: 0;
-      }
-
-      .hero h1 { font-size: clamp(3.6rem, 18vw, 6rem); }
-
-      .hero__bottom {
-        gap: 2.5rem;
-        margin-top: 4rem;
-      }
-
-      .section-heading,
-      .profile-grid,
-      .work-intro,
-      .case-study,
-      .experience-layout,
-      .capabilities-layout { display: block; }
-
-      .section-label { margin-bottom: 1rem; }
-      .profile-copy { margin-top: 1.5rem; }
-
-      .study-note {
-        display: block;
-        margin-top: 2.5rem;
-      }
-
-      .study-note__item,
-      .study-note__item + .study-note__item {
-        padding: 1rem 0;
-        border-left: 0;
-      }
-
-      .study-note__item + .study-note__item { border-top: 1px solid var(--rule); }
-      .work-intro { margin-top: -1.5rem; }
-      .case-study { padding-block: 2rem; }
-      .case-study h3 { margin-top: 1rem; }
-
-      .case-study__details {
-        margin-top: 1.25rem;
-        min-height: auto;
-      }
-
-      .timeline__item { display: block; }
-      .timeline__role { margin-top: 1rem; }
-      .timeline__summary { margin-top: 1.25rem; }
-      .capabilities { grid-template-columns: 1fr; }
-
-      .capability,
-      .capability:nth-child(even) {
-        padding: 1.25rem 0;
-        border-left: 0;
-      }
-
-      .footer-grid { display: block; }
-
-      .footer-fineprint {
-        flex-direction: column;
-        margin-top: 4rem;
-      }
+      .foot { grid-template-columns: 1fr; gap: 8px; padding-top: 96px; padding-bottom: 24px; }
+      .foot p:last-child { justify-self: start; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { transition-duration: 0.01ms !important; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+      }
+      .js .rise { opacity: 1; transform: none; }
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip" href="#work-qp">Skip to the work</a>
 
-  <header class="site-header">
-    <div class="site-header__inner page-shell">
-      <a class="wordmark" href="index.html" aria-label="Egor Grigorciuc, home">
-        Egor Grigorciuc
-        <small>Portfolio / 2026</small>
-      </a>
+  <main>
+    <section class="run" id="work" aria-label="Egor Grigorciuc and selected work">
+      <div class="pin-track">
+        <div class="pin">
+          <h1 class="display">
+            <span class="first"><span class="w" data-text="Egor">Egor</span></span>
+            <span class="last"><span class="w" data-text="Grigorciuc">Grigorciuc</span></span>
+            <span class="sr-only">, web designer and developer</span>
+          </h1>
+        </div>
+      </div>
 
-      <nav class="primary-nav" aria-label="Primary navigation">
-        <a href="#profile">Profile</a>
-        <a href="#work">Selected work</a>
-        <a href="#experience">Experience</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
-  </header>
+      <div class="panel panel--hero" data-ink="var(--ink)">
+        <nav class="hero-nav" aria-label="Main">
+          <a href="#quotepaid">Work</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
 
-  <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__inner page-shell">
-        <aside class="hero__edition" aria-label="Portfolio edition">
-          <p class="kicker">Digital Business &amp; E-commerce</p>
-          <span class="hero__folio">Vol. 01</span>
-        </aside>
-
-        <div class="hero__content">
-          <h1 id="hero-title">Business, built around <em>people.</em></h1>
-
-          <div class="hero__bottom">
-            <p class="hero__intro">I’m Egor Grigorciuc, a digital business student with practical experience in customer communication, content, operations and business development.</p>
-            <div class="hero__aside">
-              <p class="meta">Currently</p>
-              <p>BSc student at TU Dublin, learning how strong digital experiences connect people and businesses.</p>
-            </div>
+        <div class="hero-body grid">
+          <div class="hero-copy">
+            <p class="rise">Web designer and developer in Dublin. I design websites and web apps, then build them myself.</p>
+            <a class="btn rise" style="--d:90ms" href="#work-qp">See the work</a>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section" id="profile" aria-labelledby="profile-title">
-      <div class="page-shell">
-        <div class="section-heading">
-          <p class="section-label">01 / Profile</p>
-          <h2 class="section-title" id="profile-title">Curious about the whole customer journey.</h2>
-        </div>
-
-        <div class="profile-grid">
-          <p class="profile-lead">I combine academic study with experience from the day-to-day reality of small business and customer-facing work.</p>
-          <p class="profile-copy">From answering enquiries and coordinating custom orders to speaking with business owners and organising follow-ups, I’ve learned that good work starts with listening clearly, staying organised and following through. I’m now building on that foundation through my degree at TU Dublin.</p>
-
-          <div class="study-note" aria-label="Education details">
-            <div class="study-note__item">
-              <span>Course</span>
-              <strong>BSc Digital Business &amp; E-commerce</strong>
-            </div>
-            <div class="study-note__item">
-              <span>Institution</span>
-              <strong>TU Dublin</strong>
-            </div>
-            <div class="study-note__item">
-              <span>Study period</span>
-              <strong>2026-2030</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--parchment" id="work" aria-labelledby="work-title">
-      <div class="page-shell">
-        <div class="section-heading">
-          <p class="section-label">02 / Selected work</p>
-          <h2 class="section-title" id="work-title">Experience worth examining in detail.</h2>
-        </div>
-
-        <div class="work-intro">
-          <p>These entries are an introduction to the work I’ve done so far. Each will later expand into a dedicated case study covering the context, my responsibilities and what I learned.</p>
-        </div>
-
-        <div class="case-studies">
-          <article class="case-study">
-            <p class="case-study__index">01 / Jana Bake</p>
-            <h3>Customer experience, content &amp; operations</h3>
-            <div class="case-study__details">
-              <p>Customer enquiries, custom orders, product photography, promotional content, and day-to-day support for a busy family bakery.</p>
-            </div>
-          </article>
-
-          <article class="case-study">
-            <p class="case-study__index">02 / NexusCloud.ie</p>
-            <h3>Business development &amp; customer communication</h3>
-            <div class="case-study__details">
-              <p>Prospect conversations, tailored explanations, organised follow-ups, and independently maintained customer records.</p>
-            </div>
-          </article>
-
-          <article class="case-study">
-            <p class="case-study__index">03 / Solana Journal</p>
-            <h3>Trading journal &amp; reflection app</h3>
-            <div class="case-study__details">
-              <p>A private web app that imports on-chain Solana trades, rebuilds them into positions, analyses performance and gives each decision a structured review. The interactive demo uses invented data, with an Explain mode that walks through every screen.</p>
-              <a class="case-study__link" href="TradingJournalshowcase/index.html">View the interactive demo <span aria-hidden="true">&rarr;</span></a>
-            </div>
-          </article>
-
-          <article class="case-study">
-            <p class="case-study__index">04 / QuotePaid</p>
-            <h3>SaaS product, built end to end</h3>
-            <div class="case-study__details">
-              <p>A SaaS product I built myself, from shaping the idea and designing the experience to developing and shipping the platform.</p>
-              <a class="case-study__link" href="https://quotepaid.tech" target="_blank" rel="noopener noreferrer">Visit QuotePaid.tech <span aria-hidden="true">&rarr;</span></a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="experience" aria-labelledby="experience-title">
-      <div class="page-shell">
-        <div class="section-heading">
-          <p class="section-label">03 / Experience</p>
-          <h2 class="section-title" id="experience-title">Learning through responsibility.</h2>
-        </div>
-
-        <div class="experience-layout">
-          <ol class="timeline">
-            <li class="timeline__item">
-              <p class="timeline__date">2026-Present</p>
-              <div class="timeline__role">
-                <h3>Founder &amp; Builder</h3>
-                <p><a href="https://quotepaid.tech" target="_blank" rel="noopener noreferrer">QuotePaid.tech</a></p>
-              </div>
-              <p class="timeline__summary">Designed and built QuotePaid, a SaaS product, from the ground up: shaping the idea, developing the platform and launching it to real users.</p>
+          <ul class="index" aria-label="Selected work">
+            <li class="rise" style="--d:160ms">
+              <a href="#quotepaid">
+                <span class="display index__name">QuotePaid</span>
+                <span class="index__what">Quoting and invoicing for Irish trades</span>
+                <span class="index__year">2026</span>
+              </a>
             </li>
-            <li class="timeline__item">
-              <p class="timeline__date">2021-Present</p>
-              <div class="timeline__role">
-                <h3>Customer Service &amp; Business Support</h3>
-                <p>Jana Bake, Dublin</p>
-              </div>
-              <p class="timeline__summary">Supporting customer communication, custom-order requirements, product content and the smooth running of a family-owned bakery.</p>
+            <li class="rise" style="--d:240ms">
+              <a href="#solana">
+                <span class="display index__name">Solana Journal</span>
+                <span class="index__what">A trading journal with a live demo</span>
+                <span class="index__year">2026</span>
+              </a>
             </li>
-            <li class="timeline__item">
-              <p class="timeline__date">2025-2026</p>
-              <div class="timeline__role">
-                <h3>Business Development Representative</h3>
-                <p>NexusCloud.ie</p>
-              </div>
-              <p class="timeline__summary">Communicating with prospective customers, adapting explanations, managing follow-ups and organising customer records independently.</p>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--parchment" id="capabilities" aria-labelledby="capabilities-title">
-      <div class="page-shell">
-        <div class="section-heading">
-          <p class="section-label">04 / Capabilities</p>
-          <h2 class="section-title" id="capabilities-title">The habits behind the work.</h2>
-        </div>
-
-        <div class="capabilities-layout">
-          <ul class="capabilities">
-            <li class="capability"><span class="capability__number">01</span><span>Customer service</span></li>
-            <li class="capability"><span class="capability__number">02</span><span>Clear communication</span></li>
-            <li class="capability"><span class="capability__number">03</span><span>Organisation</span></li>
-            <li class="capability"><span class="capability__number">04</span><span>Problem-solving</span></li>
-            <li class="capability"><span class="capability__number">05</span><span>Teamwork</span></li>
-            <li class="capability"><span class="capability__number">06</span><span>Independent work</span></li>
-            <li class="capability"><span class="capability__number">07</span><span>Product photography</span></li>
-            <li class="capability"><span class="capability__number">08</span><span>Promotional content</span></li>
           </ul>
         </div>
+      </div>
+
+      <article class="panel panel--qp" id="work-qp" data-ink="var(--bg)" aria-labelledby="qp-title">
+        <div class="plate grid">
+          <div class="plate__title">
+            <h2 id="qp-title">QuotePaid</h2>
+            <p>2026</p>
+          </div>
+          <div class="plate__shot">
+            <picture>
+              <source media="(max-width: 760px)" srcset="assets/work/qp-hero-m.jpg" width="780" height="1688">
+              <img src="assets/work/qp-hero.jpg" width="2400" height="1500" loading="lazy" alt="The QuotePaid homepage: a blue page headed 'Get paid for the job without the chasing', with an example quote for Mary Doyle in Adamstown.">
+            </picture>
+          </div>
+          <div class="plate__fact">
+            <p>Quoting and invoicing for tradespeople in Ireland.</p>
+            <a class="link" href="#quotepaid">How it works</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel panel--sj" id="work-sj" data-ink="var(--bg)" aria-labelledby="sj-plate-title">
+        <div class="plate grid">
+          <div class="plate__title">
+            <h2 id="sj-plate-title">Solana Journal</h2>
+            <p>2026</p>
+          </div>
+          <div class="plate__shot">
+            <picture>
+              <source media="(max-width: 760px)" srcset="assets/work/sj-dashboard-m.jpg" width="780" height="1688">
+              <img src="assets/work/sj-dashboard.jpg" width="2400" height="1500" loading="lazy" alt="The Solana Journal dashboard in dark mode: net profit and loss, win rate, fees, streaks and rule adherence for the last 30 days.">
+            </picture>
+          </div>
+          <div class="plate__fact">
+            <p>A trading journal that turns on-chain trades into a review.</p>
+            <a class="link" href="#solana">Try the demo</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="story" id="quotepaid" aria-labelledby="qp-story-title">
+      <div class="story__stage" data-stage="3">
+        <h2 class="display story__top" id="qp-story-title">QuotePaid</h2>
+
+        <div class="story__frame">
+          <div class="qcard" data-ui role="img" aria-label="A QuotePaid quote for Mary Doyle in Adamstown: bedrooms, walls and ceilings €1,350; hall, stairs and landing €850; gloss woodwork €620; VAT at 13.5% €380.70; total €3,200.70; a 25% deposit of €800.18, stamped paid.">
+            <div class="qrow qhead"><span>QUOTE</span><span>No. Q-0107</span></div>
+            <div class="qmeta">
+              <div><small>CUSTOMER</small>Mary Doyle, Adamstown</div>
+              <div><small>VALID UNTIL</small>Wed 11 Nov</div>
+            </div>
+            <div class="qbody">
+              <p class="qnote"><strong>Voice note, 0:16</strong>“Right, three-bed semi for Mary Doyle. All three bedrooms, walls and ceilings. Hall, stairs and landing. Gloss all the woodwork.”</p>
+              <div class="qrow qline" style="--i:0"><span>Bedrooms ×3, walls and ceilings</span><span>€1,350.00</span></div>
+              <div class="qrow qline" style="--i:1"><span>Hall, stairs and landing</span><span>€850.00</span></div>
+              <div class="qrow qline" style="--i:2"><span>Gloss woodwork ×4</span><span>€620.00</span></div>
+              <div class="qrow qline qline--vat" style="--i:3"><span>VAT 13.5%</span><span>€380.70</span></div>
+            </div>
+            <div class="qrow qtotal"><span>Total</span><strong id="qp-total">€3,200.70</strong></div>
+            <div class="qrow qdep">
+              <span>Deposit 25%</span>
+              <span class="stamp">Paid<small>12 Oct 2026, card</small></span>
+              <span>€800.18</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="display story__bottom" aria-hidden="true">Quote to paid</p>
+
+        <div class="story__side story__facts">
+          <dl class="facts">
+            <div><dt>For</dt><dd>Painters, electricians, plumbers and other trades</dd></div>
+            <div><dt>My part</dt><dd>The idea, the design and the build</dd></div>
+            <div><dt>Built with</dt><dd>Next.js and Stripe</dd></div>
+          </dl>
+          <a class="btn" href="https://quotepaid.tech" target="_blank" rel="noopener">Visit quotepaid.tech</a>
+        </div>
+
+        <div class="story__side story__notes">
+          <ol class="notes" aria-label="How a quote gets paid">
+            <li data-n="1">A painter talks the job into their phone. That voice note is all QuotePaid needs.</li>
+            <li data-n="2">Each job they mention becomes a priced line from their own price list, and the total adds itself up.</li>
+            <li data-n="3">The customer pays a 25% deposit by card from a link, and the quote stamps itself paid.</li>
+          </ol>
+        </div>
+
+        <div class="story__extra">
+          <ol class="notes" aria-hidden="true">
+            <li data-n="1">A painter talks the job into their phone. That voice note is all QuotePaid needs.</li>
+            <li data-n="2">Each job they mention becomes a priced line, and the total adds itself up.</li>
+            <li data-n="3">The customer pays a 25% deposit by card from a link, and the quote stamps itself paid.</li>
+          </ol>
+          <a class="btn" href="https://quotepaid.tech" target="_blank" rel="noopener">Visit quotepaid.tech</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sj" id="solana" aria-labelledby="sj-title">
+      <div class="grid">
+        <div class="sj__head">
+          <h2 class="display rise" id="sj-title">Solana Journal</h2>
+          <p class="rise" style="--d:80ms">A private web app for reviewing trades. It reads a wallet's trades from the Solana blockchain, rebuilds them into positions and works out the statistics. Then it asks what a trader usually skips: did you follow your plan, and what would you do again?</p>
+          <p class="rise" style="--d:160ms">The demo runs on invented data. Turn on Explain and every screen tells you how it works.</p>
+          <div class="sj__actions rise" style="--d:240ms">
+            <a class="btn" id="sj-try" href="TradingJournalshowcase/index.html#/inbox">Try the demo here</a>
+            <a class="link" href="TradingJournalshowcase/index.html" target="_blank" rel="noopener">Open it full screen</a>
+          </div>
+        </div>
+
+        <div class="sj__frame rise" style="--d:120ms" id="sj-frame">
+          <img src="assets/work/sj-main-dashboard.webp" width="2000" height="1138" loading="lazy" alt="The Solana Journal dashboard: net profit and loss, win rate, profit factor, trades and reviews waiting, then results, fees, streaks, discipline and a list of data health checks.">
+        </div>
+
+        <div class="sj__plates">
+          <figure class="rise">
+            <div class="pic"><img src="assets/work/sj-main-calendar.webp" width="2000" height="1143" loading="lazy" alt="The Calendar screen for September 2026: each trading day coloured green or red by its result, with the number of trades and a total for every week."></div>
+            <figcaption>The calendar colours each trading day by its result, so a bad week stands out at a glance.</figcaption>
+          </figure>
+          <figure class="rise" style="--d:90ms">
+            <div class="pic"><img src="assets/work/sj-main-inbox.jpg" width="1372" height="1616" loading="lazy" alt="The Reflection Inbox: a losing trade with its numbers, then a quick review asking for an execution grade from A to F, the strategy used and the mistakes made."></div>
+            <figcaption>The Reflection Inbox asks for a grade, a strategy and the mistakes on every closed trade.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div class="grid">
+        <div class="about__facts">
+          <dl class="facts rise">
+            <div><dt>Based in</dt><dd>Adamstown, Dublin</dd></div>
+            <div><dt>Work</dt><dd>Design and development</dd></div>
+            <div><dt>Open to</dt><dd>New projects</dd></div>
+          </dl>
+        </div>
+
+        <div class="about__body">
+          <h2 class="display rise" id="about-title">Design and code</h2>
+          <p class="rise" style="--d:80ms">I'm Egor. I design the screens and write the code that runs them, so what you approve in the design is what goes live. I care about the small things: a total that adds up, a label people understand first time, a page that loads quickly on a phone.</p>
+        </div>
+
+        <div class="about__record">
+          <div class="record rise">
+            <h3>Design</h3>
+            <ul>
+              <li>Websites</li>
+              <li>Web apps</li>
+              <li>Interface design</li>
+              <li>Design systems</li>
+            </ul>
+          </div>
+          <div class="record rise" style="--d:80ms">
+            <h3>Build</h3>
+            <ul>
+              <li>HTML, CSS and JavaScript</li>
+              <li>Next.js</li>
+              <li>Stripe payments</li>
+              <li>Hosting on Vercel</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="rise">Have a website or app in mind? Send me an email and tell me about it.</h2>
+      <a class="contact__mail rise" style="--d:100ms" href="mailto:forzammil@gmail.com?subject=A%20new%20project">forzammil@<span class="at-break"><br></span>gmail.com</a>
+      <div class="contact__foot">
+        <p>Adamstown, Dublin, Ireland</p>
+        <a class="link" href="https://github.com/Forziq" target="_blank" rel="noopener">GitHub</a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" id="contact">
-    <div class="page-shell">
-      <div class="footer-grid">
-        <div class="footer-copy">
-          <p class="section-label">05 / Contact</p>
-          <h2>Let’s start a conversation.</h2>
-          <a class="email-link" href="mailto:forzammil@gmail.com">forzammil@gmail.com</a>
-        </div>
-      </div>
-
-      <div class="footer-fineprint">
-        <span>Egor Grigorciuc / Adamstown, Ireland</span>
-        <span>Portfolio edition 2026</span>
-      </div>
-    </div>
+  <footer class="foot">
+    <p>Egor Grigorciuc, web design and development</p>
+    <nav aria-label="Footer">
+      <a href="#quotepaid">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <p>© 2026</p>
   </footer>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Entrances: reveal each part once as it arrives.
+      var risers = document.querySelectorAll(".rise");
+      if ("IntersectionObserver" in window && !reduce) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+          });
+        }, { rootMargin: "0px 0px -10% 0px" });
+        risers.forEach(function (el) { io.observe(el); });
+      } else {
+        risers.forEach(function (el) { el.classList.add("is-in"); });
+      }
+
+      // The pinned name takes the ink of the panel behind it, split along the panel's edge.
+      var panels = Array.prototype.slice.call(document.querySelectorAll(".run .panel"));
+      var words = Array.prototype.slice.call(document.querySelectorAll(".pin .first, .pin .last"));
+      function panelAt(y) {
+        for (var i = 0; i < panels.length; i++) {
+          var r = panels[i].getBoundingClientRect();
+          if (y >= r.top && y < r.bottom) return { el: panels[i], rect: r };
+        }
+        return null;
+      }
+      function inkOf(p) { return p ? p.el.getAttribute("data-ink") : "var(--ink)"; }
+      function paint() {
+        words.forEach(function (word) {
+          var r = word.getBoundingClientRect();
+          var top = panelAt(r.top), bot = panelAt(r.bottom - 1);
+          // No edge behind the word: push the cut well past it so nothing is clipped.
+          var cut = r.height * 2;
+          if (top && bot && top.el !== bot.el) cut = Math.max(0, Math.min(r.height, top.rect.bottom - r.top));
+          word.style.setProperty("--top", inkOf(top));
+          word.style.setProperty("--bot", inkOf(bot));
+          word.style.setProperty("--cut", cut + "px");
+        });
+      }
+      // Each word trails the scroll and eases back into its corner, as if catching up.
+      // GRIGORCIUC lags a little more than EGOR so the two don't move as one block.
+      var EASE = [0.28, 0.22];  // share of the gap closed per 60fps frame
+      var MAX_LAG = 56;         // px; however fast the scroll, the name trails by this much at most
+      var runEl = document.querySelector(".run");
+      var pos = [window.scrollY, window.scrollY];
+      var running = false, lastT = 0;
+      function lagStep(t) {
+        var dt = lastT ? Math.min(64, t - lastT) : 16.7;
+        lastT = t;
+        var y = window.scrollY, moving = false;
+        // The lag only applies while the name is pinned. It fades out over the last
+        // MAX_LAG px of the pinned run, so there is no jump when the name is released.
+        var released = runEl.offsetTop + runEl.offsetHeight - window.innerHeight;
+        var hold = Math.max(0, Math.min(1, (released - y) / MAX_LAG));
+        words.forEach(function (word, i) {
+          var off = 0;
+          if (!reduce) {
+            pos[i] = Math.max(y - MAX_LAG, Math.min(y + MAX_LAG, pos[i]));
+            pos[i] += (y - pos[i]) * (1 - Math.pow(1 - EASE[i], dt / 16.7));
+            off = (pos[i] - y) * hold;
+            if (Math.abs(pos[i] - y) < 0.3) { pos[i] = y; off = 0; } else moving = true;
+            if (Math.abs(off) < 0.3) off = 0;
+          }
+          word.style.transform = off ? "translate3d(0," + off.toFixed(2) + "px,0)" : "";
+        });
+        paint();
+        if (moving) requestAnimationFrame(lagStep);
+        else { running = false; lastT = 0; }
+      }
+      function kick() {
+        if (!running) { running = true; requestAnimationFrame(lagStep); }
+      }
+      window.addEventListener("scroll", kick, { passive: true });
+      window.addEventListener("resize", kick);
+      paint();
+
+      // QuotePaid: the quote fills in as the page scrolls.
+      var stage = document.querySelector(".story__stage");
+      var notes = document.querySelectorAll(".story .notes li");
+      var totalEl = document.getElementById("qp-total");
+      var TOTAL = 3200.70;
+      var fmt = new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR" });
+      var shown = 0, raf = null;
+      function countTo(target) {
+        cancelAnimationFrame(raf);
+        if (reduce) { shown = target; totalEl.textContent = fmt.format(target); return; }
+        var from = shown, start = null, dur = 900;
+        function step(t) {
+          if (start === null) start = t;
+          var k = Math.min(1, (t - start) / dur);
+          var eased = 1 - Math.pow(1 - k, 3);
+          shown = from + (target - from) * eased;
+          totalEl.textContent = fmt.format(shown);
+          if (k < 1) raf = requestAnimationFrame(step);
+        }
+        raf = requestAnimationFrame(step);
+      }
+      var current = null;
+      function setStage(n) {
+        n = String(n);
+        if (n === current) return;
+        current = n;
+        stage.setAttribute("data-stage", n);
+        notes.forEach(function (li) { li.classList.toggle("is-on", li.getAttribute("data-n") === n); });
+        countTo(n === "1" ? 0 : TOTAL);
+      }
+      shown = 0;
+      totalEl.textContent = fmt.format(0);
+      setStage(1);
+      // The step comes from how far through the section the page is, so a jump
+      // (a link, a fast fling) always lands on the right step.
+      var storyEl = document.querySelector(".story");
+      function stageFromScroll() {
+        var span = storyEl.offsetHeight - window.innerHeight;
+        var p = (window.scrollY - storyEl.offsetTop) / span;
+        setStage(p < 0.3 ? 1 : p < 0.62 ? 2 : 3);
+      }
+      window.addEventListener("scroll", stageFromScroll, { passive: true });
+      window.addEventListener("resize", stageFromScroll);
+      stageFromScroll();
+
+      // Solana Journal: run the real demo inside the frame on wider screens.
+      var tryBtn = document.getElementById("sj-try");
+      var frame = document.getElementById("sj-frame");
+      tryBtn.addEventListener("click", function (ev) {
+        if (window.innerWidth <= 760) return;
+        ev.preventDefault();
+        if (frame.querySelector("iframe")) return;
+        var f = document.createElement("iframe");
+        f.src = tryBtn.getAttribute("href");
+        f.title = "Solana Journal demo with invented data";
+        frame.innerHTML = "";
+        frame.appendChild(f);
+        tryBtn.textContent = "Demo running";
+        f.focus();
+      });
+    })();
+  </script>
 </body>
 </html>
